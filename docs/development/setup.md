@@ -28,9 +28,10 @@ Put the key in a file and point `AEGIS_LLM_API_KEY_FILE` at it; the key never ap
 file, shell history or the repository. `docker-compose.yml` declares a compose secret
 `openai_api_key` from `${OPENAI_API_KEY_FILE:-./.secrets/openai_api_key}` and mounts it at
 `/run/secrets/openai_api_key`, which is what `AEGIS_LLM_API_KEY_FILE` is set to inside the api and
-worker containers. `.secrets/` is git-ignored. `.env.example` currently points the file variable at a
-machine-specific path (`/home/skylark/Downloads/openai_api_key`); change it to your own path or to
-`./.secrets/openai_api_key`. An empty `AEGIS_LLM_API_KEY` is treated as "not provided".
+worker containers. `.secrets/` is git-ignored. `.env.example` points the file variable at
+`./.secrets/openai_api_key`; point it wherever your key actually lives, or set
+`OPENAI_API_KEY_FILE` before `docker compose up`. An empty `AEGIS_LLM_API_KEY` is treated as
+"not provided".
 
 ## Environment variables
 
