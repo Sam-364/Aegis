@@ -31,7 +31,10 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           enable-cache: true
           cache-dependency-glob: uv.lock
-      - run: uv lock --check
+      # `uv lock` reads UV_FROZEN as --check-exists, which conflicts with --check, so this
+      # one step runs without it. Everything else wants UV_FROZEN: the lockfile is the truth.
+      - name: lockfile is up to date with pyproject.toml
+        run: env -u UV_FROZEN uv lock --check
       - run: uv sync --extra dev
       - run: uv run ruff check src tests evals scripts
       - run: uv run ruff format --check src tests evals scripts
