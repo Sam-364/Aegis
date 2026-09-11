@@ -9,7 +9,13 @@ from datetime import datetime
 import pytest
 from pydantic import BaseModel
 
-from aegis.agent.runtime import AgentDependencies, AgentHooks, AgentRuntime, PhaseOutcome
+from aegis.agent.runtime import (
+    MAX_STALLED_ITERATIONS,
+    AgentDependencies,
+    AgentHooks,
+    AgentRuntime,
+    PhaseOutcome,
+)
 from aegis.agent.schemas import AgentProposal, RemediationProposal, ToolCallProposal
 from aegis.domain.enums import (
     ActionPlanStatus,
@@ -567,3 +573,35 @@ async def test_capacity_diagnosis_refuses_a_restart_and_steers_to_scaling() -> N
     assert plans[0].tool_name == "scale_service" and plans[0].arguments["replicas"] == 3
     # the refusal was fed back to the model in the second prompt
     assert any("capacity problem" in c["user"] for c in llm.calls[1:])
+
+
+async def test_phase_gives_up_instead_of_spinning_when_the_signal_has_not_developed() -> None:
+    """A proposer with nothing left to offer used to be told "keep investigating" forever: the
+    phase looped until the incident's whole iteration budget was gone and the incident escalated.
+    Now the phase reports `insufficient_signal` after two barren iterations and hands the decision
+    to the workflow, which owns durable waiting."""
+    rt = build_runtime(seed=17, warmup=600)
+    inc = await seed_incident(rt, "redis-connection-leak")
+    calls = {"n": 0}
+
+    def script(schema: type[BaseModel], system: str, user: str, tier: str) -> BaseModel:
+        calls["n"] += 1
+        return AgentProposal(
+            observation="nothing further to collect",
+            action="phase_complete",
+            rationale="the symptom has not developed",
+        )
+
+    agent = make_runtime(rt, llm=ScriptedProvider(script=script))
+    out = await agent.run_phase(
+        incident_id=inc.id,
+        flow_name=inc.flow_name or "",
+        flow_version=inc.flow_version or "",
+        phase="hypothesize",
+    )
+    assert out.decision == "terminate"
+    assert out.termination is TerminationReason.INSUFFICIENT_SIGNAL
+    assert out.iterations <= MAX_STALLED_ITERATIONS + 1, "the phase must stop, not burn the budget"
+    assert out.usage.iterations < 8
+    budget = rt.flows.get(inc.flow_name or "").budget_for(inc.severity)
+    assert not out.usage.exceeded(budget), "the budget must survive for the re-observation"

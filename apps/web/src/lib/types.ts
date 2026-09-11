@@ -68,6 +68,7 @@ export type TerminationReason =
   | "no_action_required"
   | "escalate"
   | "budget_exhausted"
+  | "insufficient_signal"
   | "llm_unavailable"
   | "incident_inactive"
   | "error";

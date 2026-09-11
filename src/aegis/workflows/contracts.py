@@ -103,5 +103,6 @@ class WorkflowStatus(BaseModel):
     status: str = "running"
     awaiting_approval_id: uuid.UUID | None = None
     remediation_attempts: int = 0
+    reobservations: int = 0
     phases: list[str] = Field(default_factory=list)
     cancelled: bool = False

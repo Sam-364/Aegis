@@ -7,6 +7,7 @@ Temporal timer or signal, every identifier comes from ``workflow.uuid4()``.
 from __future__ import annotations
 
 import asyncio  # noqa: F401 - TimeoutError alias documented
+import contextlib
 import uuid
 from datetime import timedelta
 
@@ -58,6 +59,10 @@ EXEC_RETRY = RetryPolicy(
 )
 
 MAX_EARLY_DECISIONS = 8
+REOBSERVE_SECONDS = 45
+"""How long to let a symptom develop before looking again."""
+MAX_REOBSERVATIONS = 3
+"""...and how many times, before accepting that there is nothing to diagnose."""
 MAX_PHASE_ENTRIES = 2  # a third entry into the same phase means the investigation is cycling
 
 PHASE_STATUS = {
@@ -134,6 +139,8 @@ class IncidentWorkflow:
         phase = triage.initial_phase
         usage = BudgetUsage()
         attempts = 0
+        reobservations = 0
+        reobserving = False
         feedback: list[str] = []
         outcome = "escalated"
         summary = ""
@@ -142,8 +149,12 @@ class IncidentWorkflow:
                 outcome, summary = "closed", self._cancel_reason
                 break
             self._status.phase = phase
-            self._status.phases.append(phase)
-            await self._enter_phase(input.incident_id, phase)
+            if not reobserving:
+                # A re-observation is the same visit to the phase, so it must not count towards
+                # the cycle guard, and the incident's status has not changed either.
+                self._status.phases.append(phase)
+                await self._enter_phase(input.incident_id, phase)
+            reobserving = False
             try:
                 result: PhaseResult = await workflow.execute_activity(
                     "run_agent_phase",
@@ -239,6 +250,34 @@ class IncidentWorkflow:
             if result.decision == "escalate":
                 outcome, summary = "escalated", result.summary or "agent requested escalation"
                 break
+            if result.termination == "insufficient_signal":
+                # The phase ran out of things to look at while the symptom was still too small to
+                # diagnose — a resource leak twenty seconds in looks like noise. Wait on a durable
+                # timer and look again rather than escalating a fault that is still growing.
+                if reobservations >= MAX_REOBSERVATIONS:
+                    outcome, summary = (
+                        "escalated",
+                        f"no diagnosable signal after {MAX_REOBSERVATIONS} re-observations "
+                        f"over {MAX_REOBSERVATIONS * REOBSERVE_SECONDS}s: {result.summary}",
+                    )
+                    break
+                reobservations += 1
+                self._status.reobservations = reobservations
+                # The timeout is the expected path; an early return means a human cancelled.
+                with contextlib.suppress(TimeoutError):
+                    await workflow.wait_condition(
+                        lambda: self._cancel_reason is not None,
+                        timeout=timedelta(seconds=REOBSERVE_SECONDS),
+                    )
+                # A cancel that arrived during the wait is handled by the guard at the top of the
+                # loop, which is the single place this workflow decides to stop for one.
+                feedback.append(
+                    f"waited {REOBSERVE_SECONDS}s for the symptom to develop "
+                    f"(re-observation {reobservations}/{MAX_REOBSERVATIONS}); "
+                    "re-run the diagnostics before concluding"
+                )
+                reobserving = True
+                continue
             # terminate: budget exhausted, incident inactive, error
             if result.termination == "incident_inactive":
                 outcome, summary = "closed", "incident no longer active"

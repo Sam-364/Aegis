@@ -14,7 +14,13 @@ from aegis.application.container import RuntimeContainer, build_container
 from aegis.config import Settings
 from aegis.detection.engine import DetectionEngine
 from aegis.domain.base import Actor
-from aegis.domain.enums import ActionPlanStatus, ApprovalStatus, IncidentStatus, Role
+from aegis.domain.enums import (
+    ActionPlanStatus,
+    ApprovalStatus,
+    IncidentStatus,
+    Role,
+    TerminationReason,
+)
 from aegis.infrastructure.memory.repositories import InMemoryStore, InMemoryUnitOfWorkFactory
 from aegis.infrastructure.simulator.inprocess import (
     InProcessSimulatorGateway,
@@ -271,3 +277,59 @@ async def test_cancel_signal_closes_incident(temporal_env) -> None:  # type: ign
         assert engine.active_faults()  # no remediation executed
         _ = IncidentWorkflowInput
         _ = uuid
+
+
+async def test_a_symptom_that_never_develops_is_re_observed_then_escalated(temporal_env) -> None:  # type: ignore[no-untyped-def]
+    """A leak caught twenty seconds in has no diagnosable signature yet. The workflow must wait on
+    a durable timer and look again rather than burning the budget — and a re-observation must not
+    count as a fresh visit to the phase, or the cycle guard would escalate instead.
+
+    The simulator is frozen for the whole run here, so the symptom never grows: the workflow
+    exhausts its re-observations and escalates, which is the correct end of that road. Server time
+    is skipped explicitly so the 45-second timers fire without the test waiting for them.
+    """
+    engine = SimulationEngine(seed=27)
+    engine.warmup(600)
+    store = InMemoryStore()
+    container = make_container(engine, store)
+    controller = TemporalWorkflowController(temporal_env.client, task_queue="test-incidents-5")
+    container.workflows = controller
+    container.intake.workflows = controller
+    container.incidents.workflows = controller
+    async with build_worker(temporal_env.client, container, task_queue="test-incidents-5"):
+        # 20 seconds of fault: detected, but far too small to attribute to a client
+        incident = await detect(engine, container, "redis-connection-leak", seconds=20)
+        terminal = {
+            IncidentStatus.ESCALATED,
+            IncidentStatus.RESOLVED,
+            IncidentStatus.CLOSED,
+            IncidentStatus.FAILED,
+        }
+        for _ in range(60):
+            current = await container.incidents.get(incident.id)
+            if current.status in terminal:
+                break
+            await asyncio.sleep(0.2)
+            await temporal_env.sleep(20)  # skip past a re-observation timer
+        final = await container.incidents.get(incident.id)
+        assert final.status is IncidentStatus.ESCALATED, final.status
+
+        runs = await container.incidents.agent_runs(incident.id)
+        timeline = await container.incidents.timeline(incident.id)
+        stalled = [r for r in runs if r.termination_reason is TerminationReason.INSUFFICIENT_SIGNAL]
+        assert stalled, [r.termination_reason for r in runs]
+
+        # the same phase ran several times but was entered once: re-observation is not cycling
+        repeats: dict[str, int] = {}
+        for run in stalled:
+            repeats[run.phase] = repeats.get(run.phase, 0) + 1
+        phase, times = max(repeats.items(), key=lambda kv: kv[1])
+        assert times >= 2, repeats
+        # `_enter_phase` records the visit as a status change; a re-observation must not add one
+        entered = [e for e in timeline if f"entering phase '{phase}'" in e.title]
+        assert len(entered) == 1, [e.title for e in entered]
+
+        # it escalated because the signal never arrived, not because it ran out of budget
+        assert not any(e.type == "budget.exhausted" for e in timeline)
+        escalations = [e for e in timeline if e.type == "incident.escalated"]
+        assert escalations and "re-observation" in escalations[-1].title, escalations[-1].title

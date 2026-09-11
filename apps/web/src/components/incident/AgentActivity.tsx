@@ -17,6 +17,7 @@ const TERMINATION_TONE: Record<TerminationReason, "ok" | "warn" | "danger" | "ne
   no_action_required: "ok",
   escalate: "danger",
   budget_exhausted: "danger",
+  insufficient_signal: "live",
   llm_unavailable: "warn",
   incident_inactive: "neutral",
   error: "danger",

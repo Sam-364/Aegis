@@ -204,6 +204,7 @@ class TerminationReason(StrEnum):
     NO_ACTION_REQUIRED = "no_action_required"
     ESCALATE = "escalate"
     BUDGET_EXHAUSTED = "budget_exhausted"
+    INSUFFICIENT_SIGNAL = "insufficient_signal"
     LLM_UNAVAILABLE = "llm_unavailable"
     INCIDENT_INACTIVE = "incident_inactive"
     ERROR = "error"

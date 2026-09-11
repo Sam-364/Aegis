@@ -45,8 +45,8 @@ and the budgets are policy, not code.
 
 ## Consequences
 
-- Three packs ship: `incident-investigation@1.0.0` (fallback), `api-latency-investigation@1.1.0`
-  (`latency`, `saturation`), `error-rate-investigation@1.0.0` (`error_rate`, `availability`). All
+- Three packs ship: `incident-investigation@1.1.0` (fallback), `api-latency-investigation@1.2.0`
+  (`latency`, `saturation`), `error-rate-investigation@1.1.0` (`error_rate`, `availability`). All
   use the same phase names, which matters because `PHASE_ACTIONS` (allowed model actions), the
   deterministic planner's playbooks, and the workflow's `PHASE_STATUS`/`verify`/`escalate` handling
   are keyed by phase name.

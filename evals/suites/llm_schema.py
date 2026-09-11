@@ -22,7 +22,7 @@ detection signals:
 - order-service (service) -> postgres, redis, inventory-service
 - auth-service (service) -> redis, postgres
 - redis (cache)
-# Flow incident-investigation@1.0.0 — phase 'investigate' (iteration 1/8)
+# Flow incident-investigation@1.1.0 — phase 'investigate' (iteration 1/8)
 allowed actions in this phase: call_tool, propose_hypotheses, phase_complete, conclude_no_action, escalate
 # Allowed tools (only these can be called now)
 - inspect_redis(component?: string): Cache client connections by service, saturation, blocked clients, hit rate.
@@ -45,7 +45,7 @@ severity sev2, affected services: api-gateway, order-service, inventory-service
 - api-gateway (gateway) -> order-service
 - order-service (service) -> inventory-service, postgres
 - inventory-service (service) -> postgres
-# Flow incident-investigation@1.0.0 — phase 'remediate' (iteration 1/2)
+# Flow incident-investigation@1.1.0 — phase 'remediate' (iteration 1/2)
 allowed actions in this phase: plan_remediation, call_tool, conclude_no_action, escalate
 # Remediation tools available to the workflow (plan_remediation only)
 restart_service, rollback_deployment, scale_service, rotate_connection_pool, clear_cache

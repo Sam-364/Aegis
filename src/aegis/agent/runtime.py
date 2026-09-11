@@ -133,6 +133,10 @@ class AgentDependencies:
     max_invalid_streak: int = 2
 
 
+MAX_STALLED_ITERATIONS = 2
+"""Consecutive `phase_complete` proposals with no new evidence before the phase gives up."""
+
+
 class PhaseOutcome(BaseModel):
     agent_run_id: uuid.UUID
     incident_id: uuid.UUID
@@ -1047,11 +1051,44 @@ class AgentRuntime:
             )
             evaluation = FlowRuntime(flow).evaluate_exit(phase, facts)
             if not evaluation.met:
+                # The proposer has nothing left to offer but the phase is not finished. If that
+                # repeats while the evidence set is unchanged, looping is pointless: the symptom
+                # has not developed far enough to diagnose yet. Hand that back to the workflow,
+                # which owns durable waiting, instead of spending the incident's budget here.
+                stalled = (
+                    state.get("stalled_streak", 0) + 1
+                    if len(evidence) == state.get("evidence_seen", -1)
+                    else 0
+                )
+                state = {**state, "stalled_streak": stalled, "evidence_seen": len(evidence)}
+                if stalled >= MAX_STALLED_ITERATIONS:
+                    await self._record_step(
+                        uow,
+                        state,
+                        AgentStepKind.DECISION,
+                        "conclude",
+                        "no new evidence and exit conditions unmet; the signal has not developed",
+                        {},
+                        {"unsatisfied": evaluation.unsatisfied, "evidence": len(evidence)},
+                    )
+                    await uow.commit()
+                    return {
+                        **state,
+                        "decision": "terminate",
+                        "termination": TerminationReason.INSUFFICIENT_SIGNAL.value,
+                        "summary": (
+                            "no new evidence in "
+                            f"{MAX_STALLED_ITERATIONS} iterations; unmet: "
+                            + ", ".join(evaluation.unsatisfied)
+                        )[:200],
+                    }
                 feedback.append(
                     "phase exit conditions not yet met: "
                     + ", ".join(evaluation.unsatisfied)
                     + " — keep investigating"
                 )
+            else:
+                state = {**state, "stalled_streak": 0, "evidence_seen": len(evidence)}
             await self._record_step(
                 uow,
                 state,

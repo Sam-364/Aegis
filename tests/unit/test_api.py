@@ -220,7 +220,7 @@ async def test_registry_simulation_memory_and_notifications(world) -> None:  # t
         tool = (await client.get("/api/v1/tools/restart_service")).json()
         assert (
             tool["category"] == "mutating"
-            and "<remediation>" in tool["used_in"]["incident-investigation@1.0.0"]
+            and "<remediation>" in tool["used_in"]["incident-investigation@1.1.0"]
         )
         assert (await client.get("/api/v1/tools/nope")).status_code == 404
         pol = (await client.get("/api/v1/policies")).json()

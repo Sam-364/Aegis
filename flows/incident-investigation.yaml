@@ -1,6 +1,6 @@
 # Default flow pack: general-purpose investigation for any anomaly.
 name: incident-investigation
-version: "1.0.0"
+version: "1.1.0"
 description: >
   General incident investigation. Triage the blast radius, collect evidence across metrics, logs,
   traces and dependencies, form and validate hypotheses, then plan (never execute) a remediation.
@@ -10,7 +10,7 @@ initial_phase: triage
 remediation_tools: [restart_service, rollback_deployment, scale_service, rotate_connection_pool, clear_cache]
 remediation_risk_ceiling: high
 budget:
-  max_iterations: 24
+  max_iterations: 34
   max_tool_calls: 40
   max_llm_calls: 30
   max_llm_tokens: 250000

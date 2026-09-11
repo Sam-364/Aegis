@@ -164,10 +164,34 @@ over the symptom metrics (30 s stabilization, 150 s timeout). Pass → `resolved
 `investigate` has already been entered twice, escalation as cycling
 (`test_transient_spike_resolves_without_action`).
 
+### Re-observation: a symptom that has not developed yet
+
+Detection is deliberately early, which means a phase can run out of things to look at while the
+fault is still too small to attribute — a connection leak twenty seconds in reads as 23 % pool
+saturation and implicates nobody. Before, the agent kept being told "keep investigating", re-ran the
+same diagnostics and escalated on an exhausted budget.
+
+Now the phase gives up quickly and says why. After `MAX_STALLED_ITERATIONS = 2` consecutive
+`phase_complete` proposals that add no evidence, the agent returns
+`TerminationReason.INSUFFICIENT_SIGNAL` with the unmet exit conditions in its summary. The workflow
+— which is where durable waiting belongs — waits `REOBSERVE_SECONDS` (45 s) on a Temporal timer and
+re-enters the *same* phase, up to `MAX_REOBSERVATIONS` (3). A re-observation is the same visit: it
+does not append to `WorkflowStatus.phases`, so the cycle guard is untouched, and it does not re-emit
+the phase's status change. The waiting incident is queryable (`WorkflowStatus.reobservations`) and a
+cancel during the wait is honoured by the loop's own guard.
+
+If the symptom still cannot be diagnosed after the last re-observation, the incident escalates with
+"no diagnosable signal after 3 re-observations over 135s" — a human takes a fault that is real but
+not yet legible. If it develops in the meantime, the next pass sees 100 % saturation and the
+investigation proceeds normally
+(`tests/workflow/test_incident_workflow.py::test_a_symptom_that_never_develops_is_re_observed_then_escalated`,
+`tests/unit/test_agent_runtime.py::test_phase_gives_up_instead_of_spinning_when_the_signal_has_not_developed`).
+
 **Escalation** means the workflow has finished and a human owns the incident. Triggers: the flow
 transitions to the `escalate` phase; the agent returns `escalate`; the budget is exhausted; policy
 denied the plan; the approval timed out; rejections or failed verifications exhausted
-`max_remediation_attempts`; `max_phases` (14) was reached; or the investigation is *cycling* —
+`max_remediation_attempts`; `max_phases` (14) was reached; re-observations were exhausted; or the
+investigation is *cycling* —
 `MAX_PHASE_ENTRIES = 2` (`src/aegis/workflows/incident_workflow.py`), so a third entry into the same
 phase escalates with "investigation is cycling on phase X without reaching a remediation" rather
 than burning the remaining phases. The incident stays `is_active`, so read-only tools would still
@@ -193,7 +217,7 @@ they are not taken from the run log.
 | t (s) | actor | status | timeline events | what happened |
 |---|---|---|---|---|
 | −21 | operator | — | — | `POST /api/v1/simulation/faults {"scenario_id": "redis-connection-leak"}`; order-service starts leaking Redis connections at 2.5/s |
-| 0 | detector | `detected` | `incident.detected`, `incident.created`, `flow.selected` | the `connections:saturation` rule fires on `redis` after 3 consecutive 5 s samples and is correlated with the gateway/order-service signals; `FlowRegistry.select` picks the pack whose `applies_to` best matches the signal kinds (`api-latency-investigation@1.1.0` for `latency`/`saturation`); workflow `incident-<uuid>` started |
+| 0 | detector | `detected` | `incident.detected`, `incident.created`, `flow.selected` | the `connections:saturation` rule fires on `redis` after 3 consecutive 5 s samples and is correlated with the gateway/order-service signals; `FlowRegistry.select` picks the pack whose `applies_to` best matches the signal kinds (`api-latency-investigation@1.2.0` for `latency`/`saturation`); workflow `incident-<uuid>` started |
 | ~1 | workflow | `triaging` | `incident.status_changed`, `flow.phase_entered` | `triage_incident` |
 | ~1–15 | agent run 1 (`triage`) | `triaging` | `agent.run_started`, `agent.step` ×n, `tool.executed`, `evidence.collected`, `flow.phase_exited`, `agent.run_finished` | `get_health`, `compare_baseline`, `inspect_dependencies`; exit condition `min_evidence >= 3` |
 | ~15–50 | agent run 2 (`investigate`) | `investigating` | as above plus `hypothesis.created` | `inspect_redis` shows order-service holding most connections with a `leaked_by_service` entry; `inspect_dependencies`, `query_traces`, `get_logs` ("redis pool exhausted"); hypothesis H1 `resource_exhaustion` on `order-service` |

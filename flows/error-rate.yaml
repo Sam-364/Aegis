@@ -1,5 +1,5 @@
 name: error-rate-investigation
-version: "1.0.0"
+version: "1.1.0"
 description: Error-led investigation that checks recent deployments and unavailable dependencies first.
 applies_to: [error_rate, availability]
 priority: 10
@@ -7,7 +7,7 @@ initial_phase: triage
 remediation_tools: [restart_service, rollback_deployment, scale_service, rotate_connection_pool, clear_cache]
 remediation_risk_ceiling: high
 budget:
-  max_iterations: 22
+  max_iterations: 32
   max_tool_calls: 36
   max_llm_calls: 26
   max_llm_tokens: 220000

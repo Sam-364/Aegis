@@ -49,7 +49,7 @@ RelationKind: supports | contradicts | caused_by | depends_on | correlated_with 
 GraphNodeKind: evidence | hypothesis | service | action
 AgentRunStatus: running | completed | failed | budget_exhausted | cancelled
 TerminationReason: phase_complete | action_planned | no_action_required | escalate |
-  budget_exhausted | llm_unavailable | incident_inactive | error
+  budget_exhausted | insufficient_signal | llm_unavailable | incident_inactive | error
 AgentStepKind: proposal | fallback | authorization | tool_execution | hypothesis_update |
   remediation_plan | decision   (observation / evidence_update exist but are never emitted)
 SignalKind: latency | error_rate | saturation | traffic | availability | resource
@@ -59,7 +59,7 @@ VerificationStatus: pending | passed | failed | inconclusive
 HealthState: healthy | degraded | unhealthy | unknown
 NotificationKind: incident_detected | approval_requested | incident_resolved | incident_escalated | policy_denial
 Phases (all flow packs): triage, investigate, hypothesize, validate, remediate, verify (terminal), escalate (terminal)
-Flow refs: incident-investigation@1.0.0, api-latency-investigation@1.1.0, error-rate-investigation@1.0.0
+Flow refs: incident-investigation@1.1.0, api-latency-investigation@1.2.0, error-rate-investigation@1.1.0
 ```
 
 Event types (`IncidentEvent.type`, SSE `event:` name): incident.detected, incident.created,
