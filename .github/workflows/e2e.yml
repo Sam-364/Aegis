@@ -80,6 +80,9 @@ jobs:
         env:
           SCENARIOS: ${{ inputs.scenarios || 'redis-connection-leak bad-deployment' }}
           SCENARIO_TIMEOUT: ${{ inputs.timeout || '900' }}
+        # pipefail is essential: without it the pipeline reports tee's status and a failing
+        # scenario passes the job silently, which is exactly what happened on the first run.
+        shell: bash -euo pipefail {0}
         run: |
           args=()
           for s in $SCENARIOS; do args+=(--scenario "$s"); done
