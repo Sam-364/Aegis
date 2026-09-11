@@ -1,0 +1,77 @@
+# Aegis default policy. Higher priority rules are evaluated first; the first match wins.
+# Anything not matched is DENIED. Invariants in the engine cannot be overridden here.
+rules:
+  - name: deny-dangerous
+    priority: 1000
+    effect: deny
+    categories: [dangerous]
+    reason: Dangerous tools exist only as policy test cases.
+
+  - name: allow-read-only
+    priority: 900
+    effect: allow
+    categories: [read_only]
+    reason: Read-only tools are always safe to run.
+
+  - name: allow-diagnostics
+    priority: 890
+    effect: allow
+    categories: [diagnostic]
+    max_risk: low
+    reason: Low-risk diagnostics are safe to run autonomously.
+
+  - name: approve-diagnostics-medium-risk
+    priority: 880
+    effect: require_approval
+    categories: [diagnostic]
+    min_risk: medium
+    reason: Medium-risk diagnostics (load projections against production) need a human.
+
+  - name: deny-high-risk-mutation-production
+    priority: 800
+    effect: deny
+    categories: [mutating]
+    min_risk: high
+    environments: [production]
+    reason: High-risk mutations are never autonomous in production.
+
+  - name: approve-rollback
+    priority: 700
+    effect: require_approval
+    tools: [rollback_deployment]
+    reason: Rollbacks change what is running and always require approval.
+
+  - name: approve-production-mutations
+    priority: 650
+    effect: require_approval
+    categories: [mutating]
+    environments: [production, staging]
+    reason: Every mutation in staging or production requires approval.
+
+  - name: approve-sev1-mutations
+    priority: 640
+    effect: require_approval
+    categories: [mutating]
+    severities: [sev1]
+    reason: SEV1 incidents have humans in the loop for every change.
+
+  - name: approve-medium-risk-mutations
+    priority: 600
+    effect: require_approval
+    categories: [mutating]
+    min_risk: medium
+    reason: Medium and higher risk mutations require approval.
+
+  - name: allow-low-risk-mutations-development
+    priority: 500
+    effect: allow
+    categories: [mutating]
+    max_risk: low
+    environments: [development]
+    reason: Low-risk mutations (pool rotation, cache clear) may run autonomously in development.
+
+  - name: approve-remaining-mutations
+    priority: 100
+    effect: require_approval
+    categories: [mutating]
+    reason: Any other mutation requires approval.

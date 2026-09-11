@@ -1,0 +1,23 @@
+apiVersion: v2
+name: aegis
+description: >-
+  Aegis - a durable autonomous incident-response execution runtime in which an
+  AI agent is one controlled decision-making component. Deploys the API,
+  Temporal worker, detector and console; expects managed Postgres (pgvector),
+  Redis and Temporal in production.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+kubeVersion: ">=1.27.0-0"
+home: https://github.com/example-org/aegis
+sources:
+  - https://github.com/example-org/aegis
+keywords:
+  - incident-response
+  - sre
+  - temporal
+  - agents
+maintainers:
+  - name: Skylark Labs
+annotations:
+  artifacthub.io/license: Apache-2.0

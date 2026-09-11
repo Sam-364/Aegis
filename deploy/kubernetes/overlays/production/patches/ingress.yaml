@@ -1,0 +1,38 @@
+# Replace the placeholder hosts. TLS via cert-manager (ClusterIssuer
+# `letsencrypt-prod`) or supply `aegis-tls` yourself:
+#   kubectl -n aegis create secret tls aegis-tls --cert=fullchain.pem --key=privkey.pem
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aegis
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/limit-rps: "50"
+spec:
+  tls:
+    - hosts:
+        - aegis.example.com
+        - api.aegis.example.com
+      secretName: aegis-tls
+  rules:
+    - host: api.aegis.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  name: http
+    - host: aegis.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  name: http

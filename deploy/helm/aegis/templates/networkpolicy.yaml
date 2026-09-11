@@ -1,0 +1,153 @@
+{{- if .Values.networkPolicy.enabled }}
+{{- $np := .Values.networkPolicy -}}
+{{- $name := include "aegis.name" . -}}
+# Default-deny ingress for every pod of this release, then explicit allows.
+# Egress is deliberately left open (LLM API, managed Postgres/Redis/Temporal).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "aegis.fullname" . }}-default-deny-ingress
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" (dict "root" $ "component" "networkpolicy") | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes: ["Ingress"]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "aegis.fullname" . }}-allow-api
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" (dict "root" $ "component" "networkpolicy") | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "aegis.selectorLabels" (dict "root" $ "component" "api") | nindent 6 }}
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $np.ingressControllerNamespace }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $np.monitoringNamespace }}
+        {{- if .Values.web.enabled }}
+        - podSelector:
+            matchLabels:
+              {{- include "aegis.selectorLabels" (dict "root" $ "component" "web") | nindent 14 }}
+        {{- end }}
+        {{- with $np.extraApiIngressFrom }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      ports:
+        - port: {{ .Values.api.containerPort }}
+          protocol: TCP
+{{- if .Values.web.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "aegis.fullname" . }}-allow-web
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" (dict "root" $ "component" "networkpolicy") | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "aegis.selectorLabels" (dict "root" $ "component" "web") | nindent 6 }}
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $np.ingressControllerNamespace }}
+      ports:
+        - port: {{ .Values.web.containerPort }}
+          protocol: TCP
+{{- end }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "aegis.fullname" . }}-allow-metrics-scrape
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" (dict "root" $ "component" "networkpolicy") | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchExpressions:
+      - key: app.kubernetes.io/component
+        operator: In
+        values: ["worker", "detector"]
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $np.monitoringNamespace }}
+      ports:
+        - port: {{ .Values.worker.metricsPort }}
+          protocol: TCP
+        - port: {{ .Values.detector.metricsPort }}
+          protocol: TCP
+{{- if or .Values.devInfra.enabled .Values.simulator.enabled }}
+---
+# Dev infrastructure (postgres/redis/temporal/simulator) reachable from any pod
+# of this release; Temporal UI reachable from the ingress controller.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "aegis.fullname" . }}-allow-dev-infra
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" (dict "root" $ "component" "networkpolicy") | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $name }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchExpressions:
+      - key: app.kubernetes.io/component
+        operator: In
+        values: ["postgres", "redis", "temporal", "simulator"]
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - podSelector: {}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $np.monitoringNamespace }}
+{{- if and .Values.devInfra.enabled .Values.devInfra.temporal.ui.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "aegis.fullname" . }}-allow-temporal-ui
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" (dict "root" $ "component" "networkpolicy") | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "aegis.selectorLabels" (dict "root" $ "component" "temporal-ui") | nindent 6 }}
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ $np.ingressControllerNamespace }}
+      ports:
+        - port: 8080
+          protocol: TCP
+{{- end }}
+{{- end }}
+{{- end }}

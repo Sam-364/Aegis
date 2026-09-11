@@ -1,0 +1,19 @@
+{{- if .Values.api.pdb.enabled }}
+{{- $ctx := dict "root" $ "component" "api" -}}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "aegis.componentName" $ctx }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" $ctx | nindent 4 }}
+spec:
+  {{- if .Values.api.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.api.pdb.maxUnavailable }}
+  {{- else }}
+  minAvailable: {{ .Values.api.pdb.minAvailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "aegis.selectorLabels" $ctx | nindent 6 }}
+{{- end }}

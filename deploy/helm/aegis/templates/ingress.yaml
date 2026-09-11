@@ -1,0 +1,71 @@
+{{- if .Values.ingress.enabled }}
+{{- $apiSvc := include "aegis.componentName" (dict "root" $ "component" "api") -}}
+{{- $webSvc := include "aegis.componentName" (dict "root" $ "component" "web") -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "aegis.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" (dict "root" $ "component" "ingress") | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- if or .Values.ingress.tls.enabled .Values.ingress.extraTls }}
+  tls:
+    {{- if .Values.ingress.tls.enabled }}
+    - hosts:
+        - {{ .Values.ingress.api.host }}
+        {{- if .Values.web.enabled }}
+        - {{ .Values.ingress.web.host }}
+        {{- end }}
+      secretName: {{ .Values.ingress.tls.secretName }}
+    {{- end }}
+    {{- with .Values.ingress.extraTls }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.api.host }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.api.path }}
+            pathType: {{ .Values.ingress.api.pathType }}
+            backend:
+              service:
+                name: {{ $apiSvc }}
+                port:
+                  name: http
+    {{- if .Values.web.enabled }}
+    - host: {{ .Values.ingress.web.host }}
+      http:
+        paths:
+          - path: {{ .Values.ingress.web.path }}
+            pathType: {{ .Values.ingress.web.pathType }}
+            backend:
+              service:
+                name: {{ $webSvc }}
+                port:
+                  name: http
+    {{- end }}
+    {{- if and .Values.devInfra.enabled .Values.devInfra.temporal.ui.enabled }}
+    - host: {{ .Values.devInfra.temporal.ui.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "aegis.componentName" (dict "root" $ "component" "temporal-ui") }}
+                port:
+                  name: http
+    {{- end }}
+    {{- with .Values.ingress.extraRules }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}

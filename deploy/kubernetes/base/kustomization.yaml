@@ -1,0 +1,91 @@
+# Aegis Kustomize base. Never apply this directly; use an overlay:
+#   kubectl apply -k deploy/kubernetes/overlays/dev
+#   kubectl apply -k deploy/kubernetes/overlays/production
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: aegis
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: aegis
+      app.kubernetes.io/managed-by: kustomize
+    includeSelectors: false
+    includeTemplates: true
+
+resources:
+  - namespace.yaml
+  - serviceaccount.yaml
+  - api.yaml
+  - worker.yaml
+  - detector.yaml
+  - web.yaml
+  - migrate-job.yaml
+  - ingress.yaml
+  - networkpolicy.yaml
+  # secret.example.yaml is intentionally NOT listed: `aegis-secrets` is created
+  # out-of-band (kubectl create secret / ExternalSecret). The dev overlay
+  # generates a throwaway one.
+
+# Non-secret AEGIS_* settings (see src/aegis/config.py for the full list).
+# The generated name carries a content hash, so changing a value rolls every
+# Deployment that consumes it. Overlays merge/override with behavior: merge.
+configMapGenerator:
+  - name: aegis-config
+    literals:
+      # identity / logging
+      - AEGIS_ENVIRONMENT=development
+      - AEGIS_LOG_LEVEL=INFO
+      - AEGIS_LOG_FORMAT=json
+      - AEGIS_SERVICE_NAME=aegis
+      # persistence tuning (URLs with credentials live in the Secret)
+      - AEGIS_DATABASE_POOL_SIZE=10
+      - AEGIS_DATABASE_MAX_OVERFLOW=10
+      # temporal
+      - AEGIS_TEMPORAL_ADDRESS=temporal:7233
+      - AEGIS_TEMPORAL_NAMESPACE=default
+      - AEGIS_TEMPORAL_TASK_QUEUE=aegis-incidents
+      - AEGIS_TEMPORAL_ENABLED=true
+      # telemetry / infrastructure gateway
+      - AEGIS_SIMULATOR_URL=http://simulator:8601
+      - AEGIS_TELEMETRY_PROVIDER=simulator
+      - AEGIS_PROMETHEUS_URL=http://prometheus:9090
+      # llm (API key comes from the Secret)
+      - AEGIS_LLM_PROVIDER=openai
+      - AEGIS_LLM_REASONER_MODEL=gpt-5-mini
+      - AEGIS_LLM_FAST_MODEL=gpt-5-nano
+      - AEGIS_LLM_EMBEDDING_MODEL=text-embedding-3-small
+      - AEGIS_LLM_REASONING_EFFORT=low
+      - AEGIS_LLM_TIMEOUT_SECONDS=60
+      # observability
+      - AEGIS_OTEL_ENABLED=false
+      - AEGIS_OTEL_EXPORTER_ENDPOINT=http://otel-collector:4317
+      - AEGIS_METRICS_ENABLED=true
+      # api
+      - AEGIS_API_AUTH_MODE=disabled
+      - 'AEGIS_API_CORS_ORIGINS=["http://localhost:3600"]'
+      - AEGIS_API_PUBLIC_URL=http://localhost:8600
+      - AEGIS_API_RATE_LIMIT_PER_MINUTE=600
+      # detection / runtime
+      - AEGIS_DETECTION_INTERVAL_SECONDS=5
+      - AEGIS_DETECTION_WINDOW_SECONDS=600
+      - AEGIS_APPROVAL_TIMEOUT_SECONDS=900
+      - AEGIS_VERIFICATION_POLL_SECONDS=5
+  # Console (Next.js). NEXT_PUBLIC_* values are inlined at *build* time by
+  # apps/web/Dockerfile; these runtime values only matter for server-side code
+  # and must match the build args used to produce the aegis/web image.
+  - name: aegis-web-config
+    literals:
+      - AEGIS_API_URL=http://api:8600
+      - NEXT_PUBLIC_AEGIS_API_URL=http://localhost:8600
+      - NEXT_PUBLIC_TEMPORAL_UI_URL=http://localhost:8233
+      - NEXT_PUBLIC_GRAFANA_URL=http://localhost:3000
+      - NEXT_PUBLIC_PROMETHEUS_URL=http://localhost:9090
+      - NEXT_PUBLIC_TEMPORAL_NAMESPACE=default
+      - NEXT_TELEMETRY_DISABLED=1
+
+images:
+  - name: aegis/aegis
+    newTag: latest
+  - name: aegis/web
+    newTag: latest

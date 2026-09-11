@@ -1,0 +1,1 @@
+"""Temporal client-side adapter."""

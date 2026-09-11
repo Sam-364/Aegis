@@ -1,0 +1,20 @@
+# Optional: Prometheus Operator scrape configs for Aegis. Requires the
+# monitoring.coreos.com CRDs (kube-prometheus-stack). Apply separately:
+#   kubectl apply -k deploy/kubernetes/monitoring
+# The `release: kube-prometheus-stack` label must match your Prometheus'
+# serviceMonitorSelector / podMonitorSelector - edit it below if it differs.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: aegis
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: aegis
+      release: kube-prometheus-stack
+    includeSelectors: false
+
+resources:
+  - servicemonitor-api.yaml
+  - podmonitor-worker.yaml
+  - podmonitor-detector.yaml

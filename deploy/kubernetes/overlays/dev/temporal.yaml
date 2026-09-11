@@ -1,0 +1,176 @@
+# DEV ONLY Temporal (auto-setup, single process, schemas in the dev Postgres)
+# plus the Temporal web UI. Production uses Temporal Cloud or a dedicated
+# Temporal cluster (official helm chart) referenced from AEGIS_TEMPORAL_ADDRESS.
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: temporal
+spec:
+  type: ClusterIP
+  # auto-setup registers the default namespace through this Service name while
+  # the pod is still starting, so do not gate on readiness.
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: temporal
+  ports:
+    - name: grpc
+      port: 7233
+      targetPort: grpc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: temporal
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aegis
+      app.kubernetes.io/component: temporal
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aegis
+        app.kubernetes.io/component: temporal
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000 # `temporal` user in the official image
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: temporal
+          image: temporalio/auto-setup:1.25.2
+          ports:
+            - name: grpc
+              containerPort: 7233
+          env:
+            - name: DB
+              value: postgres12
+            - name: DB_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: aegis
+            - name: POSTGRES_PWD
+              value: aegis
+            - name: POSTGRES_SEEDS
+              value: postgres
+            - name: DBNAME
+              value: temporal
+            - name: VISIBILITY_DBNAME
+              value: temporal_visibility
+            - name: ENABLE_ES
+              value: "false"
+            - name: TEMPORAL_ADDRESS
+              value: temporal:7233
+            - name: TEMPORAL_CLI_ADDRESS
+              value: temporal:7233
+          startupProbe:
+            tcpSocket:
+              port: grpc
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            tcpSocket:
+              port: grpc
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: grpc
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal-ui
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: temporal-ui
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: temporal-ui
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-ui
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: temporal-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aegis
+      app.kubernetes.io/component: temporal-ui
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aegis
+        app.kubernetes.io/component: temporal-ui
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        # The image declares no USER (it would run as root); `temporal` is uid
+        # 5000 and owns /home/ui-server, whose entrypoint renders
+        # config/docker.yaml at startup - so no readOnlyRootFilesystem here.
+        runAsNonRoot: true
+        runAsUser: 5000
+        runAsGroup: 5000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: temporal-ui
+          image: temporalio/ui:2.32.0
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: TEMPORAL_ADDRESS
+              value: temporal:7233
+            - name: TEMPORAL_CORS_ORIGINS
+              value: http://aegis.localtest.me
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]

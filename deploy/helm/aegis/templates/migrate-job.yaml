@@ -1,0 +1,89 @@
+{{- if .Values.migrations.enabled }}
+{{- $ctx := dict "root" $ "component" "migrate" -}}
+{{- $name := include "aegis.componentName" $ctx -}}
+{{- if eq (include "aegis.createSecret" .) "true" }}
+# Hook-scoped copy of the DB URL: pre-install hooks run before the release's
+# regular Secret exists. Not rendered when secrets.existingSecret is set.
+# Deleted and recreated on every hook run (before-hook-creation); it is NOT
+# removed by `helm uninstall` - delete it by hand if you care.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" $ctx | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation
+type: Opaque
+stringData:
+  AEGIS_DATABASE_URL: {{ .Values.secrets.databaseUrl | quote }}
+---
+{{- end }}
+# `aegis migrate` as a Helm hook: runs to completion before the release's
+# resources are installed/upgraded. The API's /ready also fails until the schema
+# is at head, so no traffic reaches an unmigrated database either way.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" $ctx | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": {{ .Values.migrations.hookWeight | quote }}
+    "helm.sh/hook-delete-policy": {{ .Values.migrations.hookDeletePolicy | quote }}
+spec:
+  backoffLimit: {{ .Values.migrations.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.migrations.activeDeadlineSeconds }}
+  template:
+    metadata:
+      labels:
+        {{- include "aegis.selectorLabels" $ctx | nindent 8 }}
+    spec:
+      restartPolicy: OnFailure
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "aegis.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountToken }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: migrate
+          image: {{ include "aegis.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["aegis", "migrate"]
+          env:
+            # Hooks cannot depend on the release ConfigMap; only what settings
+            # validation needs is passed explicitly. Migrations never touch the
+            # LLM or Temporal.
+            - name: AEGIS_ENVIRONMENT
+              value: {{ .Values.config.environment | quote }}
+            - name: AEGIS_API_AUTH_MODE
+              value: {{ .Values.config.api.authMode | quote }}
+            - name: AEGIS_LLM_PROVIDER
+              value: disabled
+            - name: AEGIS_LOG_FORMAT
+              value: {{ .Values.config.logFormat | quote }}
+            - name: AEGIS_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ ternary $name (include "aegis.secretName" .) (eq (include "aegis.createSecret" .) "true") }}
+                  key: AEGIS_DATABASE_URL
+          resources:
+            {{- toYaml .Values.migrations.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.containerSecurityContext | nindent 12 }}
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi
+{{- end }}

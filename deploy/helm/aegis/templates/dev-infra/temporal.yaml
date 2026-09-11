@@ -1,0 +1,174 @@
+{{- if .Values.devInfra.enabled }}
+{{- $ctx := dict "root" $ "component" "temporal" -}}
+{{- $t := .Values.devInfra.temporal -}}
+{{- $pg := .Values.devInfra.postgres -}}
+{{- $name := include "aegis.componentName" $ctx -}}
+{{- $pgName := include "aegis.componentName" (dict "root" $ "component" "postgres") -}}
+# DEV ONLY Temporal auto-setup (schemas in the dev Postgres) + web UI.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" $ctx | nindent 4 }}
+spec:
+  type: ClusterIP
+  # auto-setup registers the default namespace through this Service while the
+  # pod is still starting.
+  publishNotReadyAddresses: true
+  selector:
+    {{- include "aegis.selectorLabels" $ctx | nindent 4 }}
+  ports:
+    - name: grpc
+      port: 7233
+      targetPort: grpc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" $ctx | nindent 4 }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "aegis.selectorLabels" $ctx | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "aegis.selectorLabels" $ctx | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: temporal
+          image: {{ $t.image }}
+          ports:
+            - name: grpc
+              containerPort: 7233
+          env:
+            - name: DB
+              value: postgres12
+            - name: DB_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              value: {{ $pg.user | quote }}
+            - name: POSTGRES_PWD
+              value: {{ $pg.password | quote }}
+            - name: POSTGRES_SEEDS
+              value: {{ $pgName }}
+            - name: DBNAME
+              value: temporal
+            - name: VISIBILITY_DBNAME
+              value: temporal_visibility
+            - name: ENABLE_ES
+              value: "false"
+            - name: TEMPORAL_ADDRESS
+              value: {{ $name }}:7233
+            - name: TEMPORAL_CLI_ADDRESS
+              value: {{ $name }}:7233
+          startupProbe:
+            tcpSocket:
+              port: grpc
+            periodSeconds: 5
+            failureThreshold: 60
+          readinessProbe:
+            tcpSocket:
+              port: grpc
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: grpc
+            periodSeconds: 20
+          resources:
+            {{- toYaml $t.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+{{- if $t.ui.enabled }}
+{{- $uiCtx := dict "root" $ "component" "temporal-ui" -}}
+{{- $uiName := include "aegis.componentName" $uiCtx }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $uiName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" $uiCtx | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "aegis.selectorLabels" $uiCtx | nindent 4 }}
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $uiName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" $uiCtx | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "aegis.selectorLabels" $uiCtx | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "aegis.selectorLabels" $uiCtx | nindent 8 }}
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        # The image declares no USER (it would run as root); `temporal` is uid
+        # 5000 and owns /home/ui-server, whose entrypoint renders
+        # config/docker.yaml at startup - so no readOnlyRootFilesystem here.
+        runAsNonRoot: true
+        runAsUser: 5000
+        runAsGroup: 5000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: temporal-ui
+          image: {{ $t.ui.image }}
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: TEMPORAL_ADDRESS
+              value: {{ $name }}:7233
+            - name: TEMPORAL_CORS_ORIGINS
+              value: http://{{ .Values.ingress.web.host }}
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+{{- end }}
+{{- end }}

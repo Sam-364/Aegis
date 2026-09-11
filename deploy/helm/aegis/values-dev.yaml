@@ -1,0 +1,78 @@
+# Local kind/minikube values: in-cluster Postgres/Redis/Temporal, simulator on,
+# deterministic planner (no LLM key), auth disabled, single replicas.
+#   docker compose build && kind load docker-image aegis/aegis:local aegis/web:local
+#   helm upgrade --install aegis deploy/helm/aegis -n aegis --create-namespace \
+#     -f deploy/helm/aegis/values-dev.yaml
+
+image:
+  repository: aegis/aegis
+  tag: local
+  pullPolicy: IfNotPresent
+
+config:
+  environment: development
+  logLevel: DEBUG
+  llm:
+    provider: disabled # switch to openai and set secrets.llmApiKey for real runs
+  api:
+    authMode: disabled
+    corsOrigins:
+      - http://aegis.localtest.me
+      - http://localhost:3600
+    publicUrl: http://api.aegis.localtest.me
+
+# Throwaway dev credentials; match devInfra.postgres below.
+secrets:
+  llmApiKey: ""
+  databaseUrl: postgresql+asyncpg://aegis:aegis@aegis-postgres:5432/aegis
+  redisUrl: redis://aegis-redis:6379/0
+  apiKeys: dev-admin-key:admin:local-admin,dev-viewer-key:viewer:local-viewer
+
+api:
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+  pdb:
+    enabled: false
+
+worker:
+  replicaCount: 1
+  pdb:
+    enabled: false
+
+simulator:
+  enabled: true
+
+web:
+  replicaCount: 1
+  image:
+    repository: aegis/web
+    tag: local
+  pdb:
+    enabled: false
+  env:
+    NEXT_PUBLIC_AEGIS_API_URL: http://api.aegis.localtest.me
+    NEXT_PUBLIC_TEMPORAL_UI_URL: http://temporal.aegis.localtest.me
+    NEXT_PUBLIC_GRAFANA_URL: http://localhost:3000
+    NEXT_PUBLIC_PROMETHEUS_URL: http://localhost:9090
+    NEXT_PUBLIC_TEMPORAL_NAMESPACE: default
+    NEXT_TELEMETRY_DISABLED: "1"
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+  api:
+    host: api.aegis.localtest.me
+  web:
+    host: aegis.localtest.me
+  tls:
+    enabled: false
+
+devInfra:
+  enabled: true
+  postgres:
+    storage: 2Gi

@@ -1,0 +1,180 @@
+[project]
+name = "aegis"
+version = "0.1.0"
+description = "Aegis — a durable autonomous incident-response execution runtime in which an AI agent is one controlled decision-making component."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Skylark Labs" }]
+dependencies = [
+  "fastapi>=0.141,<0.142",
+  "uvicorn[standard]>=0.52,<0.53",
+  "pydantic>=2.13,<3",
+  "pydantic-settings>=2.15,<3",
+  "sqlalchemy[asyncio]>=2.0.52,<2.1",
+  "alembic>=1.19,<2",
+  "asyncpg>=0.31,<0.32",
+  "psycopg[binary,pool]>=3.3,<4",
+  "pgvector>=0.5,<0.6",
+  "redis>=8.1,<9",
+  "httpx>=0.28,<0.29",
+  "structlog>=26.1,<27",
+  "orjson>=3.12,<4",
+  "pyyaml>=6.0.3,<7",
+  "tenacity>=9.1,<10",
+  "sse-starlette>=3.4,<4",
+  "temporalio>=1.32,<1.33",
+  "langgraph>=1.2,<2",
+  "langgraph-checkpoint-postgres>=3.1,<4",
+  "openai>=3.11,<4",
+  "prometheus-client>=0.26,<0.27",
+  "opentelemetry-sdk>=1.44,<2",
+  "opentelemetry-exporter-otlp-proto-grpc>=1.44,<2",
+  "opentelemetry-instrumentation-fastapi>=0.65b0",
+  "opentelemetry-instrumentation-sqlalchemy>=0.65b0",
+  "opentelemetry-instrumentation-httpx>=0.65b0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=9.1,<10",
+  "pytest-asyncio>=1.4,<2",
+  "pytest-timeout>=2.3",
+  "hypothesis>=6.168,<7",
+  "ruff>=0.16,<0.17",
+  "mypy>=2.3,<3",
+  "import-linter>=2.15,<3",
+  "types-pyyaml",
+  "respx>=0.22",
+  "freezegun>=1.5",
+]
+
+[project.scripts]
+aegis-api = "aegis.apps.api:main"
+aegis-worker = "aegis.apps.worker:main"
+aegis-simulator = "aegis.apps.simulator:main"
+aegis-detector = "aegis.apps.detector:main"
+aegis = "aegis.apps.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/aegis"]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["src", "tests", "evals"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "SIM", "TCH", "RUF", "ASYNC", "S", "PL"]
+ignore = [
+  "PLR0913", # many args are fine for explicit constructors
+  "PLR2004", # magic values in tests / scoring weights are documented inline
+  "S101",    # asserts are used in tests
+  "RUF012",
+  "TC001", "TC002", "TC003", # pydantic needs runtime imports
+  "S311",    # simulator RNG is deliberately non-crypto
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "PLR", "B011", "E501", "PLC0415"]
+"src/aegis/simulator/engine.py" = ["PLR0912", "PLR0915", "PLR0911", "C901"]
+"src/aegis/simulator/api.py" = ["PLR0915"]
+"src/aegis/agent/prompts.py" = ["E501"]
+"src/aegis/agent/runtime.py" = ["PLR0912", "PLR0915", "PLR0911", "PLR0917", "C901"]
+"src/aegis/workflows/incident_workflow.py" = ["PLR0912", "PLR0911", "PLR0915", "A002", "C901"]
+"src/aegis/workflows/activities.py" = ["PLR0915", "PLR0912", "A002"]
+"src/aegis/apps/**" = ["PLC0415"]
+"src/aegis/api/app.py" = ["PLC0415"]
+"src/aegis/api/v1/**" = ["PLR0917", "PLR0913"]
+"evals/**" = ["S", "PLR", "E501", "PLC0415"]
+"scripts/**" = ["E501", "T201", "PLR"]
+"migrations/**" = ["E501", "N999"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+mypy_path = "src"
+packages = ["aegis"]
+warn_unreachable = true
+warn_unused_ignores = true
+disallow_any_generics = true
+no_implicit_reexport = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = ["pgvector.*", "langgraph.*", "langgraph_checkpoint_postgres.*", "sse_starlette.*", "opentelemetry.*", "temporalio.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+markers = [
+  "integration: requires postgres/redis (docker compose --profile test)",
+  "workflow: requires Temporal test server (downloaded on first run)",
+  "e2e: requires the full docker compose stack",
+  "chaos: destructive tests against the docker compose stack",
+  "llm: makes real LLM calls (costs money)",
+]
+timeout = 120
+filterwarnings = ["error::pytest.PytestUnraisableExceptionWarning", "ignore::DeprecationWarning"]
+
+[tool.importlinter]
+root_package = "aegis"
+include_external_packages = false
+
+[[tool.importlinter.contracts]]
+name = "Domain is pure"
+type = "forbidden"
+source_modules = ["aegis.domain"]
+forbidden_modules = [
+  "aegis.ports", "aegis.flow", "aegis.policy", "aegis.tools", "aegis.evidence", "aegis.hypotheses",
+  "aegis.detection", "aegis.verification", "aegis.remediation", "aegis.memory", "aegis.llm", "aegis.agent",
+  "aegis.workflows", "aegis.infrastructure", "aegis.application", "aegis.api", "aegis.simulator", "aegis.apps",
+]
+
+[[tool.importlinter.contracts]]
+name = "Ports depend only on domain"
+type = "forbidden"
+source_modules = ["aegis.ports"]
+forbidden_modules = [
+  "aegis.flow", "aegis.policy", "aegis.tools", "aegis.evidence", "aegis.hypotheses", "aegis.detection",
+  "aegis.verification", "aegis.remediation", "aegis.memory", "aegis.llm", "aegis.agent", "aegis.workflows",
+  "aegis.infrastructure", "aegis.application", "aegis.api", "aegis.simulator", "aegis.apps",
+]
+
+[[tool.importlinter.contracts]]
+name = "Core runtime never imports delivery or infrastructure layers"
+type = "forbidden"
+source_modules = [
+  "aegis.flow", "aegis.policy", "aegis.tools", "aegis.evidence", "aegis.hypotheses", "aegis.detection",
+  "aegis.verification", "aegis.remediation", "aegis.memory", "aegis.llm", "aegis.agent",
+]
+forbidden_modules = ["aegis.infrastructure", "aegis.application", "aegis.api", "aegis.workflows", "aegis.apps"]
+
+[[tool.importlinter.contracts]]
+name = "Simulator is independent of the Aegis runtime"
+type = "forbidden"
+source_modules = ["aegis.simulator"]
+forbidden_modules = [
+  "aegis.flow", "aegis.policy", "aegis.tools", "aegis.evidence", "aegis.hypotheses", "aegis.detection",
+  "aegis.verification", "aegis.remediation", "aegis.memory", "aegis.llm", "aegis.agent", "aegis.workflows",
+  "aegis.infrastructure", "aegis.application", "aegis.api",
+]
+
+[[tool.importlinter.contracts]]
+name = "Application layer does not import delivery layers"
+type = "forbidden"
+source_modules = ["aegis.application", "aegis.infrastructure"]
+forbidden_modules = ["aegis.api", "aegis.apps"]

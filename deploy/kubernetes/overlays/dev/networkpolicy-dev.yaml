@@ -1,0 +1,41 @@
+# The base denies all ingress; open the in-cluster dev infrastructure to the
+# Aegis pods and the Temporal UI to the ingress controller.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dev-infra
+  labels:
+    app.kubernetes.io/name: aegis
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app.kubernetes.io/component
+        operator: In
+        values: ["postgres", "redis", "temporal", "simulator"]
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - podSelector: {} # any pod in the aegis namespace
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-temporal-ui
+  labels:
+    app.kubernetes.io/name: aegis
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/component: temporal-ui
+  policyTypes: ["Ingress"]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - port: 8080
+          protocol: TCP

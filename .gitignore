@@ -1,0 +1,46 @@
+# python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.hypothesis/
+.coverage
+htmlcov/
+dist/
+build/
+
+# node
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# env & secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.secrets/
+
+# runtime
+*.log
+.artifacts/
+evals/results/*
+!evals/results/.gitkeep
+# The reports docs/evals.md analyses are kept, so a reader can check the claims against the data.
+!evals/results/20260910T124035Z-llm.*
+!evals/results/20260911T061754Z-offline.*
+!evals/results/20260911T062623Z-offline.*
+!evals/results/20260911T082507Z-llm.*
+playwright-report/
+test-results/
+
+# editors
+.idea/
+.vscode/
+.DS_Store

@@ -1,0 +1,183 @@
+# Control-plane API (FastAPI/uvicorn). Stateless; scales horizontally.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: api
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aegis
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aegis
+        app.kubernetes.io/component: api
+    spec:
+      serviceAccountName: aegis
+      automountServiceAccountToken: false
+      # uvicorn drains in-flight requests for up to 20s (timeout_graceful_shutdown).
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: aegis
+                    app.kubernetes.io/component: api
+      containers:
+        - name: api
+          image: aegis/aegis
+          imagePullPolicy: IfNotPresent
+          command: ["aegis-api"]
+          ports:
+            - name: http
+              containerPort: 8600
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: aegis-config
+          env:
+            - name: AEGIS_API_PORT
+              value: "8600"
+            - name: AEGIS_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: aegis-secrets
+                  key: AEGIS_DATABASE_URL
+            - name: AEGIS_REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: aegis-secrets
+                  key: AEGIS_REDIS_URL
+            - name: AEGIS_LLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aegis-secrets
+                  key: AEGIS_LLM_API_KEY
+                  optional: true # not needed when AEGIS_LLM_PROVIDER=disabled
+            - name: AEGIS_API_KEYS
+              valueFrom:
+                secretKeyRef:
+                  name: aegis-secrets
+                  key: AEGIS_API_KEYS
+                  optional: true # required when AEGIS_API_AUTH_MODE=api_key
+          # /health is a static liveness endpoint; /ready verifies DB schema is at
+          # head, Redis, Temporal and the infrastructure gateway. Pods therefore
+          # stay unready until the aegis-migrate Job has completed.
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 200m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: api
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: api
+  ports:
+    - name: http
+      port: 8600
+      targetPort: http
+      protocol: TCP
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: api
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: api
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aegis
+      app.kubernetes.io/component: api
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: api
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api
+  minReplicas: 2
+  maxReplicas: 6
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 70
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300

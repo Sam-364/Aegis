@@ -1,0 +1,129 @@
+# Temporal worker: runs IncidentWorkflow and every activity (including the agent).
+# Safe to run N replicas; Temporal distributes tasks across the task queue.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: worker
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aegis
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aegis
+        app.kubernetes.io/component: worker
+    spec:
+      serviceAccountName: aegis
+      automountServiceAccountToken: false
+      # Let in-flight activities (LLM calls, remediation, verification polls)
+      # finish before SIGKILL. The worker stops polling on SIGTERM.
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: aegis
+                    app.kubernetes.io/component: worker
+      containers:
+        - name: worker
+          image: aegis/aegis
+          imagePullPolicy: IfNotPresent
+          command: ["aegis-worker"]
+          ports:
+            - name: metrics
+              containerPort: 9464
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: aegis-config
+          env:
+            - name: AEGIS_METRICS_PORT
+              value: "9464"
+            - name: AEGIS_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: aegis-secrets
+                  key: AEGIS_DATABASE_URL
+            - name: AEGIS_REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: aegis-secrets
+                  key: AEGIS_REDIS_URL
+            - name: AEGIS_LLM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aegis-secrets
+                  key: AEGIS_LLM_API_KEY
+                  optional: true
+          # No readiness probe: the worker receives no Service traffic. The
+          # prometheus_client HTTP server on :9464 comes up right after the
+          # runtime is built, so it doubles as a liveness signal.
+          startupProbe:
+            httpGet:
+              path: /
+              port: metrics
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 4
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 512Mi
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: worker
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: worker
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aegis
+      app.kubernetes.io/component: worker

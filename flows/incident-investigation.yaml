@@ -1,0 +1,102 @@
+# Default flow pack: general-purpose investigation for any anomaly.
+name: incident-investigation
+version: "1.0.0"
+description: >
+  General incident investigation. Triage the blast radius, collect evidence across metrics, logs,
+  traces and dependencies, form and validate hypotheses, then plan (never execute) a remediation.
+applies_to: []           # fallback pack: selected when nothing more specific matches
+priority: 0
+initial_phase: triage
+remediation_tools: [restart_service, rollback_deployment, scale_service, rotate_connection_pool, clear_cache]
+remediation_risk_ceiling: high
+budget:
+  max_iterations: 24
+  max_tool_calls: 40
+  max_llm_calls: 30
+  max_llm_tokens: 250000
+  max_runtime_seconds: 900
+  max_remediation_attempts: 2
+
+phases:
+  - name: triage
+    objective: Establish blast radius and the dependency chain around the anomalous services.
+    tools: [get_health, inspect_dependencies, compare_baseline, get_metrics]
+    max_iterations: 4
+    exit_conditions:
+      - { kind: min_evidence, value: 3 }
+    transitions:
+      - { when: exit_conditions_met, to: investigate }
+      - { when: exhausted, to: investigate }
+    guidance: >
+      Start from the services carrying detection signals. Compare current metrics with baselines
+      and map which dependencies are unhealthy. Do not hypothesize yet.
+
+  - name: investigate
+    objective: Collect evidence that discriminates between candidate root causes.
+    tools: [get_metrics, get_logs, query_traces, inspect_service, inspect_dependencies,
+            inspect_deployment, inspect_database, inspect_redis, get_health, compare_baseline,
+            search_incident_memory]
+    max_iterations: 8
+    exit_conditions:
+      - { kind: min_evidence, value: 6 }
+      - { kind: min_hypotheses, value: 1 }
+    transitions:
+      - { when: exit_conditions_met, to: hypothesize }
+      - { when: exhausted, to: hypothesize }
+      - { when: no_action_required, to: verify }
+    guidance: >
+      Follow the dependency graph downstream from the symptomatic services. Prefer evidence that
+      attributes load or errors to a specific component (top clients, recent deployments,
+      unavailable dependencies). Propose hypotheses as soon as evidence supports them.
+
+  - name: hypothesize
+    objective: Rank candidate root causes and choose the discriminating diagnostic.
+    tools: [compare_baseline, search_incident_memory, inspect_deployment, get_metrics, get_logs]
+    max_iterations: 3
+    exit_conditions:
+      - { kind: min_hypothesis_confidence, value: 0.55 }
+    transitions:
+      - { when: exit_conditions_met, to: validate }
+      - { when: exhausted, to: investigate }
+      - { when: no_action_required, to: verify }
+
+  - name: validate
+    objective: Confirm or refute the leading hypothesis with targeted diagnostics.
+    risk_ceiling: low
+    tools: [run_connectivity_test, run_database_diagnostic, run_cache_diagnostic,
+            run_process_diagnostic, reproduce_issue, run_load_projection, get_metrics,
+            compare_baseline]
+    max_iterations: 4
+    exit_conditions:
+      - { kind: hypothesis_validated }
+    transitions:
+      - { when: exit_conditions_met, to: remediate }
+      - { when: exhausted, to: hypothesize }
+      - { when: no_action_required, to: verify }
+
+  - name: remediate
+    objective: Plan one reversible remediation for the confirmed root cause. Planning only.
+    tools: [compare_baseline, inspect_deployment, get_health]
+    max_iterations: 4
+    risk_ceiling: high
+    plans_remediation: true
+    exit_conditions:
+      - { kind: action_planned }
+    transitions:
+      - { when: exit_conditions_met, to: verify }
+      - { when: exhausted, to: escalate }
+      - { when: no_action_required, to: verify }
+    guidance: >
+      Choose the least invasive action that addresses the root cause service, not the symptomatic
+      one. Restarting a healthy caller never fixes an unhealthy dependency. Include a rollback plan
+      and measurable verification conditions.
+
+  - name: verify
+    objective: Verification is performed by the runtime; this phase records the outcome.
+    tools: []
+    terminal: true
+
+  - name: escalate
+    objective: Hand over to a human with the evidence collected so far.
+    tools: []
+    terminal: true

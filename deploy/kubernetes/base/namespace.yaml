@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aegis
+  labels:
+    # Aegis pods satisfy the "restricted" profile. Enforce only "baseline" here
+    # so the dev overlay's third-party infra (postgres/redis/temporal) can run;
+    # the production overlay raises enforcement to "restricted".
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/audit: restricted

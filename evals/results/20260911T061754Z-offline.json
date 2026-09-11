@@ -1,0 +1,1396 @@
+[
+  {
+    "suite": "detection",
+    "score": 0.9818,
+    "pass_rate": 1.0,
+    "threshold": 0.9,
+    "passed": true,
+    "metrics": {
+      "mean_time_to_detect_s": 17.5,
+      "false_positive_runs": 0
+    },
+    "cases": [
+      {
+        "name": "redis-connection-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "time_to_detect_s": 20.0,
+          "budget_s": 60,
+          "incidents": 1,
+          "severity": "sev3",
+          "title": "redis connections saturation",
+          "affected": [
+            "redis",
+            "api-gateway",
+            "auth-service",
+            "order-service",
+            "inventory-service",
+            "notification-service"
+          ]
+        },
+        "duration_s": 0.67,
+        "error": null
+      },
+      {
+        "name": "bad-deployment",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "time_to_detect_s": 10.0,
+          "budget_s": 30,
+          "incidents": 1,
+          "severity": "sev2",
+          "title": "Elevated API error rate",
+          "affected": [
+            "api-gateway",
+            "order-service",
+            "payment-service"
+          ]
+        },
+        "duration_s": 0.66,
+        "error": null
+      },
+      {
+        "name": "db-pool-exhaustion",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "time_to_detect_s": 20.0,
+          "budget_s": 60,
+          "incidents": 1,
+          "severity": "sev3",
+          "title": "postgres idle in transaction saturation",
+          "affected": [
+            "postgres",
+            "api-gateway",
+            "auth-service",
+            "user-service",
+            "order-service",
+            "payment-service"
+          ]
+        },
+        "duration_s": 0.67,
+        "error": null
+      },
+      {
+        "name": "cascading-dependency",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "time_to_detect_s": 10.0,
+          "budget_s": 20,
+          "incidents": 1,
+          "severity": "sev1",
+          "title": "Elevated API error rate",
+          "affected": [
+            "api-gateway",
+            "inventory-service",
+            "order-service"
+          ]
+        },
+        "duration_s": 0.66,
+        "error": null
+      },
+      {
+        "name": "transient-spike",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "time_to_detect_s": 10.0,
+          "budget_s": 20,
+          "incidents": 1,
+          "severity": "sev4",
+          "title": "Traffic surge on api-gateway",
+          "affected": [
+            "api-gateway",
+            "auth-service",
+            "payment-service",
+            "inventory-service"
+          ]
+        },
+        "duration_s": 0.64,
+        "error": null
+      },
+      {
+        "name": "memory-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "time_to_detect_s": 40.0,
+          "budget_s": 120,
+          "incidents": 1,
+          "severity": "sev4",
+          "title": "payment-service MEMORY pressure",
+          "affected": [
+            "payment-service",
+            "api-gateway",
+            "order-service"
+          ]
+        },
+        "duration_s": 0.59,
+        "error": null
+      },
+      {
+        "name": "cpu-saturation",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "time_to_detect_s": 15.0,
+          "budget_s": 30,
+          "incidents": 1,
+          "severity": "sev3",
+          "title": "Latency regression on notification-service",
+          "affected": [
+            "notification-service"
+          ]
+        },
+        "duration_s": 0.57,
+        "error": null
+      },
+      {
+        "name": "network-latency",
+        "passed": true,
+        "score": 0.8,
+        "details": {
+          "time_to_detect_s": 15.0,
+          "budget_s": 30,
+          "incidents": 1,
+          "severity": "sev3",
+          "title": "API latency regression",
+          "affected": [
+            "api-gateway"
+          ]
+        },
+        "duration_s": 0.59,
+        "error": null
+      },
+      {
+        "name": "clean-run-seed-7",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "false_positives": []
+        },
+        "duration_s": 1.19,
+        "error": null
+      },
+      {
+        "name": "clean-run-seed-8",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "false_positives": []
+        },
+        "duration_s": 1.16,
+        "error": null
+      },
+      {
+        "name": "clean-run-seed-9",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "false_positives": []
+        },
+        "duration_s": 1.4,
+        "error": null
+      }
+    ]
+  },
+  {
+    "suite": "authorization",
+    "score": 1.0,
+    "pass_rate": 1.0,
+    "threshold": 1.0,
+    "passed": true,
+    "metrics": {
+      "corpus_size": 22,
+      "adversarial": 15,
+      "false_allows": 0
+    },
+    "cases": [
+      {
+        "name": "00-get_metrics-triage-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": true,
+          "allowed": true,
+          "denial_code": null,
+          "failed_check": null
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "01-inspect_redis-investigate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": true,
+          "allowed": true,
+          "denial_code": null,
+          "failed_check": null
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "02-run_cache_diagnostic-validate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": true,
+          "allowed": true,
+          "denial_code": null,
+          "failed_check": null
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "03-search_incident_memory-investigate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": true,
+          "allowed": true,
+          "denial_code": null,
+          "failed_check": null
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "04-compare_baseline-remediate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": true,
+          "allowed": true,
+          "denial_code": null,
+          "failed_check": null
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "05-rotate_connection_pool-remediate-workflow",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": true,
+          "allowed": true,
+          "denial_code": null,
+          "failed_check": null
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "06-scale_service-remediate-workflow",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": true,
+          "allowed": true,
+          "denial_code": null,
+          "failed_check": null
+        },
+        "duration_s": 0.17,
+        "error": null
+      },
+      {
+        "name": "07-restart_service-investigate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "phase_violation",
+          "failed_check": "phase_allows"
+        },
+        "duration_s": 0.08,
+        "error": null
+      },
+      {
+        "name": "08-restart_service-remediate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "phase_violation",
+          "failed_check": "phase_allows"
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "09-rollback_deployment-validate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "phase_violation",
+          "failed_check": "phase_allows"
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "10-drop_database-remediate-admin",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "flow_violation",
+          "failed_check": "flow_allows"
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "11-delete_data-investigate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "flow_violation",
+          "failed_check": "flow_allows"
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "12-terminate_instance-remediate-workflow",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "flow_violation",
+          "failed_check": "flow_allows"
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "13-run_cache_diagnostic-triage-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "phase_violation",
+          "failed_check": "phase_allows"
+        },
+        "duration_s": 0.13,
+        "error": null
+      },
+      {
+        "name": "14-get_metrics-investigate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "invalid_tool_arguments",
+          "failed_check": "arguments_valid"
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "15-get_metrics-investigate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "invalid_tool_arguments",
+          "failed_check": "arguments_valid"
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "16-get_logs-investigate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "invalid_tool_arguments",
+          "failed_check": "arguments_valid"
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "17-nonexistent_tool-investigate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "tool_not_registered",
+          "failed_check": "tool_registered"
+        },
+        "duration_s": 0.08,
+        "error": null
+      },
+      {
+        "name": "18-restart_service-remediate-agent",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "policy_violation",
+          "failed_check": "policy_effect"
+        },
+        "duration_s": 0.13,
+        "error": null
+      },
+      {
+        "name": "19-run_cache_diagnostic-validate-viewer",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "tool_not_allowed",
+          "failed_check": "actor_permitted"
+        },
+        "duration_s": 0.08,
+        "error": null
+      },
+      {
+        "name": "20-restart_service-remediate-workflow",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "approval_required",
+          "failed_check": "policy_effect"
+        },
+        "duration_s": 0.09,
+        "error": null
+      },
+      {
+        "name": "21-scale_service-remediate-workflow",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected_allowed": false,
+          "allowed": false,
+          "denial_code": "invalid_tool_arguments",
+          "failed_check": "arguments_valid"
+        },
+        "duration_s": 0.09,
+        "error": null
+      }
+    ]
+  },
+  {
+    "suite": "hypothesis-ranking",
+    "score": 0.8929,
+    "pass_rate": 0.8571,
+    "threshold": 0.8,
+    "passed": true,
+    "metrics": {
+      "mrr": 0.893
+    },
+    "cases": [
+      {
+        "name": "redis-connection-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank_of_truth": 1,
+          "top3": [
+            "order-service",
+            "inventory-service",
+            "user-service"
+          ],
+          "evidence": 11,
+          "top_confidence": 0.761
+        },
+        "duration_s": 2.04,
+        "error": null
+      },
+      {
+        "name": "bad-deployment",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank_of_truth": 1,
+          "top3": [
+            "payment-service",
+            "order-service",
+            "auth-service"
+          ],
+          "evidence": 11,
+          "top_confidence": 0.823
+        },
+        "duration_s": 1.49,
+        "error": null
+      },
+      {
+        "name": "db-pool-exhaustion",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank_of_truth": 1,
+          "top3": [
+            "user-service",
+            "order-service",
+            "inventory-service"
+          ],
+          "evidence": 11,
+          "top_confidence": 0.785
+        },
+        "duration_s": 0.84,
+        "error": null
+      },
+      {
+        "name": "cascading-dependency",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank_of_truth": 1,
+          "top3": [
+            "inventory-service",
+            "auth-service",
+            "user-service"
+          ],
+          "evidence": 11,
+          "top_confidence": 0.797
+        },
+        "duration_s": 1.94,
+        "error": null
+      },
+      {
+        "name": "memory-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank_of_truth": 1,
+          "top3": [
+            "payment-service",
+            "auth-service",
+            "user-service"
+          ],
+          "evidence": 11,
+          "top_confidence": 0.738
+        },
+        "duration_s": 1.35,
+        "error": null
+      },
+      {
+        "name": "cpu-saturation",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank_of_truth": 1,
+          "top3": [
+            "notification-service",
+            "auth-service",
+            "user-service"
+          ],
+          "evidence": 10,
+          "top_confidence": 0.808
+        },
+        "duration_s": 0.73,
+        "error": null
+      },
+      {
+        "name": "network-latency",
+        "passed": false,
+        "score": 0.25,
+        "details": {
+          "rank_of_truth": 4,
+          "top3": [
+            "api-gateway",
+            "postgres",
+            "redis"
+          ],
+          "evidence": 11,
+          "top_confidence": 0.719
+        },
+        "duration_s": 0.75,
+        "error": null
+      }
+    ]
+  },
+  {
+    "suite": "verification",
+    "score": 0.9167,
+    "pass_rate": 0.9167,
+    "threshold": 0.9,
+    "passed": true,
+    "metrics": {},
+    "cases": [
+      {
+        "name": "redis-connection-leak/restart:order-service",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "passed",
+          "got": "passed",
+          "summary": "all 25 conditions held for 3 consecutive polls"
+        },
+        "duration_s": 0.6,
+        "error": null
+      },
+      {
+        "name": "redis-connection-leak/restart:api-gateway",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "failed",
+          "got": "failed",
+          "summary": "23 of 25 conditions still failing after 150s: redis.connections=255 vs 1.6x baseline(12)=19.2; redis.latency_p95_ms=5.27"
+        },
+        "duration_s": 0.63,
+        "error": null
+      },
+      {
+        "name": "bad-deployment/rollback:payment-service",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "passed",
+          "got": "passed",
+          "summary": "all 7 conditions held for 3 consecutive polls"
+        },
+        "duration_s": 0.58,
+        "error": null
+      },
+      {
+        "name": "bad-deployment/restart:payment-service",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "failed",
+          "got": "failed",
+          "summary": "6 of 7 conditions still failing after 150s: api-gateway.error_rate=0.139 lte 0.03; order-service.error_rate=0.143 lte 0."
+        },
+        "duration_s": 0.6,
+        "error": null
+      },
+      {
+        "name": "db-pool-exhaustion/rotate_pool:user-service",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "passed",
+          "got": "passed",
+          "summary": "all 23 conditions held for 3 consecutive polls"
+        },
+        "duration_s": 0.62,
+        "error": null
+      },
+      {
+        "name": "db-pool-exhaustion/scale:user-service",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "failed",
+          "got": "failed",
+          "summary": "21 of 23 conditions still failing after 150s: postgres.idle_in_transaction=110 lte 10; postgres.connections=102 vs 1.6x "
+        },
+        "duration_s": 0.7,
+        "error": null
+      },
+      {
+        "name": "cascading-dependency/restart:inventory-service",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "passed",
+          "got": "passed",
+          "summary": "all 4 conditions held for 3 consecutive polls"
+        },
+        "duration_s": 0.62,
+        "error": null
+      },
+      {
+        "name": "cascading-dependency/restart:api-gateway",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "failed",
+          "got": "failed",
+          "summary": "4 of 5 conditions still failing after 150s: api-gateway.error_rate=0.652 lte 0.03; order-service.error_rate=1 lte 0.03; "
+        },
+        "duration_s": 0.59,
+        "error": null
+      },
+      {
+        "name": "memory-leak/restart:payment-service",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "passed",
+          "got": "passed",
+          "summary": "all 3 conditions held for 3 consecutive polls"
+        },
+        "duration_s": 0.61,
+        "error": null
+      },
+      {
+        "name": "memory-leak/rollback:payment-service",
+        "passed": false,
+        "score": 0.0,
+        "details": {
+          "expected": "failed",
+          "got": "passed",
+          "summary": "all 3 conditions held for 3 consecutive polls"
+        },
+        "duration_s": 0.56,
+        "error": null
+      },
+      {
+        "name": "cpu-saturation/scale:notification-service",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "passed",
+          "got": "passed",
+          "summary": "all 3 conditions held for 3 consecutive polls"
+        },
+        "duration_s": 0.59,
+        "error": null
+      },
+      {
+        "name": "cpu-saturation/restart:notification-service",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "expected": "failed",
+          "got": "failed",
+          "summary": "2 of 3 conditions still failing after 150s: notification-service.latency_p95_ms=110 vs 1.5x baseline(18.3)=27.5; notific"
+        },
+        "duration_s": 0.6,
+        "error": null
+      }
+    ]
+  },
+  {
+    "suite": "memory-recall",
+    "score": 1.0,
+    "pass_rate": 1.0,
+    "threshold": 0.8,
+    "passed": true,
+    "metrics": {},
+    "cases": [
+      {
+        "name": "hash/redis-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "Redis connection leak in order-service",
+          "similarity": 0.682
+        },
+        "duration_s": 0.0,
+        "error": null
+      },
+      {
+        "name": "lexical/redis-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "Redis connection leak in order-service",
+          "similarity": 0.869
+        },
+        "duration_s": 0.0,
+        "error": null
+      },
+      {
+        "name": "hash/bad-deploy",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "payment-service regression after 2.4.0",
+          "similarity": 0.365
+        },
+        "duration_s": 0.0,
+        "error": null
+      },
+      {
+        "name": "lexical/bad-deploy",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "payment-service regression after 2.4.0",
+          "similarity": 0.686
+        },
+        "duration_s": 0.0,
+        "error": null
+      },
+      {
+        "name": "hash/db-pool",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "Postgres connection exhaustion",
+          "similarity": 0.686
+        },
+        "duration_s": 0.0,
+        "error": null
+      },
+      {
+        "name": "lexical/db-pool",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "Postgres connection exhaustion",
+          "similarity": 0.85
+        },
+        "duration_s": 0.0,
+        "error": null
+      },
+      {
+        "name": "hash/inventory-crash",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "inventory-service OOM crash cascade",
+          "similarity": 0.414
+        },
+        "duration_s": 0.0,
+        "error": null
+      },
+      {
+        "name": "lexical/inventory-crash",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "inventory-service OOM crash cascade",
+          "similarity": 0.777
+        },
+        "duration_s": 0.0,
+        "error": null
+      },
+      {
+        "name": "hash/cpu",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "notification-service CPU saturation",
+          "similarity": 0.557
+        },
+        "duration_s": 0.0,
+        "error": null
+      },
+      {
+        "name": "lexical/cpu",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "rank": 1,
+          "top": "notification-service CPU saturation",
+          "similarity": 0.828
+        },
+        "duration_s": 0.0,
+        "error": null
+      }
+    ]
+  },
+  {
+    "suite": "agent-deterministic",
+    "score": 1.0,
+    "pass_rate": 1.0,
+    "threshold": 0.8,
+    "passed": true,
+    "metrics": {
+      "root_cause_accuracy": 0.75,
+      "plan_accuracy": 0.75,
+      "mutation_violations": 0,
+      "mean_tool_calls": 11.4,
+      "mean_llm_calls": 0.0,
+      "total_llm_tokens": 0,
+      "model": "deterministic"
+    },
+    "cases": [
+      {
+        "name": "redis-connection-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "order-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.972,
+          "plan": [
+            "restart_service",
+            {
+              "service": "order-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 13,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 14,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 1.97,
+        "error": null
+      },
+      {
+        "name": "bad-deployment",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "payment-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.973,
+          "plan": [
+            "rollback_deployment",
+            {
+              "service": "payment-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 12,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 13,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 0.85,
+        "error": null
+      },
+      {
+        "name": "db-pool-exhaustion",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "user-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.972,
+          "plan": [
+            "restart_service",
+            {
+              "service": "user-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 12,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 13,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 1.43,
+        "error": null
+      },
+      {
+        "name": "cascading-dependency",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "inventory-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.973,
+          "plan": [
+            "restart_service",
+            {
+              "service": "inventory-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 12,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 13,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 1.49,
+        "error": null
+      },
+      {
+        "name": "transient-spike",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "no_action",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "no_action",
+              null
+            ]
+          ],
+          "root_cause": null,
+          "root_cause_correct": false,
+          "top_confidence": null,
+          "plan": null,
+          "plan_correct": false,
+          "plan_incorrect": false,
+          "no_action": true,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 3,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 3,
+          "faults_active": false,
+          "runs": 2
+        },
+        "duration_s": 1.28,
+        "error": null
+      },
+      {
+        "name": "memory-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "payment-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.88,
+          "plan": [
+            "restart_service",
+            {
+              "service": "payment-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 14,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 15,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 1.39,
+        "error": null
+      },
+      {
+        "name": "cpu-saturation",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "notification-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.973,
+          "plan": [
+            "scale_service",
+            {
+              "service": "notification-service",
+              "replicas": 3
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 11,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 12,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 0.72,
+        "error": null
+      },
+      {
+        "name": "network-latency",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "terminate",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "terminate",
+              null
+            ]
+          ],
+          "root_cause": "api-gateway",
+          "root_cause_correct": false,
+          "top_confidence": 0.693,
+          "plan": null,
+          "plan_correct": false,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": true,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 14,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 22,
+          "faults_active": true,
+          "runs": 8
+        },
+        "duration_s": 0.82,
+        "error": null
+      }
+    ]
+  }
+]

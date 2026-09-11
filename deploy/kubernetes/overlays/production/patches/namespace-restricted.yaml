@@ -1,0 +1,8 @@
+# Only first-party Aegis pods run here; enforce the restricted PSA profile.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aegis
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest

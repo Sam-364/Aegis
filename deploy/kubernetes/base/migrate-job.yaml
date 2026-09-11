@@ -1,0 +1,77 @@
+# Alembic migrations (`aegis migrate`). Ordering (Helm "pre-install/pre-upgrade
+# hook" semantics, done by hand with Kustomize):
+#
+#   1. kubectl apply -k <overlay>           # creates the Job alongside everything else
+#   2. kubectl -n aegis wait --for=condition=complete --timeout=10m job/aegis-migrate
+#   3. kubectl -n aegis rollout status deploy/api deploy/worker deploy/detector
+#
+# Running the Job concurrently with the Deployments is safe: the API's /ready
+# fails until the schema is at head, so no pod receives traffic before the
+# migration lands, and the worker/detector retry their DB connections.
+#
+# Job specs are immutable. Before re-applying with a new image tag either wait
+# for ttlSecondsAfterFinished to garbage-collect the old Job or run:
+#   kubectl -n aegis delete job aegis-migrate --ignore-not-found
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: aegis-migrate
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: migrate
+spec:
+  backoffLimit: 3
+  activeDeadlineSeconds: 900
+  ttlSecondsAfterFinished: 600
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aegis
+        app.kubernetes.io/component: migrate
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: aegis
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: migrate
+          image: aegis/aegis
+          imagePullPolicy: IfNotPresent
+          command: ["aegis", "migrate"]
+          envFrom:
+            - configMapRef:
+                name: aegis-config
+          env:
+            # Settings validation only; migrations never touch the LLM or Temporal.
+            - name: AEGIS_LLM_PROVIDER
+              value: disabled
+            - name: AEGIS_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: aegis-secrets
+                  key: AEGIS_DATABASE_URL
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi

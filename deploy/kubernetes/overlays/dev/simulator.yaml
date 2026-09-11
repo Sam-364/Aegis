@@ -1,0 +1,103 @@
+# Simulated infrastructure + telemetry source. Dev only; production points
+# AEGIS_SIMULATOR_URL at the real infrastructure gateway.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulator
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: simulator
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate # in-memory world; two instances would diverge
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aegis
+      app.kubernetes.io/component: simulator
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aegis
+        app.kubernetes.io/component: simulator
+    spec:
+      serviceAccountName: aegis
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: simulator
+          image: aegis/aegis
+          imagePullPolicy: IfNotPresent
+          command: ["aegis-simulator"]
+          ports:
+            - name: http
+              containerPort: 8601
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: aegis-config
+          env:
+            - name: AEGIS_SIMULATOR_PORT
+              value: "8601"
+            - name: AEGIS_SIMULATOR_SEED
+              value: "42"
+            - name: AEGIS_LLM_PROVIDER
+              value: disabled
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 2
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 15
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simulator
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: simulator
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: simulator
+  ports:
+    - name: http
+      port: 8601
+      targetPort: http

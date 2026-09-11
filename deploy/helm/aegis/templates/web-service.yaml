@@ -1,0 +1,23 @@
+{{- if .Values.web.enabled }}
+{{- $ctx := dict "root" $ "component" "web" -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "aegis.componentName" $ctx }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" $ctx | nindent 4 }}
+  {{- with .Values.web.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.web.service.type }}
+  selector:
+    {{- include "aegis.selectorLabels" $ctx | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.web.service.port }}
+      targetPort: http
+      protocol: TCP
+{{- end }}

@@ -1,0 +1,390 @@
+The architecture I would specifically tell Claude to implement
+
+There is one part of that prompt I consider especially important for your particular interest in flow-scoped tools.
+
+Don't think of Aegis as:
+
+LLM
+ ↓
+LangGraph
+ ↓
+Tools
+
+Instead make it:
+
+                    ┌─────────────────────┐
+                    │      Temporal       │
+                    │ Durable Workflow    │
+                    │     Execution       │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │    Agent Runtime    │
+                    │                     │
+                    │     LangGraph       │
+                    └──────────┬──────────┘
+                               │
+                     ┌─────────▼─────────┐
+                     │    Flow Runtime   │
+                     │                   │
+                     │ active_flow       │
+                     │ active_phase      │
+                     │ allowed_tools     │
+                     │ budget            │
+                     │ policy            │
+                     └─────────┬─────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │    Tool Registry    │
+                    └──────────┬──────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │    Policy Engine    │
+                    └──────────┬──────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │   Tool Executor     │
+                    └──────────┬──────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │ Infrastructure      │
+                    └─────────────────────┘
+
+That distinction is what turns this into an agent runtime project rather than an SRE chatbot.
+
+The really interesting part
+
+I'd make the actual runtime contract look conceptually like:
+
+class AgentState(TypedDict):
+    incident_id: UUID
+
+    active_flow: str
+    flow_version: str
+
+    active_phase: str
+
+    evidence: list[Evidence]
+    hypotheses: list[Hypothesis]
+
+    allowed_tools: frozenset[str]
+
+    tool_history: list[ToolExecution]
+
+    policy_context: PolicyContext
+
+    budget: ExecutionBudget
+
+    status: AgentStatus
+
+And then never trust allowed_tools merely because it exists in state.
+
+Instead:
+
+LLM proposes tool
+        ↓
+FlowRuntime resolves active FlowPack
+        ↓
+FlowRuntime resolves active Phase
+        ↓
+ToolRegistry resolves tool
+        ↓
+Capability check
+        ↓
+Policy check
+        ↓
+Risk check
+        ↓
+Approval check
+        ↓
+Idempotency check
+        ↓
+Budget check
+        ↓
+Execute
+
+So even if the model generates:
+
+{
+  "tool": "delete_database",
+  "arguments": {
+    "database": "production"
+  }
+}
+
+the model doesn't get to decide whether that is possible.
+
+The runtime says:
+
+Tool exists?                YES
+Current phase allows it?    NO
+Policy allows it?           NO
+Risk level?                 CRITICAL
+
+=> DENY
+
+That is the architectural idea I'd make the centerpiece of Aegis.
+
+Why I would use Temporal + LangGraph
+
+This is the one decision I would strongly preserve.
+
+You could build the whole thing in LangGraph, but then you're making LangGraph carry responsibilities that are fundamentally different from agent reasoning.
+
+Temporal is explicitly designed around durable execution: workflows can resume after crashes, network failures and infrastructure failures.
+
+So:
+
+Temporal answers
+
+"Where is this incident workflow in its lifecycle, and how do I guarantee it continues?"
+
+LangGraph answers
+
+"Given the evidence available right now, what should the agent investigate next?"
+
+Flow Runtime answers
+
+"Is the agent actually permitted to do that?"
+
+Policy Engine answers
+
+"Even if the flow permits it, is this action safe and authorized?"
+
+Tool Runtime answers
+
+"How exactly do I execute it?"
+
+Verification Engine answers
+
+"Did it actually work?"
+
+That gives you this extremely clean hierarchy:
+
+Temporal
+   │
+   └── IncidentWorkflow
+           │
+           └── LangGraph
+                  │
+                  └── FlowPack
+                         │
+                         ├── Phase
+                         │
+                         ├── Tool Registry
+                         │
+                         ├── Policy Engine
+                         │
+                         └── Evidence Graph
+                                  │
+                                  ▼
+                            Infrastructure
+And don't underestimate the simulator
+
+I would not make the simulator a fake collection of endpoints.
+
+Make it a miniature distributed system.
+
+For example:
+
+                   ┌──────────────┐
+                   │ API Gateway  │
+                   └──────┬───────┘
+                          │
+              ┌───────────┼───────────┐
+              ▼           ▼           ▼
+          User Svc     Order Svc   Payment Svc
+              │           │           │
+              │           ├───────────┤
+              │           │
+              ▼           ▼
+           PostgreSQL    Redis
+
+Then inject:
+
+Redis connection leak
+        ↓
+Redis saturation
+        ↓
+Order Service waits
+        ↓
+Order Service latency
+        ↓
+API Gateway latency
+        ↓
+5xx increase
+        ↓
+Aegis detects symptoms
+        ↓
+Aegis traverses dependency graph
+        ↓
+Aegis discovers Redis
+        ↓
+Aegis validates hypothesis
+        ↓
+Aegis remediates
+        ↓
+Aegis verifies
+
+That gives you an actual causal investigation problem.
+
+And this is where the project becomes genuinely impressive.
+
+The frontend should tell the story
+
+Don't make the landing page:
+
+"Ask Aegis anything about your infrastructure."
+
+Instead, when something breaks, the user should see something like:
+
+INC-1042                         SEV-2
+────────────────────────────────────────────
+
+API Latency Regression
+
+Status:     INVESTIGATING
+Duration:   02m 17s
+Services:   api-gateway, order-service, redis
+
+────────────────────────────────────────────
+
+ROOT CAUSE HYPOTHESIS
+
+Redis connection pool exhaustion
+
+Confidence: 87%
+
+Supporting evidence:
+
+✓ Redis connections +312%
+✓ Order-service waiting connections +284%
+✓ API p95 latency +1,842%
+✓ Similar incident found: INC-982
+
+────────────────────────────────────────────
+
+AGENT ACTIVITY
+
+✓ Detect anomaly
+✓ Inspect API metrics
+✓ Inspect Redis
+✓ Query dependency graph
+✓ Search incident memory
+✓ Validate hypothesis
+
+→ Remediation proposed
+
+restart order-service workers
+
+Risk: MEDIUM
+Approval: REQUIRED
+
+                 [ Reject ] [ Approve ]
+
+────────────────────────────────────────────
+
+EVIDENCE GRAPH
+
+API Gateway
+     │
+     ▼
+Order Service
+     │
+     ▼
+Redis  ← SATURATED
+
+That is much more compelling than an agent chat interface.
+
+The production-grade aspect
+
+The reason I would structure it this way is that production-grade doesn't mean adding Kubernetes to a prototype.
+
+It means designing for failure from the beginning.
+
+For example:
+
+Worker crashes
+      ↓
+Temporal resumes workflow
+
+Redis disappears
+      ↓
+tool fails
+      ↓
+retry policy
+
+LLM unavailable
+      ↓
+deterministic diagnostics continue
+
+LLM proposes forbidden tool
+      ↓
+policy denies
+
+Remediation executes
+      ↓
+verification fails
+      ↓
+rollback
+
+Same remediation submitted twice
+      ↓
+idempotency key
+      ↓
+duplicate prevented
+
+Agent runs too long
+      ↓
+budget exhausted
+      ↓
+escalation
+
+That is the kind of architecture that will make the project technically interesting.
+
+OpenTelemetry is particularly appropriate here because you want the incident, Temporal workflow, LangGraph execution, tool calls and infrastructure operations tied together through distributed traces rather than having disconnected logs.
+
+FastAPI's own deployment guidance also emphasizes production concerns such as HTTPS, restarts, replication, memory and containerization rather than simply running the development server.
+
+One final recommendation for Claude Code
+
+Don't paste the entire prompt and then tell Claude Code "implement everything."
+
+Give it the prompt above, but instruct it to work in vertical slices.
+
+The first milestone should be:
+
+Docker Compose
+      ↓
+Simulator
+      ↓
+Telemetry
+      ↓
+Detection
+      ↓
+Incident
+      ↓
+Temporal
+      ↓
+LangGraph
+      ↓
+FlowPack
+      ↓
+Tool authorization
+      ↓
+One remediation
+      ↓
+Verification
+      ↓
+UI
+
+Once one complete incident can travel through that entire loop, expand horizontally.
+
+That gives you an actual working spine early instead of ending up with 200 files of disconnected abstractions.
+
+And the resulting architecture has a very strong identity:
+
+Aegis is not an AI agent that happens to operate infrastructure. It is a durable autonomous execution runtime in which an AI agent is one controlled decision-making component.
+
+That distinction is, in my view, the thing that can make this project genuinely stand out.

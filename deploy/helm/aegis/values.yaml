@@ -1,0 +1,440 @@
+# Default values for the Aegis chart.
+#
+# Production checklist:
+#   * secrets.existingSecret (or secrets.*) - DB / Redis URLs, LLM key, API keys
+#   * config.environment: production  (forces config.api.authMode: api_key)
+#   * config.temporal.address / config.simulatorUrl - managed services
+#   * image.repository / web.image.repository - your registry
+#   * ingress.api.host / ingress.web.host / ingress.tls
+# See values-production.yaml for a worked example and values-dev.yaml for kind.
+
+nameOverride: ""
+fullnameOverride: ""
+
+global:
+  # -- Pull secrets applied to every pod.
+  imagePullSecrets: []
+
+# -- Image shared by api, worker, detector, simulator and the migrate Job.
+image:
+  repository: aegis/aegis
+  # -- Defaults to Chart.appVersion when empty.
+  tag: ""
+  pullPolicy: IfNotPresent
+
+revisionHistoryLimit: 5
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
+  # -- Aegis never calls the Kubernetes API.
+  automountToken: false
+
+# -- Pod-level security context for first-party Aegis containers (image uid 1000).
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  fsGroup: 1000
+  seccompProfile:
+    type: RuntimeDefault
+
+# -- Container-level security context for first-party Aegis containers.
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: ["ALL"]
+
+# ---------------------------------------------------------------------------
+# Non-secret AEGIS_* settings -> ConfigMap. Every key maps 1:1 onto
+# src/aegis/config.py (env_prefix AEGIS_). Anything not modelled here can be
+# added under config.extraEnv.
+# ---------------------------------------------------------------------------
+config:
+  # -- development | staging | production. Production refuses api.authMode=disabled.
+  environment: development
+  logLevel: INFO
+  logFormat: json
+  serviceName: aegis
+  database:
+    poolSize: 10
+    maxOverflow: 10
+  temporal:
+    # -- Ignored when devInfra.enabled (the in-cluster dev Temporal is used).
+    address: temporal:7233
+    namespace: default
+    taskQueue: aegis-incidents
+    enabled: true
+  # -- Infrastructure gateway / telemetry source. Ignored when simulator.enabled.
+  #    /ready checks this URL, so it must be reachable in every environment.
+  simulatorUrl: http://simulator:8601
+  # -- simulator | prometheus
+  telemetryProvider: simulator
+  prometheusUrl: http://prometheus:9090
+  llm:
+    # -- openai | openai_compatible | scripted | disabled. `openai` requires the key.
+    provider: openai
+    baseUrl: ""
+    reasonerModel: gpt-5-mini
+    fastModel: gpt-5-nano
+    embeddingModel: text-embedding-3-small
+    reasoningEffort: low
+    timeoutSeconds: 60
+  otel:
+    enabled: false
+    exporterEndpoint: http://otel-collector:4317
+  metricsEnabled: true
+  api:
+    # -- disabled | api_key
+    authMode: disabled
+    corsOrigins:
+      - http://localhost:3600
+    publicUrl: http://localhost:8600
+    rateLimitPerMinute: 600
+  detection:
+    intervalSeconds: 5
+    windowSeconds: 600
+  approvalTimeoutSeconds: 900
+  verificationPollSeconds: 5
+  # -- Extra AEGIS_* keys written verbatim into the ConfigMap.
+  extraEnv: {}
+  #  AEGIS_DETECTION_ZSCORE_THRESHOLD: "3.5"
+
+# ---------------------------------------------------------------------------
+# Secrets. Either point at a pre-created Secret holding the four keys
+# (recommended: External Secrets Operator / sealed-secrets), or let the chart
+# render one from the literal values below (dev only).
+# ---------------------------------------------------------------------------
+secrets:
+  # -- Name of an existing Secret with keys AEGIS_LLM_API_KEY, AEGIS_DATABASE_URL,
+  #    AEGIS_REDIS_URL, AEGIS_API_KEYS. When set, nothing below is rendered.
+  existingSecret: ""
+  llmApiKey: ""
+  databaseUrl: ""
+  redisUrl: ""
+  # -- "key:role[:name],..." - required when config.api.authMode=api_key.
+  apiKeys: ""
+
+# ---------------------------------------------------------------------------
+# Workloads
+# ---------------------------------------------------------------------------
+api:
+  replicaCount: 2
+  containerPort: 8600
+  terminationGracePeriodSeconds: 30
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  service:
+    type: ClusterIP
+    port: 8600
+    annotations: {}
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  startupProbe:
+    httpGet:
+      path: /health
+      port: http
+    periodSeconds: 2
+    failureThreshold: 30
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 70
+    # -- Optional; leave empty to scale on CPU only.
+    targetMemoryUtilizationPercentage: ""
+  pdb:
+    enabled: true
+    minAvailable: 1
+    # maxUnavailable: ""
+  extraEnv: []
+  podAnnotations: {}
+  podLabels: {}
+  nodeSelector: {}
+  tolerations: []
+  # -- Defaults to preferred anti-affinity across nodes when empty.
+  affinity: {}
+  topologySpreadConstraints: []
+  tmpSizeLimit: 256Mi
+
+worker:
+  replicaCount: 2
+  metricsPort: 9464
+  # -- Let in-flight activities finish before SIGKILL.
+  terminationGracePeriodSeconds: 60
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+  startupProbe:
+    httpGet:
+      path: /
+      port: metrics
+    periodSeconds: 5
+    failureThreshold: 30
+  livenessProbe:
+    httpGet:
+      path: /
+      port: metrics
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 4
+  pdb:
+    enabled: true
+    minAvailable: 1
+  extraEnv: []
+  podAnnotations: {}
+  podLabels: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  topologySpreadConstraints: []
+  tmpSizeLimit: 512Mi
+
+detector:
+  # -- The detector holds a Redis leader lock; >1 replica is a warm standby.
+  replicaCount: 1
+  metricsPort: 9465
+  terminationGracePeriodSeconds: 30
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  startupProbe:
+    httpGet:
+      path: /
+      port: metrics
+    periodSeconds: 5
+    failureThreshold: 30
+  livenessProbe:
+    httpGet:
+      path: /
+      port: metrics
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 4
+  extraEnv: []
+  podAnnotations: {}
+  podLabels: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  tmpSizeLimit: 128Mi
+
+# -- Simulated infrastructure. Dev/demo only; production points config.simulatorUrl elsewhere.
+simulator:
+  enabled: false
+  replicaCount: 1
+  seed: 42
+  service:
+    port: 8601
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  extraEnv: []
+  podAnnotations: {}
+  nodeSelector: {}
+  tolerations: []
+
+# -- Next.js console (apps/web). Its image runs as uid 1001.
+web:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: aegis/web
+    tag: ""
+    pullPolicy: IfNotPresent
+  containerPort: 3000
+  terminationGracePeriodSeconds: 20
+  service:
+    type: ClusterIP
+    port: 3000
+    annotations: {}
+  # -- NEXT_PUBLIC_* values are inlined at image build time (apps/web/Dockerfile
+  #    build args); these runtime values must match what the image was built with.
+  env:
+    NEXT_PUBLIC_AEGIS_API_URL: http://localhost:8600
+    NEXT_PUBLIC_TEMPORAL_UI_URL: http://localhost:8233
+    NEXT_PUBLIC_GRAFANA_URL: http://localhost:3000
+    NEXT_PUBLIC_PROMETHEUS_URL: http://localhost:9090
+    NEXT_PUBLIC_TEMPORAL_NAMESPACE: default
+    NEXT_TELEMETRY_DISABLED: "1"
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+    seccompProfile:
+      type: RuntimeDefault
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 6
+    targetCPUUtilizationPercentage: 70
+  pdb:
+    enabled: true
+    minAvailable: 1
+  podAnnotations: {}
+  podLabels: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# -- `aegis migrate` as a Helm pre-install / pre-upgrade hook. The API's /ready
+#    also fails until the schema is at head, so traffic never hits an unmigrated DB.
+migrations:
+  enabled: true
+  hookWeight: "0"
+  # -- before-hook-creation keeps failed Jobs around for inspection.
+  hookDeletePolicy: before-hook-creation,hook-succeeded
+  backoffLimit: 3
+  activeDeadlineSeconds: 900
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+ingress:
+  enabled: true
+  className: nginx
+  # -- SSE (sse-starlette) needs buffering off and long read timeouts.
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+  api:
+    host: api.aegis.example.com
+    path: /
+    pathType: Prefix
+  web:
+    host: aegis.example.com
+    path: /
+    pathType: Prefix
+  tls:
+    enabled: true
+    # -- Provided by cert-manager or `kubectl create secret tls`.
+    secretName: aegis-tls
+  # -- Additional raw rules / tls entries appended verbatim.
+  extraRules: []
+  extraTls: []
+
+networkPolicy:
+  # -- Default-deny ingress for the release's pods, then allow controller -> api/web,
+  #    web -> api, monitoring -> metrics. Egress stays open.
+  enabled: true
+  ingressControllerNamespace: ingress-nginx
+  monitoringNamespace: monitoring
+  # -- Extra `from` peers allowed to reach the API (e.g. an internal CIDR).
+  extraApiIngressFrom: []
+  #  - ipBlock:
+  #      cidr: 10.0.0.0/8
+
+# -- Prometheus Operator CRDs. ServiceMonitor scrapes api /metrics; PodMonitors
+#    scrape worker :9464 and detector :9465.
+monitoring:
+  serviceMonitor:
+    enabled: false
+    interval: 15s
+    scrapeTimeout: 10s
+    # -- Must match your Prometheus serviceMonitorSelector.
+    labels: {}
+    #  release: kube-prometheus-stack
+  podMonitor:
+    enabled: false
+    interval: 15s
+    scrapeTimeout: 10s
+    labels: {}
+
+# -- DEV ONLY: single-replica Postgres (pgvector), Redis and Temporal auto-setup
+#    inside the release. Never enable in production - use managed services and
+#    reference them from secrets.databaseUrl / secrets.redisUrl / config.temporal.address.
+devInfra:
+  enabled: false
+  postgres:
+    image: pgvector/pgvector:pg17
+    user: aegis
+    password: aegis
+    database: aegis
+    storage: 2Gi
+    storageClassName: ""
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: "1"
+        memory: 1Gi
+  redis:
+    image: redis:7-alpine
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 500m
+        memory: 384Mi
+  temporal:
+    image: temporalio/auto-setup:1.25.2
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: "1"
+        memory: 1Gi
+    ui:
+      enabled: true
+      image: temporalio/ui:2.32.0
+      host: temporal.aegis.localtest.me

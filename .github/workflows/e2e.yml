@@ -1,0 +1,105 @@
+name: E2E
+
+# Full docker compose stack + scripts/e2e.py. Runs the deterministic planner
+# (AEGIS_LLM_PROVIDER=disabled) so no LLM key is needed.
+on:
+  workflow_dispatch:
+    inputs:
+      scenarios:
+        description: Space-separated scenario ids
+        default: redis-connection-leak bad-deployment
+        type: string
+      timeout:
+        description: Per-scenario timeout in seconds
+        default: "900"
+        type: string
+  schedule:
+    - cron: "0 3 * * *" # nightly 03:00 UTC
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.12"
+  UV_VERSION: "0.9.12"
+  UV_FROZEN: "1"
+  # compose picks these up from the shell environment
+  AEGIS_LLM_PROVIDER: disabled
+  AEGIS_LOG_LEVEL: INFO
+  OPENAI_API_KEY_FILE: ./.secrets/openai_api_key
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  e2e:
+    name: compose e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv sync --extra dev
+
+      - uses: docker/setup-buildx-action@v3
+
+      # docker-compose.yml declares a file-backed secret; it must exist even
+      # though the disabled provider never reads it.
+      - name: Placeholder LLM secret file
+        run: |
+          mkdir -p .secrets
+          printf 'disabled' > .secrets/openai_api_key
+
+      - name: Start the stack
+        run: docker compose up -d --build
+
+      - name: Wait for API readiness
+        run: |
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:8600/ready > /dev/null 2>&1; then
+              echo "API ready after ~$((i * 5))s"
+              curl -s http://localhost:8600/ready
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::API did not become ready in 300s"
+          docker compose ps
+          docker compose logs --no-color --tail=200 api migrate
+          exit 1
+
+      - name: Run scenarios
+        env:
+          SCENARIOS: ${{ inputs.scenarios || 'redis-connection-leak bad-deployment' }}
+          SCENARIO_TIMEOUT: ${{ inputs.timeout || '900' }}
+        run: |
+          args=()
+          for s in $SCENARIOS; do args+=(--scenario "$s"); done
+          uv run python scripts/e2e.py "${args[@]}" --timeout "$SCENARIO_TIMEOUT" | tee e2e-results.log
+
+      - name: Collect logs
+        if: always()
+        run: |
+          mkdir -p e2e-artifacts
+          docker compose ps > e2e-artifacts/compose-ps.txt || true
+          docker compose logs --no-color > e2e-artifacts/compose.log || true
+          cp e2e-results.log e2e-artifacts/ 2>/dev/null || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-artifacts
+          path: e2e-artifacts/
+          retention-days: 14
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v --remove-orphans

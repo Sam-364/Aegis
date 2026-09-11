@@ -1,0 +1,78 @@
+name: error-rate-investigation
+version: "1.0.0"
+description: Error-led investigation that checks recent deployments and unavailable dependencies first.
+applies_to: [error_rate, availability]
+priority: 10
+initial_phase: triage
+remediation_tools: [restart_service, rollback_deployment, scale_service, rotate_connection_pool, clear_cache]
+remediation_risk_ceiling: high
+budget:
+  max_iterations: 22
+  max_tool_calls: 36
+  max_llm_calls: 26
+  max_llm_tokens: 220000
+  max_runtime_seconds: 900
+  max_remediation_attempts: 2
+phases:
+  - name: triage
+    objective: Find which services are failing and whether any dependency is down.
+    tools: [get_health, inspect_dependencies, compare_baseline, get_metrics, inspect_deployment]
+    max_iterations: 4
+    exit_conditions: [{ kind: min_evidence, value: 3 }]
+    transitions:
+      - { when: exit_conditions_met, to: investigate }
+      - { when: exhausted, to: investigate }
+    guidance: Check health of the whole chain and recent deployments before anything else.
+  - name: investigate
+    objective: Attribute the errors to a deployment, a crashed dependency or a saturated resource.
+    tools: [get_metrics, get_logs, query_traces, inspect_service, inspect_dependencies,
+            inspect_deployment, inspect_database, inspect_redis, get_health, compare_baseline,
+            search_incident_memory]
+    max_iterations: 8
+    exit_conditions: [{ kind: min_evidence, value: 6 }, { kind: min_hypotheses, value: 1 }]
+    transitions:
+      - { when: exit_conditions_met, to: hypothesize }
+      - { when: exhausted, to: hypothesize }
+      - { when: no_action_required, to: verify }
+    guidance: >
+      Error logs name the failing handler and version. Traces show which span fails first. An
+      unavailable dependency explains every caller above it.
+  - name: hypothesize
+    objective: Rank root causes; the top hypothesis must name a single service.
+    tools: [compare_baseline, search_incident_memory, inspect_deployment, get_metrics, get_logs]
+    max_iterations: 3
+    exit_conditions: [{ kind: min_hypothesis_confidence, value: 0.55 }]
+    transitions:
+      - { when: exit_conditions_met, to: validate }
+      - { when: exhausted, to: investigate }
+      - { when: no_action_required, to: verify }
+  - name: validate
+    objective: Confirm the root cause with a targeted diagnostic.
+    risk_ceiling: low
+    tools: [run_connectivity_test, run_database_diagnostic, run_cache_diagnostic,
+            run_process_diagnostic, reproduce_issue, get_metrics, compare_baseline]
+    max_iterations: 4
+    exit_conditions: [{ kind: hypothesis_validated }]
+    transitions:
+      - { when: exit_conditions_met, to: remediate }
+      - { when: exhausted, to: hypothesize }
+      - { when: no_action_required, to: verify }
+  - name: remediate
+    objective: Plan one reversible remediation against the root-cause service.
+    tools: [compare_baseline, inspect_deployment, get_health]
+    max_iterations: 4
+    risk_ceiling: high
+    plans_remediation: true
+    exit_conditions: [{ kind: action_planned }]
+    transitions:
+      - { when: exit_conditions_met, to: verify }
+      - { when: exhausted, to: escalate }
+      - { when: no_action_required, to: verify }
+  - name: verify
+    objective: Runtime verification.
+    tools: []
+    terminal: true
+  - name: escalate
+    objective: Human handover.
+    tools: []
+    terminal: true

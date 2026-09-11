@@ -1,0 +1,111 @@
+# Dev overlay for kind / minikube: single replicas, throwaway Postgres (pgvector),
+# Redis and Temporal auto-setup inside the cluster, plus the simulator.
+#
+#   docker compose build                      # builds aegis/aegis:local and aegis/web:local
+#   kind load docker-image aegis/aegis:local aegis/web:local
+#   kubectl apply -k deploy/kubernetes/overlays/dev
+#
+# Hosts resolve to 127.0.0.1 via localtest.me; point the ingress controller's
+# port 80 at your machine (kind extraPortMappings or `minikube tunnel`).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: aegis
+
+resources:
+  - ../../base
+  - simulator.yaml
+  - postgres.yaml
+  - redis.yaml
+  - temporal.yaml
+  - networkpolicy-dev.yaml
+
+images:
+  - name: aegis/aegis
+    newTag: local
+  - name: aegis/web
+    newTag: local
+
+configMapGenerator:
+  - name: aegis-config
+    behavior: merge
+    literals:
+      - AEGIS_ENVIRONMENT=development
+      - AEGIS_LOG_LEVEL=DEBUG
+      # Deterministic planner: no API key needed. Switch to `openai` and set
+      # AEGIS_LLM_API_KEY in the secret below for real LLM runs.
+      - AEGIS_LLM_PROVIDER=disabled
+      - AEGIS_TEMPORAL_ADDRESS=temporal:7233
+      - AEGIS_SIMULATOR_URL=http://simulator:8601
+      - AEGIS_API_AUTH_MODE=disabled
+      - 'AEGIS_API_CORS_ORIGINS=["http://aegis.localtest.me","http://localhost:3600"]'
+      - AEGIS_API_PUBLIC_URL=http://api.aegis.localtest.me
+      - AEGIS_DETECTION_INTERVAL_SECONDS=5
+  - name: aegis-web-config
+    behavior: merge
+    literals:
+      - NEXT_PUBLIC_AEGIS_API_URL=http://api.aegis.localtest.me
+      - NEXT_PUBLIC_TEMPORAL_UI_URL=http://temporal.aegis.localtest.me
+
+# DEV ONLY. Throwaway credentials matching postgres.yaml / redis.yaml below.
+secretGenerator:
+  - name: aegis-secrets
+    literals:
+      - AEGIS_LLM_API_KEY=
+      - AEGIS_DATABASE_URL=postgresql+asyncpg://aegis:aegis@postgres:5432/aegis
+      - AEGIS_REDIS_URL=redis://redis:6379/0
+      - AEGIS_API_KEYS=dev-admin-key:admin:local-admin,dev-viewer-key:viewer:local-viewer
+
+patches:
+  # one replica of everything; drop HPA/PDBs that would fight with that
+  - target:
+      kind: Deployment
+      name: api|worker|web
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - patch: |-
+      apiVersion: autoscaling/v2
+      kind: HorizontalPodAutoscaler
+      metadata:
+        name: api
+      $patch: delete
+  - target:
+      kind: PodDisruptionBudget
+      name: api|worker|web
+    patch: |-
+      apiVersion: policy/v1
+      kind: PodDisruptionBudget
+      metadata:
+        name: unused
+      $patch: delete
+  # plain-HTTP hosts on localtest.me, no TLS
+  - target:
+      kind: Ingress
+      name: aegis
+    patch: |-
+      - op: remove
+        path: /spec/tls
+      - op: replace
+        path: /metadata/annotations/nginx.ingress.kubernetes.io~1ssl-redirect
+        value: "false"
+      - op: replace
+        path: /spec/rules/0/host
+        value: api.aegis.localtest.me
+      - op: replace
+        path: /spec/rules/1/host
+        value: aegis.localtest.me
+      - op: add
+        path: /spec/rules/-
+        value:
+          host: temporal.aegis.localtest.me
+          http:
+            paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: temporal-ui
+                    port:
+                      name: http

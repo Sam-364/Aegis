@@ -1,0 +1,61 @@
+{{- $cfg := .Values.config -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aegis.configMapName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" (dict "root" $ "component" "config") | nindent 4 }}
+data:
+  AEGIS_ENVIRONMENT: {{ $cfg.environment | quote }}
+  AEGIS_LOG_LEVEL: {{ $cfg.logLevel | quote }}
+  AEGIS_LOG_FORMAT: {{ $cfg.logFormat | quote }}
+  AEGIS_SERVICE_NAME: {{ $cfg.serviceName | quote }}
+  AEGIS_DATABASE_POOL_SIZE: {{ $cfg.database.poolSize | quote }}
+  AEGIS_DATABASE_MAX_OVERFLOW: {{ $cfg.database.maxOverflow | quote }}
+  AEGIS_TEMPORAL_ADDRESS: {{ include "aegis.temporalAddress" . | quote }}
+  AEGIS_TEMPORAL_NAMESPACE: {{ $cfg.temporal.namespace | quote }}
+  AEGIS_TEMPORAL_TASK_QUEUE: {{ $cfg.temporal.taskQueue | quote }}
+  AEGIS_TEMPORAL_ENABLED: {{ $cfg.temporal.enabled | quote }}
+  AEGIS_SIMULATOR_URL: {{ include "aegis.simulatorUrl" . | quote }}
+  AEGIS_TELEMETRY_PROVIDER: {{ $cfg.telemetryProvider | quote }}
+  AEGIS_PROMETHEUS_URL: {{ $cfg.prometheusUrl | quote }}
+  AEGIS_LLM_PROVIDER: {{ $cfg.llm.provider | quote }}
+  {{- with $cfg.llm.baseUrl }}
+  AEGIS_LLM_BASE_URL: {{ . | quote }}
+  {{- end }}
+  AEGIS_LLM_REASONER_MODEL: {{ $cfg.llm.reasonerModel | quote }}
+  AEGIS_LLM_FAST_MODEL: {{ $cfg.llm.fastModel | quote }}
+  AEGIS_LLM_EMBEDDING_MODEL: {{ $cfg.llm.embeddingModel | quote }}
+  AEGIS_LLM_REASONING_EFFORT: {{ $cfg.llm.reasoningEffort | quote }}
+  AEGIS_LLM_TIMEOUT_SECONDS: {{ $cfg.llm.timeoutSeconds | quote }}
+  AEGIS_OTEL_ENABLED: {{ $cfg.otel.enabled | quote }}
+  AEGIS_OTEL_EXPORTER_ENDPOINT: {{ $cfg.otel.exporterEndpoint | quote }}
+  AEGIS_METRICS_ENABLED: {{ $cfg.metricsEnabled | quote }}
+  AEGIS_API_AUTH_MODE: {{ $cfg.api.authMode | quote }}
+  AEGIS_API_CORS_ORIGINS: {{ $cfg.api.corsOrigins | toJson | quote }}
+  AEGIS_API_PUBLIC_URL: {{ $cfg.api.publicUrl | quote }}
+  AEGIS_API_RATE_LIMIT_PER_MINUTE: {{ $cfg.api.rateLimitPerMinute | quote }}
+  AEGIS_DETECTION_INTERVAL_SECONDS: {{ $cfg.detection.intervalSeconds | quote }}
+  AEGIS_DETECTION_WINDOW_SECONDS: {{ $cfg.detection.windowSeconds | quote }}
+  AEGIS_APPROVAL_TIMEOUT_SECONDS: {{ $cfg.approvalTimeoutSeconds | quote }}
+  AEGIS_VERIFICATION_POLL_SECONDS: {{ $cfg.verificationPollSeconds | quote }}
+  {{- range $k, $v := $cfg.extraEnv }}
+  {{ $k }}: {{ $v | quote }}
+  {{- end }}
+{{- if .Values.web.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aegis.webConfigMapName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "aegis.labels" (dict "root" $ "component" "web") | nindent 4 }}
+data:
+  # server-side base URL for the console -> API
+  AEGIS_API_URL: {{ include "aegis.apiUrl" . | quote }}
+  {{- range $k, $v := .Values.web.env }}
+  {{ $k }}: {{ $v | quote }}
+  {{- end }}
+{{- end }}

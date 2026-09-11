@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: aegis-detector
+  labels:
+    app.kubernetes.io/name: aegis
+    app.kubernetes.io/component: detector
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aegis
+      app.kubernetes.io/component: detector
+  namespaceSelector:
+    matchNames: ["aegis"]
+  podMetricsEndpoints:
+    - port: metrics # 9465
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s

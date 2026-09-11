@@ -1,0 +1,78 @@
+# Production overlay.
+#
+# Stateful dependencies are NOT run here. Postgres (with pgvector), Redis and
+# Temporal are managed services; their addresses/credentials arrive through the
+# `aegis-secrets` Secret (AEGIS_DATABASE_URL, AEGIS_REDIS_URL) and the ConfigMap
+# (AEGIS_TEMPORAL_ADDRESS). Create the Secret before applying - see
+# ../../base/secret.example.yaml or externalsecret.example.yaml.
+#
+#   kubectl apply -k deploy/kubernetes/overlays/production
+#   kubectl -n aegis wait --for=condition=complete --timeout=10m job/aegis-migrate
+#   kubectl -n aegis rollout status deploy/api deploy/worker deploy/detector deploy/web
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: aegis
+
+resources:
+  - ../../base
+  # Uncomment when External Secrets Operator is installed and the SecretStore exists:
+  # - externalsecret.example.yaml
+
+# Pin to the immutable tags CI pushes (sha-<commit>); `latest` is never deployed.
+#   cd deploy/kubernetes/overlays/production
+#   kustomize edit set image ghcr.io/example-org/aegis/aegis=ghcr.io/example-org/aegis/aegis:sha-<sha>
+images:
+  - name: aegis/aegis
+    newName: ghcr.io/example-org/aegis/aegis
+    newTag: sha-CHANGEME
+  - name: aegis/web
+    newName: ghcr.io/example-org/aegis/web
+    newTag: sha-CHANGEME
+
+configMapGenerator:
+  - name: aegis-config
+    behavior: merge
+    literals:
+      - AEGIS_ENVIRONMENT=production
+      - AEGIS_LOG_LEVEL=INFO
+      # production refuses to start with auth disabled (config.py)
+      - AEGIS_API_AUTH_MODE=api_key
+      - 'AEGIS_API_CORS_ORIGINS=["https://aegis.example.com"]'
+      - AEGIS_API_PUBLIC_URL=https://api.aegis.example.com
+      # Temporal Cloud: "<namespace>.<account>.tmprl.cloud:7233"; self-hosted:
+      # "temporal-frontend.temporal.svc.cluster.local:7233"
+      - AEGIS_TEMPORAL_ADDRESS=temporal-frontend.temporal.svc.cluster.local:7233
+      - AEGIS_TEMPORAL_NAMESPACE=aegis
+      # The infrastructure gateway the runtime observes and acts on. /ready
+      # checks it, so it must be reachable. Never the dev simulator.
+      - AEGIS_SIMULATOR_URL=http://infra-gateway.aegis-infra.svc.cluster.local:8601
+      # Set to `prometheus` (and AEGIS_PROMETHEUS_URL) to read telemetry from Prometheus.
+      - AEGIS_TELEMETRY_PROVIDER=simulator
+      - AEGIS_PROMETHEUS_URL=http://prometheus-operated.monitoring.svc.cluster.local:9090
+      - AEGIS_OTEL_ENABLED=true
+      - AEGIS_OTEL_EXPORTER_ENDPOINT=http://otel-collector.monitoring.svc.cluster.local:4317
+      - AEGIS_DATABASE_POOL_SIZE=20
+      - AEGIS_DATABASE_MAX_OVERFLOW=10
+  - name: aegis-web-config
+    behavior: merge
+    literals:
+      - NEXT_PUBLIC_AEGIS_API_URL=https://api.aegis.example.com
+      - NEXT_PUBLIC_TEMPORAL_UI_URL=https://temporal.example.com
+      - NEXT_PUBLIC_GRAFANA_URL=https://grafana.example.com
+      - NEXT_PUBLIC_PROMETHEUS_URL=https://prometheus.example.com
+      - NEXT_PUBLIC_TEMPORAL_NAMESPACE=aegis
+
+patches:
+  - path: patches/namespace-restricted.yaml
+  - path: patches/resources.yaml
+  - path: patches/hpa.yaml
+  - path: patches/ingress.yaml
+  # Production images are pulled from a registry; `latest`-style pulls are
+  # avoided by the immutable tags above.
+  - target:
+      kind: Deployment
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/imagePullPolicy
+        value: IfNotPresent

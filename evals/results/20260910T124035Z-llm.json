@@ -1,0 +1,890 @@
+[
+  {
+    "suite": "agent-deterministic",
+    "score": 1.0,
+    "pass_rate": 1.0,
+    "threshold": 0.8,
+    "passed": true,
+    "metrics": {
+      "root_cause_accuracy": 0.714,
+      "plan_accuracy": 0.714,
+      "mutation_violations": 0,
+      "mean_tool_calls": 11.3,
+      "mean_llm_calls": 0.0,
+      "total_llm_tokens": 0,
+      "model": "deterministic"
+    },
+    "cases": [
+      {
+        "name": "redis-connection-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "order-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.972,
+          "plan": [
+            "restart_service",
+            {
+              "service": "order-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 13,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 14,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 1.83,
+        "error": null
+      },
+      {
+        "name": "db-pool-exhaustion",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "user-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.972,
+          "plan": [
+            "restart_service",
+            {
+              "service": "user-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 12,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 13,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 0.86,
+        "error": null
+      },
+      {
+        "name": "cascading-dependency",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "inventory-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.973,
+          "plan": [
+            "restart_service",
+            {
+              "service": "inventory-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 12,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 13,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 1.83,
+        "error": null
+      },
+      {
+        "name": "transient-spike",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "no_action",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "no_action",
+              null
+            ]
+          ],
+          "root_cause": null,
+          "root_cause_correct": false,
+          "top_confidence": null,
+          "plan": null,
+          "plan_correct": false,
+          "plan_incorrect": false,
+          "no_action": true,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 3,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 3,
+          "faults_active": false,
+          "runs": 2
+        },
+        "duration_s": 0.68,
+        "error": null
+      },
+      {
+        "name": "memory-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "payment-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.88,
+          "plan": [
+            "restart_service",
+            {
+              "service": "payment-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 14,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 15,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 1.28,
+        "error": null
+      },
+      {
+        "name": "cpu-saturation",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "notification-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.973,
+          "plan": [
+            "scale_service",
+            {
+              "service": "notification-service",
+              "replicas": 3
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 11,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 12,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 1.24,
+        "error": null
+      },
+      {
+        "name": "network-latency",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "terminate",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "terminate",
+              null
+            ]
+          ],
+          "root_cause": "api-gateway",
+          "root_cause_correct": false,
+          "top_confidence": 0.693,
+          "plan": null,
+          "plan_correct": false,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": true,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 14,
+          "llm_calls": 0,
+          "llm_tokens": 0,
+          "iterations": 22,
+          "faults_active": true,
+          "runs": 8
+        },
+        "duration_s": 0.74,
+        "error": null
+      }
+    ]
+  },
+  {
+    "suite": "agent-llm",
+    "score": 0.5,
+    "pass_rate": 0.4286,
+    "threshold": 0.8,
+    "passed": false,
+    "metrics": {
+      "root_cause_accuracy": 0.714,
+      "plan_accuracy": 0.429,
+      "mutation_violations": 0,
+      "mean_tool_calls": 9.4,
+      "mean_llm_calls": 15.7,
+      "total_llm_tokens": 321410,
+      "model": "gpt-5-mini"
+    },
+    "cases": [
+      {
+        "name": "redis-connection-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "order-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.972,
+          "plan": [
+            "restart_service",
+            {
+              "service": "order-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 6,
+          "llm_calls": 9,
+          "llm_tokens": 29846,
+          "iterations": 7,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 52.16,
+        "error": null
+      },
+      {
+        "name": "db-pool-exhaustion",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "user-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.973,
+          "plan": [
+            "restart_service",
+            {
+              "service": "user-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 1,
+          "tool_calls": 7,
+          "llm_calls": 12,
+          "llm_tokens": 41786,
+          "iterations": 10,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 78.5,
+        "error": null
+      },
+      {
+        "name": "cascading-dependency",
+        "passed": false,
+        "score": 0.4,
+        "details": {
+          "detected": true,
+          "decision": "transition",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "transition",
+              "exhausted"
+            ]
+          ],
+          "root_cause": "inventory-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.942,
+          "plan": null,
+          "plan_correct": false,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": true,
+          "mutation_violations": 0,
+          "denied_calls": 1,
+          "tool_calls": 7,
+          "llm_calls": 12,
+          "llm_tokens": 34568,
+          "iterations": 11,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 80.57,
+        "error": null
+      },
+      {
+        "name": "transient-spike",
+        "passed": false,
+        "score": 0.0,
+        "details": {
+          "detected": true,
+          "decision": "transition",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ]
+          ],
+          "root_cause": "payment-service",
+          "root_cause_correct": false,
+          "top_confidence": 0.387,
+          "plan": null,
+          "plan_correct": false,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 3,
+          "tool_calls": 15,
+          "llm_calls": 30,
+          "llm_tokens": 84915,
+          "iterations": 22,
+          "faults_active": false,
+          "runs": 10
+        },
+        "duration_s": 185.52,
+        "error": null
+      },
+      {
+        "name": "memory-leak",
+        "passed": true,
+        "score": 1.0,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "payment-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.761,
+          "plan": [
+            "restart_service",
+            {
+              "service": "payment-service"
+            }
+          ],
+          "plan_correct": true,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 1,
+          "tool_calls": 7,
+          "llm_calls": 12,
+          "llm_tokens": 32294,
+          "iterations": 10,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 107.28,
+        "error": null
+      },
+      {
+        "name": "cpu-saturation",
+        "passed": false,
+        "score": 0.10000000000000003,
+        "details": {
+          "detected": true,
+          "decision": "action_planned",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "validate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "remediate",
+              "action_planned",
+              null
+            ]
+          ],
+          "root_cause": "notification-service",
+          "root_cause_correct": true,
+          "top_confidence": 0.632,
+          "plan": [
+            "restart_service",
+            {
+              "service": "notification-service"
+            }
+          ],
+          "plan_correct": false,
+          "plan_incorrect": true,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 0,
+          "tool_calls": 8,
+          "llm_calls": 13,
+          "llm_tokens": 33717,
+          "iterations": 10,
+          "faults_active": true,
+          "runs": 5
+        },
+        "duration_s": 79.07,
+        "error": null
+      },
+      {
+        "name": "network-latency",
+        "passed": false,
+        "score": 0.0,
+        "details": {
+          "detected": true,
+          "decision": "transition",
+          "phases": [
+            [
+              "triage",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ],
+            [
+              "hypothesize",
+              "transition",
+              "exhausted"
+            ],
+            [
+              "investigate",
+              "transition",
+              "exit_conditions_met"
+            ]
+          ],
+          "root_cause": "api-gateway",
+          "root_cause_correct": false,
+          "top_confidence": 0.538,
+          "plan": null,
+          "plan_correct": false,
+          "plan_incorrect": false,
+          "no_action": false,
+          "escalated": false,
+          "mutation_violations": 0,
+          "denied_calls": 1,
+          "tool_calls": 16,
+          "llm_calls": 22,
+          "llm_tokens": 64284,
+          "iterations": 20,
+          "faults_active": true,
+          "runs": 10
+        },
+        "duration_s": 170.46,
+        "error": null
+      }
+    ]
+  }
+]

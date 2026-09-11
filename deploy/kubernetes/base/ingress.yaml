@@ -1,0 +1,44 @@
+# Single Ingress fronting the API and the console. Hosts/TLS are placeholders
+# that every overlay replaces. The API streams SSE (sse-starlette), hence the
+# disabled buffering and long read timeout.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aegis
+  labels:
+    app.kubernetes.io/name: aegis
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 8m
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - aegis.example.com
+        - api.aegis.example.com
+      secretName: aegis-tls # placeholder: provide via cert-manager or kubectl create secret tls
+  rules:
+    - host: api.aegis.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  name: http
+    - host: aegis.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  name: http

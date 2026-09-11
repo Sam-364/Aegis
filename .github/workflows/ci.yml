@@ -1,0 +1,246 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.12"
+  UV_VERSION: "0.9.12"       # matches the Dockerfile
+  UV_FROZEN: "1"             # uv sync/run never re-resolve; uv.lock is the truth
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  lint:
+    name: lint (ruff, import-linter)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv lock --check
+      - run: uv sync --extra dev
+      - run: uv run ruff check src tests evals scripts
+      - run: uv run ruff format --check src tests evals scripts
+      - run: uv run lint-imports
+
+  typecheck:
+    name: typecheck (mypy)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv sync --extra dev
+      - run: uv run mypy src/aegis
+
+  unit:
+    name: unit + security tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv sync --extra dev
+      - run: uv run pytest tests/unit tests/security -q
+
+  integration:
+    name: integration tests (postgres + redis)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: aegis
+          POSTGRES_PASSWORD: aegis
+          POSTGRES_DB: aegis_test
+        ports: ["5439:5432"]
+        options: >-
+          --health-cmd "pg_isready -U aegis -d aegis_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6389:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      AEGIS_TEST_DATABASE_URL: postgresql+asyncpg://aegis:aegis@localhost:5439/aegis_test
+      AEGIS_TEST_REDIS_URL: redis://localhost:6389/0
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv sync --extra dev
+      - run: uv run pytest tests/integration -q
+
+  workflow:
+    name: workflow tests (temporal test server)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv sync --extra dev
+      # temporalio downloads the time-skipping test server on first use (network).
+      - run: uv run pytest tests/workflow -q
+
+  web:
+    name: web (lint, typecheck, build)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: apps/web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run build
+
+  manifests:
+    name: kubernetes manifests + helm chart
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: kustomize render
+        run: |
+          for o in overlays/dev overlays/production monitoring; do
+            kubectl kustomize "deploy/kubernetes/$o" > /dev/null
+          done
+      - name: helm lint + template
+        run: |
+          helm lint deploy/helm/aegis
+          helm lint deploy/helm/aegis -f deploy/helm/aegis/values-production.yaml
+          helm lint deploy/helm/aegis -f deploy/helm/aegis/values-dev.yaml
+          helm template aegis deploy/helm/aegis > /dev/null
+          helm template aegis deploy/helm/aegis -f deploy/helm/aegis/values-production.yaml > /dev/null
+          helm template aegis deploy/helm/aegis -f deploy/helm/aegis/values-dev.yaml > /dev/null
+
+  evals-offline:
+    name: evals (offline suites)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv sync --extra dev
+      # Offline suites only (detection, authorization, hypotheses, verification,
+      # memory, deterministic agent). `--llm` is never passed here: no API key.
+      - run: uv run python -m evals.run
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: evals-results
+          path: evals/results/
+          if-no-files-found: warn
+          retention-days: 30
+
+  docker:
+    name: docker (${{ matrix.image.name }})
+    needs: [lint, typecheck, unit, web]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        image:
+          - name: aegis
+            context: .
+            dockerfile: Dockerfile
+            build_args: ""
+          - name: web
+            context: apps/web
+            dockerfile: apps/web/Dockerfile
+            # NEXT_PUBLIC_* are inlined into the bundle at build time; set the
+            # repository variable to your public API URL for the published image.
+            build_args: |
+              NEXT_PUBLIC_AEGIS_API_URL=${{ vars.NEXT_PUBLIC_AEGIS_API_URL || 'http://localhost:8600' }}
+              NEXT_PUBLIC_TEMPORAL_UI_URL=${{ vars.NEXT_PUBLIC_TEMPORAL_UI_URL || 'http://localhost:8233' }}
+    env:
+      # push only from main; PRs just prove the images build
+      PUSH: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Log in to GHCR
+        if: env.PUSH == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          # -> ghcr.io/<owner>/<repo>/aegis and ghcr.io/<owner>/<repo>/web (lowercased)
+          images: ghcr.io/${{ github.repository }}/${{ matrix.image.name }}
+          tags: |
+            type=sha,format=long,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=pr
+      - name: Build${{ env.PUSH == 'true' && ' and push' || '' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.image.context }}
+          file: ${{ matrix.image.dockerfile }}
+          push: ${{ env.PUSH == 'true' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: ${{ matrix.image.build_args }}
+          cache-from: type=gha,scope=${{ matrix.image.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.image.name }}
+          provenance: false
