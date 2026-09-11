@@ -172,8 +172,13 @@ saturation and implicates nobody. Before, the agent kept being told "keep invest
 same diagnostics and escalated on an exhausted budget.
 
 Now the phase gives up quickly and says why. After `MAX_STALLED_ITERATIONS = 2` consecutive
-`phase_complete` proposals that add no evidence, the agent returns
-`TerminationReason.INSUFFICIENT_SIGNAL` with the unmet exit conditions in its summary. The workflow
+`phase_complete` proposals that add no evidence **while no hypothesis exists at all**, the agent
+returns `TerminationReason.INSUFFICIENT_SIGNAL` with the unmet exit conditions in its summary. That
+last condition is what keeps this narrow: a phase holding a hypothesis it cannot confirm — an
+inconclusive diagnostic in `validate`, say — is not short of signal, and the flow pack already
+declares where that goes (`exhausted → hypothesize`). Waiting there would strand an incident that
+was one transition away from a remediation, which is exactly what an over-broad first version of
+this did to `bad-deployment` in CI. The workflow
 — which is where durable waiting belongs — waits `REOBSERVE_SECONDS` (45 s) on a Temporal timer and
 re-enters the *same* phase, up to `MAX_REOBSERVATIONS` (3). A re-observation is the same visit: it
 does not append to `WorkflowStatus.phases`, so the cycle guard is untouched, and it does not re-emit

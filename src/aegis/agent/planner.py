@@ -204,7 +204,13 @@ class DeterministicPlanner:
                 action="escalate",
                 rationale="deterministic planner",
             )
-        top = live[0]
+        # Test the best candidate that has not been tested yet. Always re-testing the top-ranked
+        # hypothesis is how `bad-deployment` used to cycle: a generic "order-service is the most
+        # implicated component" ranked first, its diagnostic came back inconclusive, and the
+        # runner-up — the payment-service deployment that actually caused it — was never reached
+        # before the cycle guard escalated the incident.
+        untested = [h for h in live if not h.tests]
+        top = untested[0] if untested else live[0]
         handle = next((k for k, v in handles.items() if v.id == top.id), "H1")
         kinds = {n.name: n.kind for n in topology.nodes}
         root = top.suspected_root_cause_service or ""

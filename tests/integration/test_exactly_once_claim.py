@@ -43,6 +43,7 @@ from aegis.tools.executor import ToolExecutor
 
 pytestmark = [pytest.mark.integration, pytest.mark.asyncio(loop_scope="module")]
 ROOT = Path(__file__).resolve().parents[2]
+FLOW_VERSION = "1.1.0"  # the shipped incident-investigation pack
 
 
 async def _incident(uow_factory) -> Incident:  # type: ignore[no-untyped-def]
@@ -66,7 +67,7 @@ async def _incident(uow_factory) -> Incident:  # type: ignore[no-untyped-def]
         affected_services=["redis", "order-service"],
         environment=Environment.DEVELOPMENT,
         flow_name="incident-investigation",
-        flow_version="1.0.0",
+        flow_version=FLOW_VERSION,
     )
     actor = Actor.workflow("wf-claim")
     transition(incident, IncidentStatus.TRIAGING, actor)
@@ -86,7 +87,7 @@ async def test_a_committed_claim_survives_a_lost_transaction_and_refuses_the_ret
     flows = FlowRegistry(load_flow_dir(ROOT / "flows"))
     policy = PolicyEngine(load_policy_dir(ROOT / "policies"))
     authorizer = ToolAuthorizer(registry, policy, environment=Environment.DEVELOPMENT)
-    flow = flows.get("incident-investigation", "1.0.0")
+    flow = flows.get("incident-investigation", FLOW_VERSION)
     phase = flow.phase("remediate")
     actor = Actor.workflow("wf-claim")
     plan_id = uuid.uuid4()
@@ -184,7 +185,7 @@ async def test_an_approval_for_another_incident_cannot_authorize_this_one(
         PolicyEngine(load_policy_dir(ROOT / "policies")),
         environment=Environment.PRODUCTION,  # forces approval for any mutation
     )
-    flow = flows.get("incident-investigation", "1.0.0")
+    flow = flows.get("incident-investigation", FLOW_VERSION)
     plan_id = uuid.uuid4()
     actor = Actor.workflow("wf-claim")
     arguments = {"service": "order-service"}

@@ -1052,16 +1052,22 @@ class AgentRuntime:
             evaluation = FlowRuntime(flow).evaluate_exit(phase, facts)
             if not evaluation.met:
                 # The proposer has nothing left to offer but the phase is not finished. If that
-                # repeats while the evidence set is unchanged, looping is pointless: the symptom
-                # has not developed far enough to diagnose yet. Hand that back to the workflow,
-                # which owns durable waiting, instead of spending the incident's budget here.
+                # repeats while the evidence set is unchanged *and nothing has been hypothesised
+                # at all*, looping is pointless: the symptom has not developed far enough to
+                # diagnose yet. Hand that back to the workflow, which owns durable waiting.
+                #
+                # The "no hypotheses" condition is what keeps this narrow. A phase that has a
+                # hypothesis but cannot confirm it — an inconclusive diagnostic in `validate`, say
+                # — is not short of signal; the flow pack already declares where that goes
+                # (`exhausted → hypothesize`), and stealing that transition would strand an
+                # incident that was about to be remediated.
                 stalled = (
                     state.get("stalled_streak", 0) + 1
                     if len(evidence) == state.get("evidence_seen", -1)
                     else 0
                 )
                 state = {**state, "stalled_streak": stalled, "evidence_seen": len(evidence)}
-                if stalled >= MAX_STALLED_ITERATIONS:
+                if stalled >= MAX_STALLED_ITERATIONS and not hypotheses:
                     await self._record_step(
                         uow,
                         state,
