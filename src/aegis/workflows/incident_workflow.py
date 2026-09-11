@@ -81,6 +81,10 @@ class IncidentWorkflow:
         # incident a human had already approved.
         self._early_decisions: dict[str, ApprovalSignal] = {}
         self._cancel_reason: str | None = None
+        self._reobservations = 0
+        # The cycle guard counts phase entries since the last re-observation: after waiting for
+        # fresh data, the investigation genuinely starts again and must not inherit the old count.
+        self._cycle_base = 0
         self._status = WorkflowStatus()
 
     # ------------------------------------------------------------------ signals / queries -------
@@ -106,8 +110,38 @@ class IncidentWorkflow:
         return self._status
 
     def _cycling(self, next_phase: str) -> bool:
-        """True when re-entering ``next_phase`` would repeat a phase that already ran twice."""
-        return self._status.phases.count(next_phase) >= MAX_PHASE_ENTRIES
+        """True when re-entering ``next_phase`` would repeat a phase that already ran twice since
+        the last re-observation."""
+        return self._status.phases[self._cycle_base :].count(next_phase) >= MAX_PHASE_ENTRIES
+
+    def _reobserved_feedback(self) -> str:
+        return (
+            f"waited {REOBSERVE_SECONDS}s for the symptom to develop (re-observation "
+            f"{self._reobservations}/{MAX_REOBSERVATIONS}); re-run the diagnostics on fresh data "
+            "before concluding"
+        )
+
+    async def _reobserve(self) -> bool:
+        """Wait for the symptom to develop, and say whether waiting is still allowed.
+
+        Cycling and "nothing left to try" are the same situation seen from two angles: the
+        investigation cannot get further with the data it has. Sometimes that is because there is
+        nothing to find; often, early in an incident, it is because the fault is still small. So
+        wait on a durable timer before concluding, a bounded number of times.
+        """
+        if self._reobservations >= MAX_REOBSERVATIONS:
+            return False
+        self._reobservations += 1
+        self._status.reobservations = self._reobservations
+        # The timeout is the expected path; an early return means a human cancelled, which the
+        # guard at the top of the phase loop handles.
+        with contextlib.suppress(TimeoutError):
+            await workflow.wait_condition(
+                lambda: self._cancel_reason is not None,
+                timeout=timedelta(seconds=REOBSERVE_SECONDS),
+            )
+        self._cycle_base = len(self._status.phases)
+        return True
 
     def _take_approval(self) -> ApprovalSignal | None:
         return self._approval
@@ -139,7 +173,6 @@ class IncidentWorkflow:
         phase = triage.initial_phase
         usage = BudgetUsage()
         attempts = 0
-        reobservations = 0
         reobserving = False
         feedback: list[str] = []
         outcome = "escalated"
@@ -190,21 +223,29 @@ class IncidentWorkflow:
                         break
                     feedback.append(f"verification without action failed: {verified.summary}")
                     if self._cycling("investigate"):
-                        outcome, summary = (
-                            "escalated",
-                            f"investigation is cycling on phase {'investigate'} without reaching a "
-                            "remediation",
-                        )
-                        break
+                        if not await self._reobserve():
+                            outcome, summary = (
+                                "escalated",
+                                "investigation is cycling on phase investigate without reaching a "
+                                "remediation",
+                            )
+                            break
+                        feedback.append(self._reobserved_feedback())
                     phase = "investigate"
                     continue
                 if self._cycling(result.next_phase):
-                    outcome, summary = (
-                        "escalated",
-                        f"investigation is cycling on phase {result.next_phase} without reaching a "
-                        "remediation",
-                    )
-                    break
+                    if not await self._reobserve():
+                        outcome, summary = (
+                            "escalated",
+                            f"investigation is cycling on phase {result.next_phase} without "
+                            "reaching a remediation",
+                        )
+                        break
+                    # Fresh data is what the loop was missing, and only `investigate` collects it.
+                    feedback.append(self._reobserved_feedback())
+                    reobserving = phase == "investigate"
+                    phase = "investigate"
+                    continue
                 phase = result.next_phase
                 continue
             if result.decision == "no_action":
@@ -217,12 +258,14 @@ class IncidentWorkflow:
                     break
                 feedback.append(f"metrics did not stay within baseline: {verified.summary}")
                 if self._cycling("investigate"):
-                    outcome, summary = (
-                        "escalated",
-                        f"investigation is cycling on phase {'investigate'} without reaching a "
-                        "remediation",
-                    )
-                    break
+                    if not await self._reobserve():
+                        outcome, summary = (
+                            "escalated",
+                            "investigation is cycling on phase investigate without reaching a "
+                            "remediation",
+                        )
+                        break
+                    feedback.append(self._reobserved_feedback())
                 phase = "investigate"
                 continue
             if result.decision == "action_planned" and result.action_plan_id is not None:
@@ -251,32 +294,16 @@ class IncidentWorkflow:
                 outcome, summary = "escalated", result.summary or "agent requested escalation"
                 break
             if result.termination == "insufficient_signal":
-                # The phase ran out of things to look at while the symptom was still too small to
-                # diagnose — a resource leak twenty seconds in looks like noise. Wait on a durable
-                # timer and look again rather than escalating a fault that is still growing.
-                if reobservations >= MAX_REOBSERVATIONS:
+                if not await self._reobserve():
                     outcome, summary = (
                         "escalated",
                         f"no diagnosable signal after {MAX_REOBSERVATIONS} re-observations "
                         f"over {MAX_REOBSERVATIONS * REOBSERVE_SECONDS}s: {result.summary}",
                     )
                     break
-                reobservations += 1
-                self._status.reobservations = reobservations
-                # The timeout is the expected path; an early return means a human cancelled.
-                with contextlib.suppress(TimeoutError):
-                    await workflow.wait_condition(
-                        lambda: self._cancel_reason is not None,
-                        timeout=timedelta(seconds=REOBSERVE_SECONDS),
-                    )
-                # A cancel that arrived during the wait is handled by the guard at the top of the
-                # loop, which is the single place this workflow decides to stop for one.
-                feedback.append(
-                    f"waited {REOBSERVE_SECONDS}s for the symptom to develop "
-                    f"(re-observation {reobservations}/{MAX_REOBSERVATIONS}); "
-                    "re-run the diagnostics before concluding"
-                )
-                reobserving = True
+                feedback.append(self._reobserved_feedback())
+                reobserving = phase == "investigate"
+                phase = "investigate"
                 continue
             # terminate: budget exhausted, incident inactive, error
             if result.termination == "incident_inactive":

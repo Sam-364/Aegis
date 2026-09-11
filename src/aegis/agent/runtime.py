@@ -1051,23 +1051,36 @@ class AgentRuntime:
             )
             evaluation = FlowRuntime(flow).evaluate_exit(phase, facts)
             if not evaluation.met:
-                # The proposer has nothing left to offer but the phase is not finished. If that
-                # repeats while the evidence set is unchanged *and nothing has been hypothesised
-                # at all*, looping is pointless: the symptom has not developed far enough to
-                # diagnose yet. Hand that back to the workflow, which owns durable waiting.
+                # The proposer has nothing left to offer but the phase is not finished. Whether
+                # to loop or to wait depends on one question: is there anything left to try with
+                # the data already in hand?
                 #
-                # The "no hypotheses" condition is what keeps this narrow. A phase that has a
-                # hypothesis but cannot confirm it — an inconclusive diagnostic in `validate`, say
-                # — is not short of signal; the flow pack already declares where that goes
-                # (`exhausted → hypothesize`), and stealing that transition would strand an
-                # incident that was about to be remediated.
+                # There is, if a live hypothesis has never been tested — the flow's declared
+                # `exhausted → hypothesize → validate` path will reach it, and stealing that
+                # transition would strand an incident one step from its remediation. There is
+                # also, if one is already confirmed: that belongs in `remediate`.
+                #
+                # There is not, if every live hypothesis has been tried and none stuck (or there
+                # are none at all) while the evidence set is unchanged. Then the symptom simply
+                # has not developed far enough to diagnose, and looping only spends the budget.
+                # That is the workflow's problem, because durable waiting is what it owns.
+                live = [
+                    h
+                    for h in hypotheses
+                    if h.status not in (HypothesisStatus.REFUTED, HypothesisStatus.ABANDONED)
+                ]
+                nothing_left_to_try = not any(
+                    not h.tests
+                    or h.status in (HypothesisStatus.CONFIRMED, HypothesisStatus.SUPPORTED)
+                    for h in live
+                )
                 stalled = (
                     state.get("stalled_streak", 0) + 1
                     if len(evidence) == state.get("evidence_seen", -1)
                     else 0
                 )
                 state = {**state, "stalled_streak": stalled, "evidence_seen": len(evidence)}
-                if stalled >= MAX_STALLED_ITERATIONS and not hypotheses:
+                if stalled >= MAX_STALLED_ITERATIONS and nothing_left_to_try:
                     await self._record_step(
                         uow,
                         state,
