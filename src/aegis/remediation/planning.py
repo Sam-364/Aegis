@@ -12,6 +12,7 @@ from aegis.domain.hypothesis import Hypothesis
 from aegis.domain.incident import Incident
 from aegis.domain.telemetry import Topology
 from aegis.domain.tool import ToolSpec
+from aegis.hypotheses.engine import attributions
 
 # metric → (comparator, absolute target, ratio to baseline). Ratio wins when a baseline exists.
 _METRIC_RULES: dict[str, tuple[str, float | None, float | None]] = {
@@ -220,6 +221,13 @@ def _effective_category(
       is restarted rather than rolled back or scaled;
     * a component pinned at the CPU limit with no leaked connections and no memory pressure is a
       capacity problem, so it is scaled rather than restarted.
+
+    And one derivation, for when there is no useful label at all: a target that the evidence names
+    as the dominant client of a saturated shared resource is exhausting that resource, whatever
+    the hypothesis called itself. Without this an `unknown` category is a dead end — the
+    deterministic planner has no playbook for it and escalates an incident it has in fact
+    diagnosed, which is what happened when a weak early hypothesis ("X is the most implicated
+    component") was confirmed after the evidence had improved.
     """
     mine = [e for e in evidence if e.service == target]
     if any(
@@ -244,6 +252,10 @@ def _effective_category(
     )
     if cpu_bound and not memory_pressure and not leaked:
         return HypothesisCategory.CAPACITY
+    if hypothesis.category is HypothesisCategory.UNKNOWN and any(
+        a.client == target for a in attributions(list(evidence))
+    ):
+        return HypothesisCategory.RESOURCE_EXHAUSTION
     return hypothesis.category
 
 
@@ -304,14 +316,23 @@ def risk_for(tool_spec: ToolSpec, hypothesis: Hypothesis, incident: Incident) ->
 
 
 def category_default_action(  # noqa: PLR0911 - one return per category
-    hypothesis: Hypothesis, topology: Topology, remediation_tools: frozenset[str]
+    hypothesis: Hypothesis,
+    topology: Topology,
+    remediation_tools: frozenset[str],
+    *,
+    evidence: Sequence[Evidence] = (),
 ) -> tuple[str, dict[str, Any]] | None:
-    """Deterministic remediation choice used when the LLM is unavailable."""
+    """Deterministic remediation choice used when the LLM is unavailable.
+
+    The mechanism comes from `_effective_category`, the same reading of the evidence that
+    `validate_remediation_fit` will judge the choice by — picking by one rule and gating by
+    another is how a planner ends up proposing actions its own guard refuses.
+    """
     root = hypothesis.suspected_root_cause_service
     if root is None:
         return None
     kinds = {n.name: n.kind for n in topology.nodes}
-    match hypothesis.category:
+    match _effective_category(hypothesis, evidence, root):
         case HypothesisCategory.DEPLOYMENT_REGRESSION:
             if "rollback_deployment" in remediation_tools:
                 return "rollback_deployment", {"service": root}

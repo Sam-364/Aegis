@@ -286,7 +286,7 @@ class DeterministicPlanner:
                 action="conclude_no_action",
                 rationale="deterministic planner",
             )
-        choice = category_default_action(top, topology, remediation_tools)
+        choice = category_default_action(top, topology, remediation_tools, evidence=evidence)
         if choice is None and top.category is HypothesisCategory.RESOURCE_EXHAUSTION:
             # the root is a shared resource; find its heaviest client from evidence tags/data
             client = self._heaviest_client(top, topology, evidence)

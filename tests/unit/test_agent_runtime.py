@@ -21,6 +21,7 @@ from aegis.domain.enums import (
     ActionPlanStatus,
     AgentRunStatus,
     AgentStepKind,
+    EvidenceKind,
     ExecutionStatus,
     HypothesisCategory,
     HypothesisStatus,
@@ -605,3 +606,44 @@ async def test_phase_gives_up_instead_of_spinning_when_the_signal_has_not_develo
     assert out.usage.iterations < 8
     budget = rt.flows.get(inc.flow_name or "").budget_for(inc.severity)
     assert not out.usage.exceeded(budget), "the budget must survive for the re-observation"
+
+
+def test_a_vague_hypothesis_is_still_remediable_when_the_evidence_names_a_mechanism() -> None:
+    """A hypothesis confirmed early can carry no useful category — "X is the most implicated
+    component" is `unknown`. The deterministic planner has no playbook for that and used to
+    escalate an incident it had in fact diagnosed. The mechanism is read from the evidence
+    instead: the dominant client of a saturated resource is exhausting it."""
+    from aegis.domain.evidence import Evidence
+    from aegis.domain.hypothesis import Hypothesis
+    from aegis.infrastructure.simulator.inprocess import to_topology
+    from aegis.remediation.planning import category_default_action
+
+    rt = build_runtime()
+    topology = to_topology(rt.engine.topology())
+    vague = Hypothesis(
+        incident_id=uuid.uuid4(),
+        statement="order-service is the most implicated component in the collected evidence.",
+        category=HypothesisCategory.UNKNOWN,
+        suspected_root_cause_service="order-service",
+    )
+    saturated = Evidence(
+        incident_id=vague.incident_id,
+        kind=EvidenceKind.DIAGNOSTIC,
+        source="inspect_redis",
+        service="redis",
+        title="redis saturation",
+        summary="redis: 240/250 connections (96% saturation); by client: order-service 228",
+        strength=0.9,
+        data={
+            "component": "redis",
+            "saturation": 0.96,
+            "connections_by_client": {"order-service": 228.0, "auth-service": 12.0},
+        },
+    )
+    assert category_default_action(vague, topology, frozenset({"restart_service"})) is None
+    choice = category_default_action(
+        vague, topology, frozenset({"restart_service"}), evidence=[saturated]
+    )
+    assert choice is not None
+    tool, args = choice
+    assert tool == "restart_service" and args["service"] == "order-service"
