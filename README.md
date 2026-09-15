@@ -253,7 +253,7 @@ leaves the fault running and fails verification. That is the point.
 ## Evidence
 
 ```bash
-make test               # 174 unit + security tests (adversarial tool abuse), no infrastructure
+make test               # 179 unit + security tests (adversarial tool abuse), no infrastructure
 make test-infra         # throwaway pgvector Postgres :5439 and Redis :6389
 make test-integration   # Postgres/Redis adapters, bootstrap wiring, audit immutability
 make test-workflow      # full incident lifecycle on Temporal's time-skipping test server
@@ -277,9 +277,12 @@ repository so the claims can be checked against the data:
 | agent, `gpt-5-mini` | **8/8** correct plans, 0 mutation violations, ~12 model calls per incident |
 | structured output, `gpt-5-mini` | 3/3 |
 
-Against the running stack: **5/5 end-to-end scenarios** resolved with the correct remediation, and
-**4/4 chaos tests** — worker SIGKILLed mid-remediation (exactly one execution), API restarted,
-Redis stopped, simulator restarted.
+Against the running stack, on this commit: **5/5 end-to-end scenarios** resolved with the correct
+verified remediation (52-125 s each, one human approval apiece, none for `transient-spike`), and
+**4/4 chaos tests** — worker SIGKILLed mid-remediation, API restarted, Redis stopped, simulator
+restarted. The killed worker's incident shows exactly one mutating execution in the ledger, one
+idempotency key, one attempt. Offline: **179** unit and security tests, **14** Postgres/Redis
+integration tests, **5** Temporal workflow tests.
 
 ### What broke when it was tested for real
 
@@ -302,6 +305,15 @@ regression test that would have caught it.
 - **The chaos suite caught a bug in a security fix.** Keying the rate limiter on Redis made API
   reads return 500 while Redis was down. A rate limit is a protection, not a dependency that may
   take reads down with it; it now degrades to a per-process counter.
+- **The deterministic planner was too fast for the fault it was diagnosing.** It completes a step
+  in under a second, so the nightly run inspected a connection leak twenty seconds in — 23 % pool
+  saturation, implicating nobody — and escalated an incident that was perfectly diagnosable ninety
+  seconds later. The real model had been hiding this behind its own latency: ten seconds a call
+  meant it always arrived when the signature was unmistakable. The runtime now waits on a durable
+  timer and **re-measures** rather than escalating a symptom that has not developed yet, and a
+  hypothesis formed on early evidence is sharpened when better evidence arrives instead of standing
+  as the incident's diagnosis. It took four attempts to get right, each one caught by running the
+  scenarios twice in a row against a stack that was never reset.
 - **Definition checksums were not stable across processes.** `frozenset` iteration order under hash
   randomisation meant every restart wrote a new "version" of all 25 tools. The test that guards it
   now runs two subprocesses with different `PYTHONHASHSEED`, because nothing inside one interpreter
