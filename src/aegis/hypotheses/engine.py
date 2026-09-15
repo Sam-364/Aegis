@@ -464,7 +464,6 @@ def deterministic_hypotheses(  # noqa: PLR0912 - keyword table
             continue
         if service in attributed and attributed[service].client != service:
             continue  # a saturated shared resource with a dominant client is a symptom
-        kinds = {e.kind for e in items}
         text = " ".join(e.summary for e in items)
         down = any(
             k in text
@@ -478,9 +477,17 @@ def deterministic_hypotheses(  # noqa: PLR0912 - keyword table
         ) or any("process_up" in e.tags for e in items)
         is_service = node_kinds.get(service) in ("service", "gateway")
         resource_words = ("saturation", "connections", "pool", "leaked", "idle-in-transaction")
-        if EvidenceKind.DEPLOYMENT in kinds and any(
-            e.strength >= 0.8 for e in items if e.kind is EvidenceKind.DEPLOYMENT
-        ):
+        # A rollback is not a regression: it returns a service to a version it already ran, and
+        # Aegis performs rollbacks itself, so treating one as a cause makes the runtime propose
+        # undoing its own remediation — redeploying the version that broke.
+        release = [
+            e
+            for e in items
+            if e.kind is EvidenceKind.DEPLOYMENT
+            and not e.data.get("is_rollback")
+            and "rollback" not in e.tags
+        ]
+        if any(e.strength >= 0.8 for e in release):
             category = HypothesisCategory.DEPLOYMENT_REGRESSION
             statement = (
                 f"A recent deployment of {service} introduced a regression causing the symptoms."

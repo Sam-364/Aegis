@@ -15,7 +15,12 @@ from pydantic import BaseModel, ValidationError
 from aegis.agent.runtime import AgentRuntime
 from aegis.config import Settings
 from aegis.domain.action import VerificationSpec
-from aegis.domain.enums import EvidenceKind, HypothesisCategory, VerificationStatus
+from aegis.domain.enums import (
+    EvidenceKind,
+    HypothesisCategory,
+    SignalKind,
+    VerificationStatus,
+)
 from aegis.domain.evidence import Evidence
 from aegis.domain.flow import BudgetUsage, ExecutionBudget
 from aegis.domain.hypothesis import Hypothesis
@@ -163,3 +168,80 @@ def test_wall_clock_time_is_charged_against_the_runtime_budget() -> None:
     assert resumed.runtime_seconds - usage.runtime_seconds == pytest.approx(
         AgentRuntime.MAX_TICK_SECONDS, abs=1
     )
+
+
+def _deployment_evidence(*, incident_id: uuid.UUID, rollback: bool) -> Evidence:
+    return Evidence(
+        incident_id=incident_id,
+        kind=EvidenceKind.DEPLOYMENT,
+        source="inspect_deployment",
+        service="payment-service",
+        title="payment-service deployment",
+        summary="payment-service runs 2.3.7 deployed 2 min ago (previous 2.4.0)",
+        strength=0.85,
+        data={
+            "service": "payment-service",
+            "current_version": "2.3.7" if rollback else "2.4.0",
+            "previous_version": "2.4.0" if rollback else "2.3.7",
+            "recent": True,
+            "is_rollback": rollback,
+        },
+        tags=["rollback"] if rollback else ["recent_deploy"],
+    )
+
+
+async def test_the_runtime_does_not_mistake_its_own_rollback_for_a_cause() -> None:
+    """Aegis performs rollbacks, and a rollback is a deployment record like any other. Read as a
+    release it becomes the prime suspect for the *next* incident on that service, and the fix the
+    runtime proposes is to roll back the rollback — redeploying the version that broke. Seen for
+    real: a correct `bad-deployment` remediation caused the two following scenarios to be blamed
+    on payment-service and remediated twice, both failing verification.
+    """
+    from aegis.hypotheses.engine import deterministic_hypotheses
+    from aegis.infrastructure.simulator.inprocess import to_topology
+    from aegis.remediation.planning import RemediationMismatch, validate_remediation_fit
+
+    rt = build_runtime(seed=41, warmup=600)
+    topology = to_topology(rt.engine.topology())
+    incident = rt.incident(services=["payment-service"], kinds=[SignalKind.ERROR_RATE])
+
+    release = _deployment_evidence(incident_id=incident.id, rollback=False)
+    proposals = deterministic_hypotheses(incident, [release], topology)
+    assert [p.category for p in proposals] == [HypothesisCategory.DEPLOYMENT_REGRESSION], (
+        "a real release is still a regression candidate"
+    )
+
+    rolled_back = _deployment_evidence(incident_id=incident.id, rollback=True)
+    proposals = deterministic_hypotheses(incident, [rolled_back], topology)
+    assert HypothesisCategory.DEPLOYMENT_REGRESSION not in [p.category for p in proposals]
+
+    # and the guard that licenses a rollback must not accept one as its own justification
+    hypothesis = Hypothesis(
+        incident_id=incident.id,
+        statement="A recent deployment of payment-service introduced a regression.",
+        category=HypothesisCategory.DEPLOYMENT_REGRESSION,
+        suspected_root_cause_service="payment-service",
+    )
+    validate_remediation_fit("rollback_deployment", hypothesis, [release], "payment-service")
+    with pytest.raises(RemediationMismatch, match="deployed recently"):
+        validate_remediation_fit(
+            "rollback_deployment", hypothesis, [rolled_back], "payment-service"
+        )
+
+
+def test_the_deployment_tool_marks_a_rollback_as_one() -> None:
+    """The exclusion above is only as good as the observation it rests on."""
+    rt = build_runtime(seed=42, warmup=600)
+    rt.engine.inject("bad-deployment")
+    rt.engine.advance(120)
+    before = rt.engine.deployments_for("payment-service")[-1]
+    assert not any(
+        d.version == before.version for d in rt.engine.deployments_for("payment-service")[:-1]
+    )
+
+    rt.engine.rollback("payment-service")
+    latest = rt.engine.deployments_for("payment-service")[-1]
+    assert latest.version != before.version
+    assert any(
+        d.version == latest.version for d in rt.engine.deployments_for("payment-service")[:-1]
+    ), "a rollback returns to a version the service already ran, which is what the tool keys on"

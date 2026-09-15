@@ -221,8 +221,11 @@ async def main() -> int:
         await e2e.close()
     print(json.dumps(results, indent=2))
     ok = all(r.get("ok") for r in results)
+    passed = sum(1 for r in results if r.get("ok"))
+    failed = [str(r.get("scenario")) for r in results if not r.get("ok")]
     print(
-        f"\n{'ALL SCENARIOS PASSED' if ok else 'FAILURES'}: {sum(1 for r in results if r.get('ok'))}/{len(results)}"
+        f"\n{'ALL SCENARIOS PASSED' if ok else 'PASSED'}: {passed}/{len(results)}"
+        + (f"  FAILED: {', '.join(failed)}" if failed else "")
     )
     return 0 if ok else 1
 

@@ -273,8 +273,14 @@ def validate_remediation_fit(
     if allowed is None:
         return
     if tool_name == "rollback_deployment":
+        # The deployment that licenses a rollback has to be a release. Aegis's own rollback is a
+        # deployment record too, and accepting it would let the runtime roll back its own fix.
         recent_deploy = any(
-            e.kind is EvidenceKind.DEPLOYMENT and e.service == target and bool(e.data.get("recent"))
+            e.kind is EvidenceKind.DEPLOYMENT
+            and e.service == target
+            and bool(e.data.get("recent"))
+            and not e.data.get("is_rollback")
+            and "rollback" not in e.tags
             for e in evidence
         )
         if not recent_deploy:

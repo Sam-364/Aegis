@@ -540,6 +540,12 @@ async def inspect_deployment(ctx: ToolContext, args: ServiceArgs) -> ToolOutput:
     latest = deployments[-1]
     age_min = (now - latest.deployed_at).total_seconds() / 60
     recent = age_min <= 60
+    # A return to a version this service already ran is a rollback, not a release. That matters
+    # downstream: you cannot regress by going back to a known-good version, and "rolling back" a
+    # rollback means redeploying the one that broke. Aegis performs rollbacks itself, so without
+    # this its own remediation reads as a fresh deployment to the next incident that looks.
+    previous_versions = {d.version for d in deployments[:-1]}
+    is_rollback = latest.version in previous_versions
     if age_min < 60:
         age_text = f"{age_min:.0f} min ago"
     elif age_min < 60 * 48:
@@ -552,6 +558,8 @@ async def inspect_deployment(ctx: ToolContext, args: ServiceArgs) -> ToolOutput:
         f"; change: {latest.change_summary or 'n/a'}; rollback "
         f"{'available' if latest.rollback_available else 'unavailable'}"
     )
+    if is_rollback:
+        summary += " — this was a ROLLBACK to a version already run, not a new release"
     if not recent:
         summary += " — NO deployment in the last 60 min; version is stable"
     if recent and latest.deployed_at >= ctx.incident.detected_at - timedelta(minutes=30):
@@ -564,6 +572,7 @@ async def inspect_deployment(ctx: ToolContext, args: ServiceArgs) -> ToolOutput:
         "age_minutes": age_min,
         "recent": recent,
         "rollback_available": latest.rollback_available,
+        "is_rollback": is_rollback,
         "history": [
             {
                 "version": d.version,
@@ -584,7 +593,7 @@ async def inspect_deployment(ctx: ToolContext, args: ServiceArgs) -> ToolOutput:
                 data=data,
                 strength=recency_strength(latest.deployed_at, now),
                 service=args.service,
-                tags=["recent_deploy" if recent else "stable"],
+                tags=(["rollback"] if is_rollback else ["recent_deploy"] if recent else ["stable"]),
             )
         ],
     )
