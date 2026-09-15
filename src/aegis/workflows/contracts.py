@@ -38,6 +38,7 @@ class RunPhaseInput(BaseModel):
     workflow_id: str | None = None
     attempt: int = 1
     feedback: list[str] = Field(default_factory=list)
+    refresh: bool = False  # re-observation: collect before judging the exit conditions
 
 
 class PhaseResult(BaseModel):

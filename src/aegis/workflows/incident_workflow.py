@@ -174,6 +174,7 @@ class IncidentWorkflow:
         usage = BudgetUsage()
         attempts = 0
         reobserving = False
+        refresh = False
         feedback: list[str] = []
         outcome = "escalated"
         summary = ""
@@ -200,6 +201,7 @@ class IncidentWorkflow:
                         usage=usage,
                         workflow_id=wf_id,
                         feedback=feedback,
+                        refresh=refresh,
                     ),
                     result_type=PhaseResult,
                     start_to_close_timeout=timedelta(seconds=input.phase_timeout_seconds),
@@ -211,6 +213,7 @@ class IncidentWorkflow:
                 break
             usage = result.usage
             feedback = []
+            refresh = False
             if result.decision == "transition" and result.next_phase:
                 if result.next_phase == "escalate":
                     outcome, summary = "escalated", result.summary or "flow escalated"
@@ -231,6 +234,7 @@ class IncidentWorkflow:
                             )
                             break
                         feedback.append(self._reobserved_feedback())
+                        refresh = True
                     phase = "investigate"
                     continue
                 if self._cycling(result.next_phase):
@@ -243,6 +247,7 @@ class IncidentWorkflow:
                         break
                     # Fresh data is what the loop was missing, and only `investigate` collects it.
                     feedback.append(self._reobserved_feedback())
+                    refresh = True
                     reobserving = phase == "investigate"
                     phase = "investigate"
                     continue
@@ -302,6 +307,7 @@ class IncidentWorkflow:
                     )
                     break
                 feedback.append(self._reobserved_feedback())
+                refresh = True
                 reobserving = phase == "investigate"
                 phase = "investigate"
                 continue

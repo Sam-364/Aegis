@@ -183,6 +183,7 @@ class IncidentActivities:
                 workflow_id=input.workflow_id,
                 attempt=activity.info().attempt,
                 initial_feedback=input.feedback,
+                refresh=input.refresh,
             )
         finally:
             clear_context()

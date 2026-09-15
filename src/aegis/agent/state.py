@@ -31,6 +31,7 @@ class AgentState(TypedDict, total=False):
     recovered: bool
     metric_lines: list[str]
     ticked_at: str | None  # ISO timestamp of the last observe, for the runtime budget
+    refresh: bool  # this run follows a wait: take a measurement before judging exit conditions
     evidence_seen: int  # evidence count at the previous iteration, to detect a stalled phase
     stalled_streak: int
 
@@ -46,6 +47,7 @@ def initial_state(
     llm_available: bool,
     feedback: list[str] | None = None,
     ticked_at: str | None = None,
+    refresh: bool = False,
 ) -> AgentState:
     return AgentState(
         incident_id=incident_id,
@@ -70,6 +72,7 @@ def initial_state(
         recovered=False,
         metric_lines=[],
         ticked_at=ticked_at,
+        refresh=refresh,
         evidence_seen=-1,
         stalled_streak=0,
     )

@@ -180,6 +180,7 @@ class AgentRuntime:
         workflow_id: str | None = None,
         attempt: int = 1,
         initial_feedback: list[str] | None = None,
+        refresh: bool = False,
     ) -> PhaseOutcome:
         run_id = agent_run_id or uuid.uuid4()
         flow = self._flow(flow_name, flow_version)
@@ -230,6 +231,7 @@ class AgentRuntime:
                 llm_available=llm_available,
                 feedback=list(initial_feedback or []),
                 ticked_at=self.clock.now().isoformat(),
+                refresh=refresh,
             )
         )
         if resuming:
@@ -375,6 +377,12 @@ class AgentRuntime:
             hypotheses = self.engine.rank(await uow.hypotheses.list_for_incident(incident.id))
             facts = self._facts(state, evidence, hypotheses)
             trigger, nxt = FlowRuntime(flow).decide(phase, facts)
+            if nxt is not None and state.get("refresh") and state["iteration"] == 0:
+                # This run follows a wait for the symptom to develop. The exit conditions are
+                # still satisfied by the *old* evidence, so honouring them here would transition
+                # straight out without measuring anything and make the wait pointless. Collect
+                # first; the conditions are re-evaluated on the next iteration against fresh data.
+                nxt = None
             if nxt is not None:
                 await emit(
                     uow.incidents,
