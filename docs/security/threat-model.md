@@ -212,7 +212,7 @@ spent 30 model calls and 85k tokens doing exactly this, benignly).
 | `max_runtime_seconds` | 900 | same; charged by `AgentRuntime._tick` once per observation, with a single gap capped at `MAX_TICK_SECONDS = 120` so a worker outage between two checkpoints is not billed to the agent |
 | `max_remediation_attempts` | 2 | flow pack; the workflow's replan loop passes it to `_remediate` and stops replanning past it. It is also on `PolicyContext` as `remediation_attempt`, but `PolicyRule` has no predicate for it, so no YAML rule can match on it |
 | per-phase iterations | `max_iterations` in the flow YAML | `FlowPhase` |
-| phases per workflow | 14 (`max_phases`) | `IncidentWorkflow` |
+| phases per round of investigation | 14 (`max_phases`) | `IncidentWorkflow`; a re-observation starts a new round (`_start_new_round`), so the ceiling is `max_phases × (MAX_REOBSERVATIONS + 1)` and the incident's iteration budget binds well before that |
 | entries into one phase | 2 (`MAX_PHASE_ENTRIES`) | `IncidentWorkflow._cycling` — a third entry escalates; this is the tighter bound in practice |
 | activity timeout | `AEGIS_AGENT_PHASE_TIMEOUT_SECONDS` = 600 | `src/aegis/config.py` |
 | LLM output | `AEGIS_LLM_MAX_OUTPUT_TOKENS` = 4000, `AEGIS_LLM_TIMEOUT_SECONDS` = 60, `AEGIS_LLM_MAX_RETRIES` = 2 | same |

@@ -180,9 +180,10 @@ declares where that goes (`exhausted → hypothesize`). Waiting there would stra
 was one transition away from a remediation, which is exactly what an over-broad first version of
 this did to `bad-deployment` in CI. The workflow
 — which is where durable waiting belongs — waits `REOBSERVE_SECONDS` (45 s) on a Temporal timer and
-re-enters the *same* phase, up to `MAX_REOBSERVATIONS` (3). A re-observation is the same visit: it
-does not append to `WorkflowStatus.phases`, so the cycle guard is untouched, and it does not re-emit
-the phase's status change. The waiting incident is queryable (`WorkflowStatus.reobservations`) and a
+re-enters the *same* phase, up to `MAX_REOBSERVATIONS` (3). A re-observation starts a new *round*: `_start_new_round` moves both the cycle
+guard's window and the `max_phases` allowance to the current point, because neither bound is
+measuring anything meaningful once the data has changed. The record of where the incident has been
+(`WorkflowStatus.phases`) is kept intact; only the two counters move. The waiting incident is queryable (`WorkflowStatus.reobservations`) and a
 cancel during the wait is honoured by the loop's own guard.
 
 If the symptom still cannot be diagnosed after the last re-observation, the incident escalates with
@@ -195,7 +196,8 @@ investigation proceeds normally
 **Escalation** means the workflow has finished and a human owns the incident. Triggers: the flow
 transitions to the `escalate` phase; the agent returns `escalate`; the budget is exhausted; policy
 denied the plan; the approval timed out; rejections or failed verifications exhausted
-`max_remediation_attempts`; `max_phases` (14) was reached; re-observations were exhausted; or the
+`max_remediation_attempts`; `max_phases` (14 phases *since the last re-observation*) was reached;
+re-observations were exhausted; or the
 investigation is *cycling* —
 `MAX_PHASE_ENTRIES = 2` (`src/aegis/workflows/incident_workflow.py`), so a third entry into the same
 phase escalates with "investigation is cycling on phase X without reaching a remediation" rather

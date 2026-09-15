@@ -75,7 +75,7 @@ Import direction is enforced by five import-linter contracts in `pyproject.toml`
                                                   ▼
  ┌─ IncidentWorkflow (task queue aegis-incidents) ───────────────────────────────────────────────┐
  │ triage_incident            select flow pack (or keep pinned one), detected → triaging          │
- │ for phase in flow (≤ max_phases = 14; a 3rd entry into the same phase → escalate):            │
+ │ for phase in flow (≤ max_phases = 14 per round; 3rd entry into a phase → escalate):           │
  │   set_incident_status(phase)                                                                  │
  │   run_agent_phase ──▶ AgentRuntime.run_phase (LangGraph; checkpoint thread = agent_run_id)   │
  │        returns: transition | no_action | action_planned | escalate | terminate                 │

@@ -85,6 +85,9 @@ class IncidentWorkflow:
         # The cycle guard counts phase entries since the last re-observation: after waiting for
         # fresh data, the investigation genuinely starts again and must not inherit the old count.
         self._cycle_base = 0
+        # ...and so does the phase allowance: `max_phases` bounds one round of investigation,
+        # not the incident, or a legitimate wait would spend the runaway protection.
+        self._phase_base = 0
         self._status = WorkflowStatus()
 
     # ------------------------------------------------------------------ signals / queries -------
@@ -140,8 +143,15 @@ class IncidentWorkflow:
                 lambda: self._cancel_reason is not None,
                 timeout=timedelta(seconds=REOBSERVE_SECONDS),
             )
-        self._cycle_base = len(self._status.phases)
+        self._start_new_round()
         return True
+
+    def _start_new_round(self) -> None:
+        """A re-observation restarts the investigation against fresh data, so both bounds that
+        exist to stop an investigation going nowhere measure from here: the cycle guard's window
+        and the phase allowance."""
+        self._cycle_base = len(self._status.phases)
+        self._phase_base = len(self._status.phases)
 
     def _take_approval(self) -> ApprovalSignal | None:
         return self._approval
@@ -178,7 +188,10 @@ class IncidentWorkflow:
         feedback: list[str] = []
         outcome = "escalated"
         summary = ""
-        for _ in range(input.max_phases):
+        # `max_phases` bounds a round of investigation; a re-observation starts a new round with
+        # fresh data, so it starts a new allowance. The number of rounds is bounded by
+        # MAX_REOBSERVATIONS, and the incident's iteration budget binds long before either.
+        while len(self._status.phases) - self._phase_base < input.max_phases:
             if self._cancel_reason is not None:
                 outcome, summary = "closed", self._cancel_reason
                 break
@@ -323,7 +336,11 @@ class IncidentWorkflow:
                 outcome, summary = "failed", result.summary or "agent terminated"
             break
         else:
-            outcome, summary = "escalated", "maximum number of phases reached"
+            outcome, summary = (
+                "escalated",
+                f"maximum number of phases reached ({input.max_phases} since the last "
+                "re-observation)",
+            )
         await workflow.execute_activity(
             "finalize_incident",
             FinalizeInput(

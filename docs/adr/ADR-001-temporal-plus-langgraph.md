@@ -47,7 +47,7 @@ Split responsibilities by durability requirement:
 - Human waits cost nothing: an approval can take 15 minutes (default) with no process holding state.
 - Two runtimes to operate (Temporal server plus the worker's Postgres checkpointer), and two places
   to look when debugging: the Temporal UI for the spine, `agent_runs`/`agent_steps` for the loop.
-- `max_phases=14`, `MAX_PHASE_ENTRIES = 2` (a third entry into the same phase escalates, which
+- `max_phases=14` per round of investigation, `MAX_PHASE_ENTRIES = 2` (a third entry into the same phase escalates, which
   usually binds sooner than `max_phases`) and per-flow budgets bound the workflow length; a phase
   cannot exceed `agent_phase_timeout_seconds` (600).
 - The workflow's phase-to-status mapping is by phase *name* (`PHASE_STATUS`) and is partial: only

@@ -135,3 +135,26 @@ async def test_a_decision_on_a_finished_workflow_is_reported_as_a_conflict() -> 
         await _controller(_GoneHandle()).signal_approval(
             "incident-1", uuid.uuid4(), True, "user:ops", "go"
         )
+
+
+def test_a_re_observation_starts_a_fresh_round_for_both_bounds() -> None:
+    """`max_phases` and the cycle guard both exist to stop an investigation going nowhere. A wait
+    for the symptom to develop is not going nowhere — it starts the investigation again on data it
+    did not have — so both measure from the wait, not from the incident."""
+    wf = IncidentWorkflow()
+    wf._status.phases.extend(["triage", "investigate", "hypothesize", "validate", "hypothesize"])
+    assert wf._cycling("hypothesize"), "a third entry would be cycling"
+    spent = len(wf._status.phases) - wf._phase_base
+    assert spent == 5
+
+    wf._start_new_round()
+
+    assert not wf._cycling("hypothesize"), "fresh data deserves a fresh window"
+    assert len(wf._status.phases) - wf._phase_base == 0, "and a fresh phase allowance"
+    assert wf._status.phases == [
+        "triage",
+        "investigate",
+        "hypothesize",
+        "validate",
+        "hypothesize",
+    ], "the record of where the incident went is kept"
