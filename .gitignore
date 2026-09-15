@@ -37,6 +37,7 @@ evals/results/*
 !evals/results/20260911T061754Z-offline.*
 !evals/results/20260911T062623Z-offline.*
 !evals/results/20260911T082507Z-llm.*
+!evals/results/20260915T080414Z-llm.*
 playwright-report/
 test-results/
 

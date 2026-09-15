@@ -263,7 +263,7 @@ make e2e                # five scenarios end to end against the running stack
 make chaos              # SIGKILL the worker mid-remediation, restart the API, stop Redis
 ```
 
-Latest full sweep, every suite, real model — `evals/results/20260911T082507Z-llm.md`, kept in the
+Latest full sweep, every suite, real model — `evals/results/20260915T080414Z-llm.md`, kept in the
 repository so the claims can be checked against the data:
 
 | Suite | Result |
@@ -274,7 +274,7 @@ repository so the claims can be checked against the data:
 | verification | **12/12** — the correct remediation passes and the incorrect one fails, for every scenario pair |
 | memory recall | 10/10 recall@1 |
 | agent, deterministic planner (no LLM) | **8/8** correct plans, 0 mutation violations |
-| agent, `gpt-5-mini` | **8/8** correct plans, 0 mutation violations, ~11 model calls per incident |
+| agent, `gpt-5-mini` | **8/8** correct plans, 0 mutation violations, ~12 model calls per incident |
 | structured output, `gpt-5-mini` | 3/3 |
 
 Against the running stack: **5/5 end-to-end scenarios** resolved with the correct remediation, and

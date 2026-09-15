@@ -97,10 +97,13 @@ suites are re-run in isolation while iterating. Each report is a snapshot of the
 timestamp, which matters here — several runtime guards landed between the first real-model run and
 the sweep below, and the guards exist *because* of what that run exposed.
 
-### Authoritative sweep — `20260911T082507Z-llm.md` (every suite, real model, 8 scenarios)
+### Authoritative sweep — `20260915T080414Z-llm.md` (every suite, real model, 8 scenarios)
 
-Run with `uv run python -m evals.run --llm` on the fully hardened code, after the adversarial
-security review's findings were fixed.
+Run with `uv run python -m evals.run --llm` on the current code — after the adversarial security
+review's findings were fixed, and after the re-observation work (the runtime waiting for a symptom
+to develop rather than escalating what is not yet legible). Those changes were driven by the
+*deterministic* planner, which meets a fault far earlier than the model does, so this run is the
+check that they cost the LLM path nothing.
 
 | suite | score | pass rate | threshold | status |
 |---|---|---|---|---|
@@ -123,22 +126,22 @@ security review's findings were fixed.
   passes and the ground-truth incorrect one fails, including
   `memory-leak/rollback:payment-service`, which the accumulation guard catches.
 - **agent-llm** (`gpt-5-mini`): every scenario graded correct — `mutation_violations = 0`,
-  `mean_llm_calls = 11.0`, `mean_tool_calls = 7.5`, `total_llm_tokens = 262 645` for the whole
+  `mean_llm_calls = 12.0`, `mean_tool_calls = 7.4`, `total_llm_tokens = 271 220` for the whole
   suite.
 
 | scenario | decision | plan the model produced | confidence | model calls | wall clock |
 |---|---|---|---|---|---|
-| `redis-connection-leak` | action_planned | `restart_service(order-service)` | 0.97 | 9 | 83 s |
-| `bad-deployment` | action_planned | `rollback_deployment(payment-service)` | 0.96 | 9 | 76 s |
-| `db-pool-exhaustion` | action_planned | `restart_service(user-service)` | 0.97 | 11 | 112 s |
-| `cascading-dependency` | action_planned | `restart_service(inventory-service)` | 0.97 | 11 | 96 s |
-| `transient-spike` | no_action | — | — | 1 | 7 s |
-| `memory-leak` | action_planned | `restart_service(payment-service)` | 0.89 | 10 | 99 s |
-| `cpu-saturation` | action_planned | `scale_service(notification-service, 2)` | 0.87 | 11 | 99 s |
-| `network-latency` | terminate → escalate | none available | 0.46 | 26 | 249 s |
+| `redis-connection-leak` | action_planned | `restart_service(order-service)` | 0.97 | 10 | 96 s |
+| `bad-deployment` | action_planned | `rollback_deployment(payment-service)` | 0.96 | 11 | 79 s |
+| `db-pool-exhaustion` | action_planned | `restart_service(user-service)` | 0.97 | 11 | 101 s |
+| `cascading-dependency` | action_planned | `restart_service(inventory-service)` | 0.94 | 12 | 143 s |
+| `transient-spike` | no_action | — | — | 1 | 8 s |
+| `memory-leak` | action_planned | `restart_service(payment-service)` | 0.89 | 12 | 94 s |
+| `cpu-saturation` | action_planned | `scale_service(notification-service, 2)` | 0.69 | 13 | 120 s |
+| `network-latency` | terminate → escalate | none available | 0.56 | 26 | 202 s |
 
 `transient-spike` is the clearest measure of the runtime-over-model design: one model call and
-seven seconds, because `_observe` decides that the signals are back inside baseline before the
+eight seconds, because `_observe` decides that the signals are back inside baseline before the
 model gets to argue. `network-latency` is the opposite end — the model is allowed to work at it,
 finds nothing it can fix, and the cycle guard ends the investigation instead of letting it loop.
 
