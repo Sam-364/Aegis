@@ -1,0 +1,19 @@
+{
+ "version": "0.1.0",
+ "environment": "development",
+ "llm": {
+  "provider": "disabled",
+  "reasoner": null,
+  "fast": null,
+  "healthy": false
+ },
+ "telemetry_provider": "simulator",
+ "temporal": true,
+ "flows": [
+  "api-latency-investigation@1.2.0",
+  "error-rate-investigation@1.1.0",
+  "incident-investigation@1.1.0"
+ ],
+ "tools": 25,
+ "policy_rules": 11
+}

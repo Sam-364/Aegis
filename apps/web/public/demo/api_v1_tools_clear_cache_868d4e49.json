@@ -1,0 +1,56 @@
+{
+ "name": "clear_cache",
+ "version": "1",
+ "description": "Flush a cache. Briefly increases load on backing stores.",
+ "category": "mutating",
+ "risk": "low",
+ "idempotent": true,
+ "timeout_seconds": 30.0,
+ "retry": {
+  "max_attempts": 1,
+  "initial_backoff_seconds": 0.5,
+  "backoff_multiplier": 2.0,
+  "max_backoff_seconds": 10.0
+ },
+ "capabilities": [],
+ "allowed_environments": [
+  "development",
+  "staging",
+  "production"
+ ],
+ "min_severity": null,
+ "enabled": true,
+ "arguments_schema": {
+  "additionalProperties": false,
+  "properties": {
+   "component": {
+    "default": "redis",
+    "title": "Component",
+    "type": "string"
+   },
+   "reason": {
+    "default": "",
+    "maxLength": 300,
+    "title": "Reason",
+    "type": "string"
+   }
+  },
+  "title": "ClearCacheArgs",
+  "type": "object"
+ },
+ "produces_evidence": true,
+ "verification_metrics": [
+  "hit_rate"
+ ],
+ "used_in": {
+  "api-latency-investigation@1.2.0": [
+   "<remediation>"
+  ],
+  "error-rate-investigation@1.1.0": [
+   "<remediation>"
+  ],
+  "incident-investigation@1.1.0": [
+   "<remediation>"
+  ]
+ }
+}

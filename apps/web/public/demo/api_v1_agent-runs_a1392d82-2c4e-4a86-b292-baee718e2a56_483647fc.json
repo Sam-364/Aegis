@@ -1,0 +1,395 @@
+{
+ "run": {
+  "created_at": "2026-09-15T10:44:11.414890Z",
+  "updated_at": "2026-09-15T10:44:11.414891Z",
+  "id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "flow_version": "1.2.0",
+  "phase": "validate",
+  "status": "completed",
+  "budget": {
+   "max_iterations": 32,
+   "max_tool_calls": 36,
+   "max_llm_calls": 26,
+   "max_llm_tokens": 220000,
+   "max_runtime_seconds": 900,
+   "max_remediation_attempts": 2
+  },
+  "usage": {
+   "iterations": 26,
+   "tool_calls": 15,
+   "llm_calls": 0,
+   "llm_tokens": 0,
+   "runtime_seconds": 0.982677,
+   "remediation_attempts": 0
+  },
+  "model": "deterministic-planner",
+  "started_at": "2026-09-15T10:44:11.414881Z",
+  "finished_at": "2026-09-15T10:44:11.633330Z",
+  "termination_reason": "phase_complete",
+  "summary": "exhausted \u2192 hypothesize",
+  "error": null,
+  "steps_count": 9,
+  "workflow_id": "incident-26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "attempt": 1
+ },
+ "steps": [
+  {
+   "id": "1d4e36c7-b4db-4245-9547-4946225fbd91",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 1,
+   "phase": "validate",
+   "node": "propose",
+   "kind": "fallback",
+   "at": "2026-09-15T10:44:11.433301Z",
+   "title": "call_tool: Testing H1: payment-service is the most implicated component in the collected evidence.",
+   "input": {
+    "phase": "validate",
+    "evidence": 14,
+    "iteration": 0,
+    "hypotheses": 1
+   },
+   "output": {
+    "proposal": {
+     "action": "call_tool",
+     "rationale": "deterministic planner",
+     "tool_call": {
+      "purpose": "validate leading hypothesis",
+      "tool_name": "run_process_diagnostic",
+      "expectation": "result implicates payment-service",
+      "arguments_json": "{\"service\": \"payment-service\"}",
+      "tests_hypothesis": "H1"
+     },
+     "hypotheses": [],
+     "observation": "Testing H1: payment-service is the most implicated component in the collected evidence.",
+     "remediation": null,
+     "hypothesis_update": null
+    },
+    "recovered": false
+   },
+   "model": "deterministic-planner",
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "9c01db96-26d6-4511-a005-cdfb6cf1569a",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 2,
+   "phase": "validate",
+   "node": "execute_tool",
+   "kind": "authorization",
+   "at": "2026-09-15T10:44:11.449041Z",
+   "title": "allowed: run_process_diagnostic",
+   "input": {
+    "tool": "run_process_diagnostic",
+    "arguments": {
+     "service": "payment-service"
+    }
+   },
+   "output": {
+    "decision": {
+     "checks": [
+      {
+       "name": "tool_registered",
+       "detail": "run_process_diagnostic@1 (diagnostic, risk low)",
+       "passed": true
+      },
+      {
+       "name": "tool_enabled",
+       "detail": "enabled",
+       "passed": true
+      },
+      {
+       "name": "incident_active",
+       "detail": "incident INC-1124 is validating",
+       "passed": true
+      },
+      {
+       "name": "flow_allows",
+       "detail": "run_process_diagnostic is part of flow api-latency-investigation@1.2.0",
+       "passed": true
+      },
+      {
+       "name": "phase_allows",
+       "detail": "phase 'validate' lists run_process_diagnostic",
+       "passed": true
+      },
+      {
+       "name": "category_permitted",
+       "detail": "diagnostic permitted inside the agent loop",
+       "passed": true
+      },
+      {
+       "name": "environment_allows",
+       "detail": "permitted in development",
+       "passed": true
+      },
+      {
+       "name": "severity_allows",
+       "detail": "incident severity sev3 permits run_process_diagnostic",
+       "passed": true
+      },
+      {
+       "name": "actor_permitted",
+       "detail": "agent:a1392d82-2c4e-4a86-b292-baee718e2a56 has role operator",
+       "passed": true
+      },
+      {
+       "name": "risk_within_ceiling",
+       "detail": "risk low <= ceiling low",
+       "passed": true
+      },
+      {
+       "name": "policy_effect",
+       "detail": "allowed by rule 'allow-diagnostics'",
+       "passed": true
+      },
+      {
+       "name": "arguments_valid",
+       "detail": "1 argument(s) validated",
+       "passed": true
+      },
+      {
+       "name": "idempotency",
+       "detail": "key 6069aa1b6e68\u2026 is new",
+       "passed": true
+      },
+      {
+       "name": "budget_available",
+       "detail": "tool_calls 14/36, iterations 22/32",
+       "passed": true
+      }
+     ],
+     "effect": "allow",
+     "reason": "all checks passed",
+     "allowed": true,
+     "tool_name": "run_process_diagnostic",
+     "decided_at": "2026-09-15T10:44:11.441614Z",
+     "request_id": "529446cf-a09b-4f99-953c-9a98871788f4",
+     "denial_code": null,
+     "matched_policy": "allow-diagnostics"
+    }
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": "f07a9c40-7d49-4161-95c0-d30538e92efa",
+   "trace_id": null
+  },
+  {
+   "id": "7a9bb433-cbdc-4321-8ade-d5f90d0bf540",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 3,
+   "phase": "validate",
+   "node": "execute_tool",
+   "kind": "tool_execution",
+   "at": "2026-09-15T10:44:11.452565Z",
+   "title": "run_process_diagnostic: payment-service process: up, version 2.3.7, uptime 198s, replicas 2.0/2, restarts 1, mem 54.7%, cpu 34.1%, open redis conns 2, open db conns 2",
+   "input": {
+    "tool": "run_process_diagnostic",
+    "arguments": {
+     "service": "payment-service"
+    }
+   },
+   "output": {
+    "status": "succeeded",
+    "summary": "payment-service process: up, version 2.3.7, uptime 198s, replicas 2.0/2, restarts 1, mem 54.7%, cpu 34.1%, open redis conns 2, open db conns 2",
+    "duration_ms": 4.184,
+    "evidence_ids": [
+     "9dffeb94-55bf-4b9c-a499-172c7493b57a"
+    ]
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 4.184,
+   "tool_execution_id": "f07a9c40-7d49-4161-95c0-d30538e92efa",
+   "trace_id": null
+  },
+  {
+   "id": "85464894-9fc3-4a1f-af52-72b317ad4107",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 4,
+   "phase": "validate",
+   "node": "propose",
+   "kind": "fallback",
+   "at": "2026-09-15T10:44:11.475732Z",
+   "title": "phase_complete: validation diagnostics exhausted",
+   "input": {
+    "phase": "validate",
+    "evidence": 15,
+    "iteration": 1,
+    "hypotheses": 1
+   },
+   "output": {
+    "proposal": {
+     "action": "phase_complete",
+     "rationale": "deterministic planner",
+     "tool_call": null,
+     "hypotheses": [],
+     "observation": "validation diagnostics exhausted",
+     "remediation": null,
+     "hypothesis_update": null
+    },
+    "recovered": false
+   },
+   "model": "deterministic-planner",
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "2445afa9-3f4c-4366-8afe-d47c94aee365",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 5,
+   "phase": "validate",
+   "node": "conclude",
+   "kind": "decision",
+   "at": "2026-09-15T10:44:11.489079Z",
+   "title": "phase_complete requested",
+   "input": {},
+   "output": {
+    "exit_met": false,
+    "unsatisfied": [
+     "hypothesis_validated"
+    ]
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "1893e228-9620-42ec-a473-878c3a09769f",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 6,
+   "phase": "validate",
+   "node": "propose",
+   "kind": "fallback",
+   "at": "2026-09-15T10:44:11.506376Z",
+   "title": "phase_complete: validation diagnostics exhausted",
+   "input": {
+    "phase": "validate",
+    "evidence": 15,
+    "iteration": 2,
+    "hypotheses": 1
+   },
+   "output": {
+    "proposal": {
+     "action": "phase_complete",
+     "rationale": "deterministic planner",
+     "tool_call": null,
+     "hypotheses": [],
+     "observation": "validation diagnostics exhausted",
+     "remediation": null,
+     "hypothesis_update": null
+    },
+    "recovered": false
+   },
+   "model": "deterministic-planner",
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "2526ee45-6705-4e09-9c9e-0d0c490c90c4",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 7,
+   "phase": "validate",
+   "node": "conclude",
+   "kind": "decision",
+   "at": "2026-09-15T10:44:11.520493Z",
+   "title": "phase_complete requested",
+   "input": {},
+   "output": {
+    "exit_met": false,
+    "unsatisfied": [
+     "hypothesis_validated"
+    ]
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "052c5402-13c0-4a95-9a44-267a80d48dac",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 8,
+   "phase": "validate",
+   "node": "propose",
+   "kind": "fallback",
+   "at": "2026-09-15T10:44:11.542105Z",
+   "title": "phase_complete: validation diagnostics exhausted",
+   "input": {
+    "phase": "validate",
+    "evidence": 15,
+    "iteration": 3,
+    "hypotheses": 1
+   },
+   "output": {
+    "proposal": {
+     "action": "phase_complete",
+     "rationale": "deterministic planner",
+     "tool_call": null,
+     "hypotheses": [],
+     "observation": "validation diagnostics exhausted",
+     "remediation": null,
+     "hypothesis_update": null
+    },
+    "recovered": false
+   },
+   "model": "deterministic-planner",
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "ede86f40-db69-43e3-962f-436f49600934",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 9,
+   "phase": "validate",
+   "node": "conclude",
+   "kind": "decision",
+   "at": "2026-09-15T10:44:11.553693Z",
+   "title": "phase_complete requested",
+   "input": {},
+   "output": {
+    "exit_met": false,
+    "unsatisfied": [
+     "hypothesis_validated"
+    ]
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  }
+ ]
+}

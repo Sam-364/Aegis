@@ -1,0 +1,52 @@
+{
+ "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+ "evidence": [
+  {
+   "created_at": "2026-09-15T10:37:36.727749Z",
+   "updated_at": "2026-09-15T10:37:36.727750Z",
+   "id": "496a2ad9-27f5-49c9-8a15-45671efe803e",
+   "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "kind": "health",
+   "source": "get_health",
+   "service": "api-gateway",
+   "title": "api-gateway health",
+   "summary": "api-gateway is healthy; all checks passing",
+   "data": {
+    "state": "healthy",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": true,
+     "process_up": true,
+     "error_rate_ok": true,
+     "dependencies_ok": true
+    },
+    "message": "all checks passing",
+    "service": "api-gateway"
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:37:36.727710Z",
+   "tool_execution_id": "5e243c6f-ca2f-4b1a-964b-23d8059116b7",
+   "agent_run_id": "eda4f659-4cf4-4808-bf01-d613f67f8885",
+   "phase": "triage",
+   "tags": [
+    "healthy"
+   ]
+  }
+ ],
+ "relations": [
+  {
+   "id": "682ac3d9-6732-4975-8625-56603a0730b1",
+   "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "from_id": "496a2ad9-27f5-49c9-8a15-45671efe803e",
+   "from_kind": "evidence",
+   "to_id": "api-gateway",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:37:36.734554Z",
+   "created_by": "get_health"
+  }
+ ]
+}

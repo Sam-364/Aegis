@@ -1,0 +1,74 @@
+{
+ "name": "get_metrics",
+ "version": "1",
+ "description": "Time series for one metric of one component over a window, with baseline comparison.",
+ "category": "read_only",
+ "risk": "none",
+ "idempotent": true,
+ "timeout_seconds": 10.0,
+ "retry": {
+  "max_attempts": 3,
+  "initial_backoff_seconds": 0.5,
+  "backoff_multiplier": 2.0,
+  "max_backoff_seconds": 10.0
+ },
+ "capabilities": [],
+ "allowed_environments": [
+  "development",
+  "staging",
+  "production"
+ ],
+ "min_severity": null,
+ "enabled": true,
+ "arguments_schema": {
+  "additionalProperties": false,
+  "properties": {
+   "service": {
+    "description": "service or infrastructure component name",
+    "title": "Service",
+    "type": "string"
+   },
+   "metric": {
+    "description": "metric name, e.g. latency_p95_ms, error_rate, connections",
+    "title": "Metric",
+    "type": "string"
+   },
+   "window_seconds": {
+    "default": 300,
+    "description": "lookback window",
+    "maximum": 1800,
+    "minimum": 30,
+    "title": "Window Seconds",
+    "type": "integer"
+   }
+  },
+  "required": [
+   "service",
+   "metric"
+  ],
+  "title": "ServiceMetricArgs",
+  "type": "object"
+ },
+ "produces_evidence": true,
+ "verification_metrics": [],
+ "used_in": {
+  "api-latency-investigation@1.2.0": [
+   "triage",
+   "investigate",
+   "hypothesize",
+   "validate"
+  ],
+  "error-rate-investigation@1.1.0": [
+   "triage",
+   "investigate",
+   "hypothesize",
+   "validate"
+  ],
+  "incident-investigation@1.1.0": [
+   "triage",
+   "investigate",
+   "hypothesize",
+   "validate"
+  ]
+ }
+}

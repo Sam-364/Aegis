@@ -1,0 +1,18 @@
+{
+ "component": "notification-service",
+ "time": "2026-09-15T11:50:43.126624+00:00",
+ "metrics": {
+  "request_rate": 12.238453219241116,
+  "error_rate": 4.087676653484697e-05,
+  "latency_p50_ms": 10.933745792392022,
+  "latency_p95_ms": 18.19348572180069,
+  "cpu_percent": 27.192684273783197,
+  "memory_percent": 39.11435006755533,
+  "db_pool_in_use": 0.0,
+  "db_pool_wait_ms": 0.0,
+  "redis_pool_in_use": 1.0,
+  "redis_pool_wait_ms": 0.0,
+  "replicas_ready": 1.0,
+  "up": 1.0
+ }
+}

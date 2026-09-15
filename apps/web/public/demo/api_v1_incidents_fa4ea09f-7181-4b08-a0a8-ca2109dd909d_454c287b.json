@@ -1,0 +1,4930 @@
+{
+ "incident": {
+  "created_at": "2026-09-15T11:45:52.996332Z",
+  "updated_at": "2026-09-15T11:45:58.059437Z",
+  "id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "tenant_id": "default",
+  "environment": "development",
+  "number": 1125,
+  "title": "Elevated API error rate",
+  "summary": "payment-service error_rate 0.000938 -> 0.351 (+37281%): elevated error rate; order-service error_rate 0.00264 -> 0.145 (+5388%): elevated error rate; api-gateway error_rate 0.00528 -> 0.142 (+2581%): elevated error rate",
+  "severity": "sev2",
+  "status": "awaiting_approval",
+  "flow_name": "error-rate-investigation",
+  "flow_version": "1.1.0",
+  "correlation_key": "api-gateway|order-service|payment-service",
+  "affected_services": [
+   "api-gateway",
+   "order-service",
+   "payment-service"
+  ],
+  "signals": [
+   {
+    "id": "8eae779b-5819-4754-b798-c6db7f2b52ff",
+    "service": "api-gateway",
+    "metric": "error_rate",
+    "kind": "error_rate",
+    "observed_value": 0.1415888737686003,
+    "baseline_value": 0.005280344121612928,
+    "deviation_sigma": 59.21565631657188,
+    "detector": "error_rate:error_rate",
+    "detected_at": "2026-09-15T11:45:53.126624Z",
+    "window_seconds": 2,
+    "description": "api-gateway error_rate 0.00528 -> 0.142 (+2581%): elevated error rate"
+   },
+   {
+    "id": "fd477a09-b74d-47ac-9939-1967f376a3ee",
+    "service": "order-service",
+    "metric": "error_rate",
+    "kind": "error_rate",
+    "observed_value": 0.14509654581678846,
+    "baseline_value": 0.002643822574137764,
+    "deviation_sigma": 105.7817513483471,
+    "detector": "error_rate:error_rate",
+    "detected_at": "2026-09-15T11:45:53.126624Z",
+    "window_seconds": 2,
+    "description": "order-service error_rate 0.00264 -> 0.145 (+5388%): elevated error rate"
+   },
+   {
+    "id": "33ca1f48-a01a-484e-b531-12959ddffbfe",
+    "service": "payment-service",
+    "metric": "error_rate",
+    "kind": "error_rate",
+    "observed_value": 0.35067407517565163,
+    "baseline_value": 0.0009381098521269542,
+    "deviation_sigma": 631.2799784848456,
+    "detector": "error_rate:error_rate",
+    "detected_at": "2026-09-15T11:45:53.126624Z",
+    "window_seconds": 2,
+    "description": "payment-service error_rate 0.000938 -> 0.351 (+37281%): elevated error rate"
+   },
+   {
+    "id": "d2ef8dbf-33cb-4667-a8c8-38dd3436e34a",
+    "service": "api-gateway",
+    "metric": "latency_p95_ms",
+    "kind": "latency",
+    "observed_value": 740.2407844926378,
+    "baseline_value": 203.2292684218027,
+    "deviation_sigma": 52.84785210723357,
+    "detector": "latency_p95_ms:latency",
+    "detected_at": "2026-09-15T11:45:58.126624Z",
+    "window_seconds": 3,
+    "description": "api-gateway latency_p95_ms 203 -> 740 (+264%): p95 latency regression"
+   },
+   {
+    "id": "399a35ff-522c-4f7e-b80a-026c7b3e44de",
+    "service": "order-service",
+    "metric": "latency_p95_ms",
+    "kind": "latency",
+    "observed_value": 510.7556374247035,
+    "baseline_value": 116.78244079458902,
+    "deviation_sigma": 67.47130715020451,
+    "detector": "latency_p95_ms:latency",
+    "detected_at": "2026-09-15T11:45:58.126624Z",
+    "window_seconds": 3,
+    "description": "order-service latency_p95_ms 117 -> 511 (+337%): p95 latency regression"
+   },
+   {
+    "id": "9f1fb5e8-3232-4361-9dfa-656f5864966a",
+    "service": "payment-service",
+    "metric": "latency_p95_ms",
+    "kind": "latency",
+    "observed_value": 660.5354634610657,
+    "baseline_value": 69.93860944647899,
+    "deviation_sigma": 168.89007622221746,
+    "detector": "latency_p95_ms:latency",
+    "detected_at": "2026-09-15T11:45:58.126624Z",
+    "window_seconds": 3,
+    "description": "payment-service latency_p95_ms 69.9 -> 661 (+844%): p95 latency regression"
+   }
+  ],
+  "leading_hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+  "active_action_plan_id": "38459026-892c-44c7-8457-49439cad8248",
+  "workflow_id": "incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "detected_at": "2026-09-15T11:45:53.126624Z",
+  "acknowledged_at": "2026-09-15T11:45:53.114721Z",
+  "resolved_at": null,
+  "closed_at": null,
+  "resolution_summary": "",
+  "root_cause_summary": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+  "remediation_attempts": 0,
+  "version": 11
+ },
+ "hypotheses": [
+  {
+   "created_at": "2026-09-15T11:45:54.004086Z",
+   "updated_at": "2026-09-15T11:45:54.262945Z",
+   "id": "1c849775-d672-47ff-8040-57abababf4d9",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "statement": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "category": "deployment_regression",
+   "suspected_root_cause_service": "payment-service",
+   "mechanism": "derived deterministically from evidence strength and service attribution",
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "status": "confirmed",
+   "confidence": 0.9728,
+   "score": {
+    "evidence_strength": 0.9395,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 1.0,
+    "historical_similarity": 0.0,
+    "contradiction_penalty": 0.0,
+    "validation_bonus": 0.15,
+    "total": 0.9728,
+    "explanation": [
+     "4 supporting evidence items (strength 0.94)",
+     "temporal alignment 1.00",
+     "payment-service explains 3/3 symptomatic services",
+     "tests: 1 confirmed, 0 refuted"
+    ]
+   },
+   "supporting_evidence_ids": [
+    "135bdc19-f123-4e13-8239-bc25481960eb",
+    "364639b2-26ac-4042-be95-bdc67cddc13c",
+    "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+    "d4967013-2a30-477d-8b69-8d5686c743fc"
+   ],
+   "contradicting_evidence_ids": [],
+   "suggested_tests": [],
+   "tests": [
+    {
+     "id": "85b1859b-bb0c-43a2-81db-1a3977d50d3a",
+     "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+     "tool_execution_id": null,
+     "tool_name": "compare_baseline",
+     "expectation": "result implicates payment-service",
+     "outcome": "confirmed",
+     "detail": "deterministic judgement: diagnostic strongly implicates the suspected service",
+     "at": "2026-09-15T11:45:54.262116Z"
+    }
+   ],
+   "proposed_by": "deterministic",
+   "agent_run_id": "3fb00583-d31a-4fd2-b309-2538c74d48c5",
+   "version": 3
+  },
+  {
+   "created_at": "2026-09-15T11:45:54.005055Z",
+   "updated_at": "2026-09-15T11:45:54.010107Z",
+   "id": "08dabb1d-1249-47db-8d00-4faf2b278fd6",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "statement": "order-service is the most implicated component in the collected evidence.",
+   "category": "unknown",
+   "suspected_root_cause_service": "order-service",
+   "mechanism": "derived deterministically from evidence strength and service attribution",
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "status": "supported",
+   "confidence": 0.7816,
+   "score": {
+    "evidence_strength": 0.848,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 1.0,
+    "historical_similarity": 0.0,
+    "contradiction_penalty": 0.0,
+    "validation_bonus": 0.0,
+    "total": 0.7816,
+    "explanation": [
+     "2 supporting evidence items (strength 0.85)",
+     "temporal alignment 1.00",
+     "order-service explains 3/3 symptomatic services"
+    ]
+   },
+   "supporting_evidence_ids": [
+    "27c1d408-82e9-4bd1-b583-224500364d3b",
+    "e94dbdd4-6034-4948-8bc3-6b1e5b9fb484"
+   ],
+   "contradicting_evidence_ids": [],
+   "suggested_tests": [],
+   "tests": [],
+   "proposed_by": "deterministic",
+   "agent_run_id": "3fb00583-d31a-4fd2-b309-2538c74d48c5",
+   "version": 2
+  },
+  {
+   "created_at": "2026-09-15T11:45:54.005589Z",
+   "updated_at": "2026-09-15T11:45:54.012765Z",
+   "id": "5113a1d3-fb87-487f-937e-ff3124022a6f",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "statement": "api-gateway is the most implicated component in the collected evidence.",
+   "category": "unknown",
+   "suspected_root_cause_service": "api-gateway",
+   "mechanism": "derived deterministically from evidence strength and service attribution",
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "status": "proposed",
+   "confidence": 0.5033,
+   "score": {
+    "evidence_strength": 0.6,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 0.3333,
+    "historical_similarity": 0.0,
+    "contradiction_penalty": 0.0,
+    "validation_bonus": 0.0,
+    "total": 0.5033,
+    "explanation": [
+     "1 supporting evidence items (strength 0.60)",
+     "temporal alignment 1.00",
+     "api-gateway explains 1/3 symptomatic services"
+    ]
+   },
+   "supporting_evidence_ids": [
+    "d3518132-ea24-43a3-b94a-1d1093d64f84"
+   ],
+   "contradicting_evidence_ids": [],
+   "suggested_tests": [],
+   "tests": [],
+   "proposed_by": "deterministic",
+   "agent_run_id": "3fb00583-d31a-4fd2-b309-2538c74d48c5",
+   "version": 2
+  }
+ ],
+ "action_plans": [
+  {
+   "created_at": "2026-09-15T11:45:54.399573Z",
+   "updated_at": "2026-09-15T11:45:54.561387Z",
+   "id": "38459026-892c-44c7-8457-49439cad8248",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+   "tool_name": "rollback_deployment",
+   "tool_version": "1",
+   "arguments": {
+    "service": "payment-service"
+   },
+   "reason": "addresses deployment_regression on payment-service",
+   "expected_effect": "symptomatic metrics return to baseline",
+   "risk": "medium",
+   "rollback": {
+    "available": false,
+    "tool_name": null,
+    "arguments": {},
+    "reason": "original version unknown until execution"
+   },
+   "verification": {
+    "conditions": [
+     {
+      "metric": "error_rate",
+      "service": "api-gateway",
+      "comparator": "lte",
+      "target": 0.03,
+      "max_ratio_to_baseline": null,
+      "description": "api-gateway error_rate lte 0.03"
+     },
+     {
+      "metric": "error_rate",
+      "service": "order-service",
+      "comparator": "lte",
+      "target": 0.03,
+      "max_ratio_to_baseline": null,
+      "description": "order-service error_rate lte 0.03"
+     },
+     {
+      "metric": "error_rate",
+      "service": "payment-service",
+      "comparator": "lte",
+      "target": 0.03,
+      "max_ratio_to_baseline": null,
+      "description": "payment-service error_rate lte 0.03"
+     },
+     {
+      "metric": "latency_p95_ms",
+      "service": "payment-service",
+      "comparator": "lte",
+      "target": null,
+      "max_ratio_to_baseline": 1.5,
+      "description": "payment-service latency_p95_ms within 1.5x of baseline"
+     },
+     {
+      "metric": "up",
+      "service": "payment-service",
+      "comparator": "gte",
+      "target": 1.0,
+      "max_ratio_to_baseline": null,
+      "description": "payment-service up gte 1"
+     }
+    ],
+    "stabilization_seconds": 30,
+    "timeout_seconds": 240,
+    "require_all": true
+   },
+   "timeout_seconds": 90,
+   "status": "awaiting_approval",
+   "idempotency_key": "4fdaa407d428271b07f56031fb3f4211",
+   "proposed_by": "deterministic",
+   "agent_run_id": "eec7135e-fee5-4033-b454-9f2a71677687",
+   "approval_id": "0729b3d8-d279-4287-9c45-bb357d8a37ce",
+   "policy_decision": {
+    "effect": "require_approval",
+    "reason": "Rollbacks change what is running and always require approval.",
+    "invariant": null,
+    "matched_rule": "approve-rollback",
+    "evaluated_rules": [
+     "deny-dangerous",
+     "allow-read-only",
+     "allow-diagnostics",
+     "approve-diagnostics-medium-risk",
+     "deny-high-risk-mutation-production",
+     "approve-rollback"
+    ]
+   },
+   "attempt": 1,
+   "verification_result": null
+  }
+ ],
+ "approvals": [
+  {
+   "created_at": "2026-09-15T11:45:54.572538Z",
+   "updated_at": "2026-09-15T11:45:54.572540Z",
+   "id": "0729b3d8-d279-4287-9c45-bb357d8a37ce",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "action_plan_id": "38459026-892c-44c7-8457-49439cad8248",
+   "status": "pending",
+   "title": "rollback_deployment on payment-service",
+   "summary": "addresses deployment_regression on payment-service",
+   "risk": "medium",
+   "expected_impact": "symptomatic metrics return to baseline",
+   "rollback_summary": "original version unknown until execution",
+   "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+   "hypothesis_statement": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "hypothesis_confidence": 0.9728,
+   "evidence_ids": [
+    "135bdc19-f123-4e13-8239-bc25481960eb",
+    "364639b2-26ac-4042-be95-bdc67cddc13c",
+    "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+    "d4967013-2a30-477d-8b69-8d5686c743fc"
+   ],
+   "requested_by": "workflow:incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "requested_at": "2026-09-15T11:45:54.561387Z",
+   "expires_at": "2026-09-15T12:00:54.561387Z",
+   "decided_at": null,
+   "decided_by": null,
+   "decision_reason": "",
+   "context": {
+    "policy": {
+     "effect": "require_approval",
+     "reason": "Rollbacks change what is running and always require approval.",
+     "invariant": null,
+     "matched_rule": "approve-rollback",
+     "evaluated_rules": [
+      "deny-dangerous",
+      "allow-read-only",
+      "allow-diagnostics",
+      "approve-diagnostics-medium-risk",
+      "deny-high-risk-mutation-production",
+      "approve-rollback"
+     ]
+    },
+    "rollback": null,
+    "arguments": {
+     "service": "payment-service"
+    },
+    "tool_name": "rollback_deployment",
+    "verification": {
+     "conditions": [
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "api-gateway",
+       "comparator": "lte",
+       "description": "api-gateway error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "order-service",
+       "comparator": "lte",
+       "description": "order-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "payment-service",
+       "comparator": "lte",
+       "description": "payment-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "latency_p95_ms",
+       "target": null,
+       "service": "payment-service",
+       "comparator": "lte",
+       "description": "payment-service latency_p95_ms within 1.5x of baseline",
+       "max_ratio_to_baseline": 1.5
+      },
+      {
+       "metric": "up",
+       "target": 1.0,
+       "service": "payment-service",
+       "comparator": "gte",
+       "description": "payment-service up gte 1",
+       "max_ratio_to_baseline": null
+      }
+     ],
+     "require_all": true,
+     "timeout_seconds": 240,
+     "stabilization_seconds": 30
+    }
+   }
+  }
+ ],
+ "agent_runs": [
+  {
+   "created_at": "2026-09-15T11:45:53.210387Z",
+   "updated_at": "2026-09-15T11:45:53.210387Z",
+   "id": "255bd330-8604-4e3e-9906-0714333df968",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "triage",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 40,
+    "max_tool_calls": 45,
+    "max_llm_calls": 32,
+    "max_llm_tokens": 275000,
+    "max_runtime_seconds": 1125,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 3,
+    "tool_calls": 3,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.148343,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T11:45:53.210378Z",
+   "finished_at": "2026-09-15T11:45:53.397247Z",
+   "termination_reason": "phase_complete",
+   "summary": "exit_conditions_met \u2192 investigate",
+   "error": null,
+   "steps_count": 9,
+   "workflow_id": "incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "attempt": 1
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.481665Z",
+   "updated_at": "2026-09-15T11:45:53.481666Z",
+   "id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "investigate",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 40,
+    "max_tool_calls": 45,
+    "max_llm_calls": 32,
+    "max_llm_tokens": 275000,
+    "max_runtime_seconds": 1125,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 11,
+    "tool_calls": 11,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.50511,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T11:45:53.481659Z",
+   "finished_at": "2026-09-15T11:45:53.884331Z",
+   "termination_reason": "phase_complete",
+   "summary": "exhausted \u2192 hypothesize",
+   "error": null,
+   "steps_count": 24,
+   "workflow_id": "incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "attempt": 1
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.969981Z",
+   "updated_at": "2026-09-15T11:45:53.969982Z",
+   "id": "3fb00583-d31a-4fd2-b309-2538c74d48c5",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "hypothesize",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 40,
+    "max_tool_calls": 45,
+    "max_llm_calls": 32,
+    "max_llm_tokens": 275000,
+    "max_runtime_seconds": 1125,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 12,
+    "tool_calls": 11,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.560344,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T11:45:53.969975Z",
+   "finished_at": "2026-09-15T11:45:54.065999Z",
+   "termination_reason": "phase_complete",
+   "summary": "exit_conditions_met \u2192 validate",
+   "error": null,
+   "steps_count": 2,
+   "workflow_id": "incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "attempt": 1
+  },
+  {
+   "created_at": "2026-09-15T11:45:54.203255Z",
+   "updated_at": "2026-09-15T11:45:54.203256Z",
+   "id": "f3913751-76f6-4a42-a88d-1b3683c46310",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "validate",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 40,
+    "max_tool_calls": 45,
+    "max_llm_calls": 32,
+    "max_llm_tokens": 275000,
+    "max_runtime_seconds": 1125,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 13,
+    "tool_calls": 12,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.61949,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T11:45:54.203244Z",
+   "finished_at": "2026-09-15T11:45:54.300364Z",
+   "termination_reason": "phase_complete",
+   "summary": "exit_conditions_met \u2192 remediate",
+   "error": null,
+   "steps_count": 3,
+   "workflow_id": "incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "attempt": 1
+  },
+  {
+   "created_at": "2026-09-15T11:45:54.354341Z",
+   "updated_at": "2026-09-15T11:45:54.354343Z",
+   "id": "eec7135e-fee5-4033-b454-9f2a71677687",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "remediate",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 40,
+    "max_tool_calls": 45,
+    "max_llm_calls": 32,
+    "max_llm_tokens": 275000,
+    "max_runtime_seconds": 1125,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 13,
+    "tool_calls": 12,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.623817,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T11:45:54.354323Z",
+   "finished_at": "2026-09-15T11:45:54.430579Z",
+   "termination_reason": "action_planned",
+   "summary": "planned rollback_deployment on payment-service",
+   "error": null,
+   "steps_count": 2,
+   "workflow_id": "incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "attempt": 1
+  }
+ ],
+ "evidence": {
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "evidence": [
+   {
+    "created_at": "2026-09-15T11:45:53.256512Z",
+    "updated_at": "2026-09-15T11:45:53.256512Z",
+    "id": "d3518132-ea24-43a3-b94a-1d1093d64f84",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "health",
+    "source": "get_health",
+    "service": "api-gateway",
+    "title": "api-gateway health",
+    "summary": "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok",
+    "data": {
+     "state": "degraded",
+     "checks": {
+      "cpu_ok": true,
+      "pools_ok": true,
+      "memory_ok": true,
+      "latency_ok": false,
+      "process_up": true,
+      "error_rate_ok": false,
+      "dependencies_ok": false
+     },
+     "message": "failing: error_rate_ok, latency_ok, dependencies_ok",
+     "service": "api-gateway"
+    },
+    "strength": 0.6,
+    "observed_at": "2026-09-15T11:45:53.256483Z",
+    "tool_execution_id": "d9dbf47c-1f86-42e9-bc84-a7da71a4c4e9",
+    "agent_run_id": "255bd330-8604-4e3e-9906-0714333df968",
+    "phase": "triage",
+    "tags": [
+     "degraded",
+     "error_rate_ok",
+     "latency_ok",
+     "dependencies_ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.301705Z",
+    "updated_at": "2026-09-15T11:45:53.301706Z",
+    "id": "27c1d408-82e9-4bd1-b583-224500364d3b",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "health",
+    "source": "get_health",
+    "service": "order-service",
+    "title": "order-service health",
+    "summary": "order-service is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok",
+    "data": {
+     "state": "degraded",
+     "checks": {
+      "cpu_ok": true,
+      "pools_ok": true,
+      "memory_ok": true,
+      "latency_ok": false,
+      "process_up": true,
+      "error_rate_ok": false,
+      "dependencies_ok": false
+     },
+     "message": "failing: error_rate_ok, latency_ok, dependencies_ok",
+     "service": "order-service"
+    },
+    "strength": 0.6,
+    "observed_at": "2026-09-15T11:45:53.301676Z",
+    "tool_execution_id": "80304b8b-795b-4787-b9c2-505ea1ed5003",
+    "agent_run_id": "255bd330-8604-4e3e-9906-0714333df968",
+    "phase": "triage",
+    "tags": [
+     "degraded",
+     "error_rate_ok",
+     "latency_ok",
+     "dependencies_ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.349894Z",
+    "updated_at": "2026-09-15T11:45:53.349894Z",
+    "id": "135bdc19-f123-4e13-8239-bc25481960eb",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "health",
+    "source": "get_health",
+    "service": "payment-service",
+    "title": "payment-service health",
+    "summary": "payment-service is degraded; failing checks: error_rate_ok, latency_ok",
+    "data": {
+     "state": "degraded",
+     "checks": {
+      "cpu_ok": true,
+      "pools_ok": true,
+      "memory_ok": true,
+      "latency_ok": false,
+      "process_up": true,
+      "error_rate_ok": false,
+      "dependencies_ok": true
+     },
+     "message": "failing: error_rate_ok, latency_ok",
+     "service": "payment-service"
+    },
+    "strength": 0.6,
+    "observed_at": "2026-09-15T11:45:53.349863Z",
+    "tool_execution_id": "01e12359-a8ad-4f83-bf7a-4372e47f0ae1",
+    "agent_run_id": "255bd330-8604-4e3e-9906-0714333df968",
+    "phase": "triage",
+    "tags": [
+     "degraded",
+     "error_rate_ok",
+     "latency_ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.518829Z",
+    "updated_at": "2026-09-15T11:45:53.518831Z",
+    "id": "fffad6ab-c99f-4713-a796-3c9c86a5afb4",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "diagnostic",
+    "source": "inspect_redis",
+    "service": "redis",
+    "title": "redis connection analysis",
+    "summary": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+    "data": {
+     "at": "2026-09-15T11:45:54.126624+00:00",
+     "hit_rate": 0.97,
+     "available": true,
+     "component": "redis",
+     "saturation": 0.048,
+     "top_client": "order-service",
+     "max_clients": 250,
+     "ops_per_sec": 347,
+     "latency_p95_ms": 0.8,
+     "blocked_clients": 0,
+     "connected_clients": 12,
+     "leaked_by_service": {},
+     "clients_by_service": {
+      "auth-service": 2,
+      "user-service": 2,
+      "order-service": 3,
+      "payment-service": 2,
+      "inventory-service": 2,
+      "notification-service": 1
+     }
+    },
+    "strength": 0.2,
+    "observed_at": "2026-09-15T11:45:53.518769Z",
+    "tool_execution_id": "7a2d221c-3f64-4d2d-8bd5-0e14cc61419b",
+    "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "phase": "investigate",
+    "tags": [
+     "cache",
+     "ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.561696Z",
+    "updated_at": "2026-09-15T11:45:53.561696Z",
+    "id": "ef1a4500-0ab9-4e39-8a5d-347071d8ed59",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "diagnostic",
+    "source": "inspect_database",
+    "service": "postgres",
+    "title": "postgres connection analysis",
+    "summary": "postgres: 11/100 connections (11% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+    "data": {
+     "at": "2026-09-15T11:45:54.126624+00:00",
+     "available": true,
+     "component": "postgres",
+     "lock_waits": 0.0,
+     "saturation": 0.11,
+     "top_client": "order-service",
+     "connections": 11,
+     "latency_p95_ms": 4.02,
+     "max_connections": 100,
+     "idle_in_transaction": 0,
+     "connections_by_client": {
+      "auth-service": 2,
+      "user-service": 2,
+      "order-service": 3,
+      "payment-service": 2,
+      "inventory-service": 2
+     },
+     "idle_in_transaction_by_client": {}
+    },
+    "strength": 0.2,
+    "observed_at": "2026-09-15T11:45:53.561666Z",
+    "tool_execution_id": "5ba1bd04-4730-4ed6-ab6e-e0dde886fa78",
+    "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "phase": "investigate",
+    "tags": [
+     "database",
+     "ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.600751Z",
+    "updated_at": "2026-09-15T11:45:53.600752Z",
+    "id": "e94dbdd4-6034-4948-8bc3-6b1e5b9fb484",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "topology",
+    "source": "inspect_dependencies",
+    "service": "order-service",
+    "title": "api-gateway dependencies",
+    "summary": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), payment-service (7% errors); own error rate 0.0%, own latency 8ms",
+    "data": {
+     "service": "api-gateway",
+     "dependents": [],
+     "dependencies": [
+      "auth-service",
+      "user-service",
+      "order-service",
+      "payment-service",
+      "inventory-service",
+      "notification-service"
+     ],
+     "contributions": [
+      {
+       "target": "order-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 3000.0,
+       "calls_per_request": 0.5,
+       "error_contribution": 0.071
+      },
+      {
+       "target": "payment-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 3000.0,
+       "calls_per_request": 0.2,
+       "error_contribution": 0.07
+      },
+      {
+       "target": "auth-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 1500.0,
+       "calls_per_request": 1.0,
+       "error_contribution": 0.001
+      },
+      {
+       "target": "user-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 2000.0,
+       "calls_per_request": 0.6,
+       "error_contribution": 0.0
+      },
+      {
+       "target": "inventory-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 2000.0,
+       "calls_per_request": 0.3,
+       "error_contribution": 0.0
+      },
+      {
+       "target": "notification-service",
+       "critical": false,
+       "available": true,
+       "timeout_ms": 2000.0,
+       "calls_per_request": 0.1,
+       "error_contribution": 0.0
+      }
+     ],
+     "own_error_rate": 0.0,
+     "own_latency_ms": 8.2,
+     "downstream_closure": [
+      "auth-service",
+      "user-service",
+      "order-service",
+      "payment-service",
+      "inventory-service",
+      "notification-service",
+      "redis",
+      "postgres"
+     ]
+    },
+    "strength": 0.8,
+    "observed_at": "2026-09-15T11:45:53.600723Z",
+    "tool_execution_id": "25b4cbea-12e8-49ec-a36c-34b5bb41bf6f",
+    "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "phase": "investigate",
+    "tags": [
+     "order-service",
+     "payment-service"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.646762Z",
+    "updated_at": "2026-09-15T11:45:53.646763Z",
+    "id": "364639b2-26ac-4042-be95-bdc67cddc13c",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "topology",
+    "source": "inspect_dependencies",
+    "service": "payment-service",
+    "title": "order-service dependencies",
+    "summary": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "data": {
+     "service": "order-service",
+     "dependents": [
+      "api-gateway"
+     ],
+     "dependencies": [
+      "postgres",
+      "redis",
+      "inventory-service",
+      "payment-service"
+     ],
+     "contributions": [
+      {
+       "target": "payment-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 2500.0,
+       "calls_per_request": 0.4,
+       "error_contribution": 0.14
+      },
+      {
+       "target": "postgres",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 1500.0,
+       "calls_per_request": 1.0,
+       "error_contribution": 0.0
+      },
+      {
+       "target": "redis",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 500.0,
+       "calls_per_request": 1.5,
+       "error_contribution": 0.0
+      },
+      {
+       "target": "inventory-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 2000.0,
+       "calls_per_request": 1.0,
+       "error_contribution": 0.0
+      }
+     ],
+     "own_error_rate": 0.0,
+     "own_latency_ms": 20.6,
+     "downstream_closure": [
+      "postgres",
+      "redis",
+      "inventory-service",
+      "payment-service"
+     ]
+    },
+    "strength": 0.8,
+    "observed_at": "2026-09-15T11:45:53.646732Z",
+    "tool_execution_id": "ba975cb4-590e-4d4d-88a0-21af017793bd",
+    "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "phase": "investigate",
+    "tags": [
+     "payment-service"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.694972Z",
+    "updated_at": "2026-09-15T11:45:53.694973Z",
+    "id": "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "trace",
+    "source": "query_traces",
+    "service": "payment-service",
+    "title": "trace analysis",
+    "summary": "3 traces sampled, 3 errored, avg 692ms; failure origin (deepest failing span): payment-service x3; slowest span most often in: payment-service x2, order-service x1",
+    "data": {
+     "count": 3,
+     "errored": 3,
+     "examples": [
+      {
+       "error": true,
+       "spans": [
+        {
+         "ms": 1030,
+         "error": true,
+         "service": "api-gateway"
+        },
+        {
+         "ms": 458,
+         "error": true,
+         "service": "payment-service"
+        },
+        {
+         "ms": 538,
+         "error": false,
+         "service": "order-service"
+        },
+        {
+         "ms": 499,
+         "error": false,
+         "service": "payment-service"
+        },
+        {
+         "ms": 15,
+         "error": false,
+         "service": "inventory-service"
+        },
+        {
+         "ms": 20,
+         "error": false,
+         "service": "auth-service"
+        },
+        {
+         "ms": 1,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 3,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 1,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 2,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 0,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 2,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 1,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 4,
+         "error": false,
+         "service": "postgres"
+        }
+       ],
+       "trace_id": "08d0c0b4d64d83eadfd9e48c54f6e505",
+       "duration_ms": 1030
+      },
+      {
+       "error": true,
+       "spans": [
+        {
+         "ms": 424,
+         "error": true,
+         "service": "api-gateway"
+        },
+        {
+         "ms": 400,
+         "error": true,
+         "service": "payment-service"
+        },
+        {
+         "ms": 13,
+         "error": false,
+         "service": "auth-service"
+        },
+        {
+         "ms": 0,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 3,
+         "error": false,
+         "service": "postgres"
+        }
+       ],
+       "trace_id": "a3f517b8a64697f3542badab446c09a5",
+       "duration_ms": 424
+      },
+      {
+       "error": true,
+       "spans": [
+        {
+         "ms": 622,
+         "error": true,
+         "service": "api-gateway"
+        },
+        {
+         "ms": 583,
+         "error": true,
+         "service": "payment-service"
+        },
+        {
+         "ms": 18,
+         "error": false,
+         "service": "user-service"
+        },
+        {
+         "ms": 10,
+         "error": false,
+         "service": "auth-service"
+        },
+        {
+         "ms": 1,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 4,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 0,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 4,
+         "error": false,
+         "service": "postgres"
+        }
+       ],
+       "trace_id": "db116cb12d350e213ad968dea7247507",
+       "duration_ms": 622
+      }
+     ],
+     "slowest_span": {
+      "order-service": 1,
+      "payment-service": 2
+     },
+     "failure_origin": {
+      "payment-service": 3
+     },
+     "avg_duration_ms": 692.0500000000001
+    },
+    "strength": 0.9,
+    "observed_at": "2026-09-15T11:45:53.694943Z",
+    "tool_execution_id": "047b3ac8-9518-4d80-b5bb-d68eba8cc0c5",
+    "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "phase": "investigate",
+    "tags": [
+     "payment-service"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.742648Z",
+    "updated_at": "2026-09-15T11:45:53.742649Z",
+    "id": "d4967013-2a30-477d-8b69-8d5686c743fc",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "deployment",
+    "source": "inspect_deployment",
+    "service": "payment-service",
+    "title": "payment-service deployment 2.4.0",
+    "summary": "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "data": {
+     "recent": true,
+     "history": [
+      {
+       "summary": "baseline release",
+       "version": "2.3.7",
+       "deployed_at": "2026-09-14T11:44:29.126624+00:00"
+      },
+      {
+       "summary": "checkout handler refactor; new retry path",
+       "version": "2.4.0",
+       "deployed_at": "2026-09-15T11:45:47.126624+00:00"
+      }
+     ],
+     "service": "payment-service",
+     "age_minutes": 0.110266,
+     "deployed_at": "2026-09-15T11:45:47.126624+00:00",
+     "is_rollback": false,
+     "current_version": "2.4.0",
+     "previous_version": "2.3.7",
+     "rollback_available": true
+    },
+    "strength": 0.85,
+    "observed_at": "2026-09-15T11:45:53.742621Z",
+    "tool_execution_id": "9bb48a43-f8e4-4490-b17f-e80e90ec0aa8",
+    "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "phase": "investigate",
+    "tags": [
+     "recent_deploy"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.784393Z",
+    "updated_at": "2026-09-15T11:45:53.784394Z",
+    "id": "d6b17ead-d609-4bc1-9086-925894a8fe79",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "deployment",
+    "source": "inspect_deployment",
+    "service": "order-service",
+    "title": "order-service deployment 4.1.0",
+    "summary": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "data": {
+     "recent": false,
+     "history": [
+      {
+       "summary": "baseline release",
+       "version": "4.1.0",
+       "deployed_at": "2026-09-14T11:44:29.126624+00:00"
+      }
+     ],
+     "service": "order-service",
+     "age_minutes": 1441.4109619,
+     "deployed_at": "2026-09-14T11:44:29.126624+00:00",
+     "is_rollback": false,
+     "current_version": "4.1.0",
+     "previous_version": "4.0.9",
+     "rollback_available": true
+    },
+    "strength": 0.15,
+    "observed_at": "2026-09-15T11:45:53.784366Z",
+    "tool_execution_id": "2567ba8b-46b1-4b3d-9db5-ccf56f5ce31d",
+    "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "phase": "investigate",
+    "tags": [
+     "stable"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:53.828401Z",
+    "updated_at": "2026-09-15T11:45:53.828401Z",
+    "id": "76571f64-04b1-4e62-885a-2a3624c43ed8",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "deployment",
+    "source": "inspect_deployment",
+    "service": "api-gateway",
+    "title": "api-gateway deployment 3.2.1",
+    "summary": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "data": {
+     "recent": false,
+     "history": [
+      {
+       "summary": "baseline release",
+       "version": "3.2.1",
+       "deployed_at": "2026-09-14T11:44:29.126624+00:00"
+      }
+     ],
+     "service": "api-gateway",
+     "age_minutes": 1441.4116953333332,
+     "deployed_at": "2026-09-14T11:44:29.126624+00:00",
+     "is_rollback": false,
+     "current_version": "3.2.1",
+     "previous_version": "3.2.0",
+     "rollback_available": true
+    },
+    "strength": 0.15,
+    "observed_at": "2026-09-15T11:45:53.828372Z",
+    "tool_execution_id": "5bd52631-ad7c-41bf-9c17-d7261b277030",
+    "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "phase": "investigate",
+    "tags": [
+     "stable"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T11:45:54.250686Z",
+    "updated_at": "2026-09-15T11:45:54.250687Z",
+    "id": "d96f0f3b-c2a9-46f3-93cf-d1465d6aea8d",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "kind": "metric",
+    "source": "compare_baseline",
+    "service": "payment-service",
+    "title": "payment-service error_rate vs baseline",
+    "summary": "payment-service error_rate: current 4.2% vs baseline 0.1% \u2192 +4061% vs baseline",
+    "data": {
+     "unit": "ratio",
+     "ratio": 41.61464149504786,
+     "metric": "error_rate",
+     "current": 0.041985743801970614,
+     "service": "payment-service",
+     "verdict": "+4061% vs baseline",
+     "baseline": 0.0010089175899056324
+    },
+    "strength": 0.9,
+    "observed_at": "2026-09-15T11:45:54.250647Z",
+    "tool_execution_id": "ea30094f-8224-4b36-9420-4492e302f0a5",
+    "agent_run_id": "f3913751-76f6-4a42-a88d-1b3683c46310",
+    "phase": "validate",
+    "tags": [
+     "error_rate",
+     "baseline"
+    ]
+   }
+  ],
+  "relations": [
+   {
+    "id": "850a304b-a33c-4d83-b4c4-c4a7f5910f2f",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "d3518132-ea24-43a3-b94a-1d1093d64f84",
+    "from_kind": "evidence",
+    "to_id": "api-gateway",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.262057Z",
+    "created_by": "get_health"
+   },
+   {
+    "id": "e92803d5-c9b3-4e8e-b6c2-521ff47e1fef",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "27c1d408-82e9-4bd1-b583-224500364d3b",
+    "from_kind": "evidence",
+    "to_id": "order-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.307288Z",
+    "created_by": "get_health"
+   },
+   {
+    "id": "ddb882e2-6e15-468e-84a2-a347cb51b7c2",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "135bdc19-f123-4e13-8239-bc25481960eb",
+    "from_kind": "evidence",
+    "to_id": "payment-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.354631Z",
+    "created_by": "get_health"
+   },
+   {
+    "id": "f73f2e6a-ede4-428b-bfad-a75e99ce5952",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "fffad6ab-c99f-4713-a796-3c9c86a5afb4",
+    "from_kind": "evidence",
+    "to_id": "redis",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.523883Z",
+    "created_by": "inspect_redis"
+   },
+   {
+    "id": "e87a8c5d-1c6b-48be-a4f8-7a21a8ef6e09",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "ef1a4500-0ab9-4e39-8a5d-347071d8ed59",
+    "from_kind": "evidence",
+    "to_id": "postgres",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.565556Z",
+    "created_by": "inspect_database"
+   },
+   {
+    "id": "b970cde3-cd26-4278-9bca-78b986f68254",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "e94dbdd4-6034-4948-8bc3-6b1e5b9fb484",
+    "from_kind": "evidence",
+    "to_id": "order-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.604957Z",
+    "created_by": "inspect_dependencies"
+   },
+   {
+    "id": "71b82365-67c2-4199-815f-89aceabb8e47",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "364639b2-26ac-4042-be95-bdc67cddc13c",
+    "from_kind": "evidence",
+    "to_id": "payment-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.651307Z",
+    "created_by": "inspect_dependencies"
+   },
+   {
+    "id": "424304c3-e34a-4e0f-a6e5-471be21e537f",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+    "from_kind": "evidence",
+    "to_id": "payment-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.699867Z",
+    "created_by": "query_traces"
+   },
+   {
+    "id": "1e3f3b04-3562-40ed-8496-dbdddf2bafcd",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "d4967013-2a30-477d-8b69-8d5686c743fc",
+    "from_kind": "evidence",
+    "to_id": "payment-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.747397Z",
+    "created_by": "inspect_deployment"
+   },
+   {
+    "id": "bae99ee8-cf4f-4158-a02a-9c42759e23ba",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "d6b17ead-d609-4bc1-9086-925894a8fe79",
+    "from_kind": "evidence",
+    "to_id": "order-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.789178Z",
+    "created_by": "inspect_deployment"
+   },
+   {
+    "id": "5df5ff9a-9a26-4948-bb60-ef80bb17f7f7",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "135bdc19-f123-4e13-8239-bc25481960eb",
+    "from_kind": "evidence",
+    "to_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.007326Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "37f4a8b0-17a7-42c8-805b-e2b2feaa3657",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "364639b2-26ac-4042-be95-bdc67cddc13c",
+    "from_kind": "evidence",
+    "to_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.007940Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "138e1fc6-da6a-4918-9e8b-62ae5afbc947",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+    "from_kind": "evidence",
+    "to_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.008410Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "2691ee09-e8a3-486b-a20f-4fd219c4c1fe",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "d4967013-2a30-477d-8b69-8d5686c743fc",
+    "from_kind": "evidence",
+    "to_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.008875Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "61863e03-d4b0-4079-a6c2-e3255689f734",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "from_kind": "hypothesis",
+    "to_id": "payment-service",
+    "to_kind": "service",
+    "kind": "caused_by",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.009325Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "89b52632-319a-4f94-acb3-5ae10cc4a7b7",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "27c1d408-82e9-4bd1-b583-224500364d3b",
+    "from_kind": "evidence",
+    "to_id": "08dabb1d-1249-47db-8d00-4faf2b278fd6",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.011226Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "f8ea6fc1-c2c0-486b-b721-65d862e98ee0",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "e94dbdd4-6034-4948-8bc3-6b1e5b9fb484",
+    "from_kind": "evidence",
+    "to_id": "08dabb1d-1249-47db-8d00-4faf2b278fd6",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.011774Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "5ade8668-dda8-4498-a96c-c3d0daa7373b",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "08dabb1d-1249-47db-8d00-4faf2b278fd6",
+    "from_kind": "hypothesis",
+    "to_id": "order-service",
+    "to_kind": "service",
+    "kind": "caused_by",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.012265Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "e42dae19-5a75-4f27-8403-2b4624849c1f",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "d3518132-ea24-43a3-b94a-1d1093d64f84",
+    "from_kind": "evidence",
+    "to_id": "5113a1d3-fb87-487f-937e-ff3124022a6f",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.013888Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "90e4b808-50ee-4bd9-8161-d1aeb2ef178f",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "5113a1d3-fb87-487f-937e-ff3124022a6f",
+    "from_kind": "hypothesis",
+    "to_id": "api-gateway",
+    "to_kind": "service",
+    "kind": "caused_by",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.014416Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "dd7af12f-e5f8-4bf6-8a83-e0eb381a58d5",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "76571f64-04b1-4e62-885a-2a3624c43ed8",
+    "from_kind": "evidence",
+    "to_id": "api-gateway",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:53.833643Z",
+    "created_by": "inspect_deployment"
+   },
+   {
+    "id": "2a545e15-f7e1-4c0b-86b3-c625870721d5",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "d96f0f3b-c2a9-46f3-93cf-d1465d6aea8d",
+    "from_kind": "evidence",
+    "to_id": "payment-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.256412Z",
+    "created_by": "compare_baseline"
+   },
+   {
+    "id": "c078a969-3440-4220-b08d-8a3cc4621b62",
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "from_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "from_kind": "hypothesis",
+    "to_id": "38459026-892c-44c7-8457-49439cad8248",
+    "to_kind": "action",
+    "kind": "resolved_by",
+    "weight": 1.0,
+    "created_at": "2026-09-15T11:45:54.402746Z",
+    "created_by": "workflow"
+   }
+  ]
+ },
+ "tool_executions": [
+  {
+   "created_at": "2026-09-15T11:45:53.253975Z",
+   "updated_at": "2026-09-15T11:45:53.253976Z",
+   "id": "d9dbf47c-1f86-42e9-bc84-a7da71a4c4e9",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "005f3311-e055-43f7-8ad1-17ba5f950589",
+   "tool_name": "get_health",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "idempotency_key": "c13233d5e6e7cb6857707a9838108813",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "005f3311-e055-43f7-8ad1-17ba5f950589",
+    "tool_name": "get_health",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "get_health@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is triaging"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "get_health is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'triage' lists get_health"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits get_health"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:255bd330-8604-4e3e-9906-0714333df968 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key c13233d5e6e7\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 0/45, iterations 0/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.253106Z"
+   },
+   "agent_run_id": "255bd330-8604-4e3e-9906-0714333df968",
+   "action_plan_id": null,
+   "phase": "triage",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.253106Z",
+   "finished_at": "2026-09-15T11:45:53.256483Z",
+   "duration_ms": 3.377,
+   "result": {
+    "state": "degraded",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": false,
+     "process_up": true,
+     "error_rate_ok": false,
+     "dependencies_ok": false
+    },
+    "message": "failing: error_rate_ok, latency_ok, dependencies_ok",
+    "service": "api-gateway"
+   },
+   "result_summary": "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok",
+   "error": null,
+   "evidence_ids": [
+    "d3518132-ea24-43a3-b94a-1d1093d64f84"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.299093Z",
+   "updated_at": "2026-09-15T11:45:53.299094Z",
+   "id": "80304b8b-795b-4787-b9c2-505ea1ed5003",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "cdda46a0-0a1c-4954-aca4-7870f313e747",
+   "tool_name": "get_health",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "order-service"
+   },
+   "idempotency_key": "fba7a8da6926a0d3b4bb53af4a6901b5",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "cdda46a0-0a1c-4954-aca4-7870f313e747",
+    "tool_name": "get_health",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "get_health@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is triaging"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "get_health is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'triage' lists get_health"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits get_health"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:255bd330-8604-4e3e-9906-0714333df968 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key fba7a8da6926\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 1/45, iterations 1/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.298199Z"
+   },
+   "agent_run_id": "255bd330-8604-4e3e-9906-0714333df968",
+   "action_plan_id": null,
+   "phase": "triage",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.298199Z",
+   "finished_at": "2026-09-15T11:45:53.301676Z",
+   "duration_ms": 3.477,
+   "result": {
+    "state": "degraded",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": false,
+     "process_up": true,
+     "error_rate_ok": false,
+     "dependencies_ok": false
+    },
+    "message": "failing: error_rate_ok, latency_ok, dependencies_ok",
+    "service": "order-service"
+   },
+   "result_summary": "order-service is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok",
+   "error": null,
+   "evidence_ids": [
+    "27c1d408-82e9-4bd1-b583-224500364d3b"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.347472Z",
+   "updated_at": "2026-09-15T11:45:53.347473Z",
+   "id": "01e12359-a8ad-4f83-bf7a-4372e47f0ae1",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "3100db9a-997d-41fc-b42a-a290481b6a26",
+   "tool_name": "get_health",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "payment-service"
+   },
+   "idempotency_key": "7771e2a4675b72fe7e8c744bcf8c656b",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "3100db9a-997d-41fc-b42a-a290481b6a26",
+    "tool_name": "get_health",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "get_health@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is triaging"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "get_health is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'triage' lists get_health"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits get_health"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:255bd330-8604-4e3e-9906-0714333df968 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 7771e2a4675b\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 2/45, iterations 2/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.346932Z"
+   },
+   "agent_run_id": "255bd330-8604-4e3e-9906-0714333df968",
+   "action_plan_id": null,
+   "phase": "triage",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.346932Z",
+   "finished_at": "2026-09-15T11:45:53.349863Z",
+   "duration_ms": 2.931,
+   "result": {
+    "state": "degraded",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": false,
+     "process_up": true,
+     "error_rate_ok": false,
+     "dependencies_ok": true
+    },
+    "message": "failing: error_rate_ok, latency_ok",
+    "service": "payment-service"
+   },
+   "result_summary": "payment-service is degraded; failing checks: error_rate_ok, latency_ok",
+   "error": null,
+   "evidence_ids": [
+    "135bdc19-f123-4e13-8239-bc25481960eb"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.514908Z",
+   "updated_at": "2026-09-15T11:45:53.514909Z",
+   "id": "7a2d221c-3f64-4d2d-8bd5-0e14cc61419b",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "8c13eba5-3359-46c9-9d9f-85a785879403",
+   "tool_name": "inspect_redis",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "component": "redis"
+   },
+   "idempotency_key": "c4e45c1f2275ad69a3b8d05503d8d703",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "8c13eba5-3359-46c9-9d9f-85a785879403",
+    "tool_name": "inspect_redis",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_redis@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_redis is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_redis"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits inspect_redis"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key c4e45c1f2275\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 3/45, iterations 3/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.514316Z"
+   },
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.514316Z",
+   "finished_at": "2026-09-15T11:45:53.518769Z",
+   "duration_ms": 4.453,
+   "result": {
+    "at": "2026-09-15T11:45:54.126624+00:00",
+    "hit_rate": 0.97,
+    "available": true,
+    "component": "redis",
+    "saturation": 0.048,
+    "top_client": "order-service",
+    "max_clients": 250,
+    "ops_per_sec": 347,
+    "latency_p95_ms": 0.8,
+    "blocked_clients": 0,
+    "connected_clients": 12,
+    "leaked_by_service": {},
+    "clients_by_service": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 3,
+     "payment-service": 2,
+     "inventory-service": 2,
+     "notification-service": 1
+    }
+   },
+   "result_summary": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+   "error": null,
+   "evidence_ids": [
+    "fffad6ab-c99f-4713-a796-3c9c86a5afb4"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.559242Z",
+   "updated_at": "2026-09-15T11:45:53.559243Z",
+   "id": "5ba1bd04-4730-4ed6-ab6e-e0dde886fa78",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "f73e02a3-0f42-4362-8d31-eb0f5d6da404",
+   "tool_name": "inspect_database",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "component": "postgres"
+   },
+   "idempotency_key": "9335401b0e461f9de008d3e9b22d4336",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "f73e02a3-0f42-4362-8d31-eb0f5d6da404",
+    "tool_name": "inspect_database",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_database@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_database is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_database"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits inspect_database"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 9335401b0e46\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 4/45, iterations 4/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.558738Z"
+   },
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.558738Z",
+   "finished_at": "2026-09-15T11:45:53.561666Z",
+   "duration_ms": 2.928,
+   "result": {
+    "at": "2026-09-15T11:45:54.126624+00:00",
+    "available": true,
+    "component": "postgres",
+    "lock_waits": 0.0,
+    "saturation": 0.11,
+    "top_client": "order-service",
+    "connections": 11,
+    "latency_p95_ms": 4.02,
+    "max_connections": 100,
+    "idle_in_transaction": 0,
+    "connections_by_client": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 3,
+     "payment-service": 2,
+     "inventory-service": 2
+    },
+    "idle_in_transaction_by_client": {}
+   },
+   "result_summary": "postgres: 11/100 connections (11% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+   "error": null,
+   "evidence_ids": [
+    "ef1a4500-0ab9-4e39-8a5d-347071d8ed59"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.597709Z",
+   "updated_at": "2026-09-15T11:45:53.597710Z",
+   "id": "25b4cbea-12e8-49ec-a36c-34b5bb41bf6f",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "a3c7c94e-c084-44be-bf28-d4ebf30e7d07",
+   "tool_name": "inspect_dependencies",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "idempotency_key": "36711cef5a4d808d6c9fbe5d007dfabe",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "a3c7c94e-c084-44be-bf28-d4ebf30e7d07",
+    "tool_name": "inspect_dependencies",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_dependencies@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_dependencies is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_dependencies"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits inspect_dependencies"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 36711cef5a4d\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 5/45, iterations 5/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.597206Z"
+   },
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.597206Z",
+   "finished_at": "2026-09-15T11:45:53.600723Z",
+   "duration_ms": 3.5170000000000003,
+   "result": {
+    "service": "api-gateway",
+    "dependents": [],
+    "dependencies": [
+     "auth-service",
+     "user-service",
+     "order-service",
+     "payment-service",
+     "inventory-service",
+     "notification-service"
+    ],
+    "contributions": [
+     {
+      "target": "order-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 3000.0,
+      "calls_per_request": 0.5,
+      "error_contribution": 0.071
+     },
+     {
+      "target": "payment-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 3000.0,
+      "calls_per_request": 0.2,
+      "error_contribution": 0.07
+     },
+     {
+      "target": "auth-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 1500.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.001
+     },
+     {
+      "target": "user-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.6,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "inventory-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.3,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "notification-service",
+      "critical": false,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.1,
+      "error_contribution": 0.0
+     }
+    ],
+    "own_error_rate": 0.0,
+    "own_latency_ms": 8.2,
+    "downstream_closure": [
+     "auth-service",
+     "user-service",
+     "order-service",
+     "payment-service",
+     "inventory-service",
+     "notification-service",
+     "redis",
+     "postgres"
+    ]
+   },
+   "result_summary": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), payment-service (7% errors); own error rate 0.0%, own latency 8ms",
+   "error": null,
+   "evidence_ids": [
+    "e94dbdd4-6034-4948-8bc3-6b1e5b9fb484"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.643265Z",
+   "updated_at": "2026-09-15T11:45:53.643266Z",
+   "id": "ba975cb4-590e-4d4d-88a0-21af017793bd",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "38e4012c-45d4-468e-bba0-3a2413202c98",
+   "tool_name": "inspect_dependencies",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "order-service"
+   },
+   "idempotency_key": "d2ac87af7bd161d63c54347b104b712a",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "38e4012c-45d4-468e-bba0-3a2413202c98",
+    "tool_name": "inspect_dependencies",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_dependencies@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_dependencies is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_dependencies"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits inspect_dependencies"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key d2ac87af7bd1\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 6/45, iterations 6/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.642691Z"
+   },
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.642691Z",
+   "finished_at": "2026-09-15T11:45:53.646732Z",
+   "duration_ms": 4.041,
+   "result": {
+    "service": "order-service",
+    "dependents": [
+     "api-gateway"
+    ],
+    "dependencies": [
+     "postgres",
+     "redis",
+     "inventory-service",
+     "payment-service"
+    ],
+    "contributions": [
+     {
+      "target": "payment-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2500.0,
+      "calls_per_request": 0.4,
+      "error_contribution": 0.14
+     },
+     {
+      "target": "postgres",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 1500.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "redis",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 500.0,
+      "calls_per_request": 1.5,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "inventory-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.0
+     }
+    ],
+    "own_error_rate": 0.0,
+    "own_latency_ms": 20.6,
+    "downstream_closure": [
+     "postgres",
+     "redis",
+     "inventory-service",
+     "payment-service"
+    ]
+   },
+   "result_summary": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+   "error": null,
+   "evidence_ids": [
+    "364639b2-26ac-4042-be95-bdc67cddc13c"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.692502Z",
+   "updated_at": "2026-09-15T11:45:53.692503Z",
+   "id": "047b3ac8-9518-4d80-b5bb-d68eba8cc0c5",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "595737cc-74bf-4bd7-9c80-9427506244b5",
+   "tool_name": "query_traces",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "errors_only": true
+   },
+   "idempotency_key": "383fd5c82f808b7c87bb6a060e68a401",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "595737cc-74bf-4bd7-9c80-9427506244b5",
+    "tool_name": "query_traces",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "query_traces@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "query_traces is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists query_traces"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits query_traces"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 383fd5c82f80\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 7/45, iterations 7/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.692000Z"
+   },
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.692000Z",
+   "finished_at": "2026-09-15T11:45:53.694943Z",
+   "duration_ms": 2.943,
+   "result": {
+    "count": 3,
+    "errored": 3,
+    "examples": [
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 1030,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 458,
+        "error": true,
+        "service": "payment-service"
+       },
+       {
+        "ms": 538,
+        "error": false,
+        "service": "order-service"
+       },
+       {
+        "ms": 499,
+        "error": false,
+        "service": "payment-service"
+       },
+       {
+        "ms": 15,
+        "error": false,
+        "service": "inventory-service"
+       },
+       {
+        "ms": 20,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       }
+      ],
+      "trace_id": "08d0c0b4d64d83eadfd9e48c54f6e505",
+      "duration_ms": 1030
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 424,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 400,
+        "error": true,
+        "service": "payment-service"
+       },
+       {
+        "ms": 13,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       }
+      ],
+      "trace_id": "a3f517b8a64697f3542badab446c09a5",
+      "duration_ms": 424
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 622,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 583,
+        "error": true,
+        "service": "payment-service"
+       },
+       {
+        "ms": 18,
+        "error": false,
+        "service": "user-service"
+       },
+       {
+        "ms": 10,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       }
+      ],
+      "trace_id": "db116cb12d350e213ad968dea7247507",
+      "duration_ms": 622
+     }
+    ],
+    "slowest_span": {
+     "order-service": 1,
+     "payment-service": 2
+    },
+    "failure_origin": {
+     "payment-service": 3
+    },
+    "avg_duration_ms": 692.0500000000001
+   },
+   "result_summary": "3 traces sampled, 3 errored, avg 692ms; failure origin (deepest failing span): payment-service x3; slowest span most often in: payment-service x2, order-service x1",
+   "error": null,
+   "evidence_ids": [
+    "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.739425Z",
+   "updated_at": "2026-09-15T11:45:53.739427Z",
+   "id": "9bb48a43-f8e4-4490-b17f-e80e90ec0aa8",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "228eb2c2-4398-491c-9512-14f54d76d62d",
+   "tool_name": "inspect_deployment",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "payment-service"
+   },
+   "idempotency_key": "036bcea29ec9bf4284cf1ced670dcc62",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "228eb2c2-4398-491c-9512-14f54d76d62d",
+    "tool_name": "inspect_deployment",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_deployment@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_deployment is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_deployment"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits inspect_deployment"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 036bcea29ec9\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 8/45, iterations 8/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.738452Z"
+   },
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.738452Z",
+   "finished_at": "2026-09-15T11:45:53.742621Z",
+   "duration_ms": 4.169,
+   "result": {
+    "recent": true,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "2.3.7",
+      "deployed_at": "2026-09-14T11:44:29.126624+00:00"
+     },
+     {
+      "summary": "checkout handler refactor; new retry path",
+      "version": "2.4.0",
+      "deployed_at": "2026-09-15T11:45:47.126624+00:00"
+     }
+    ],
+    "service": "payment-service",
+    "age_minutes": 0.110266,
+    "deployed_at": "2026-09-15T11:45:47.126624+00:00",
+    "is_rollback": false,
+    "current_version": "2.4.0",
+    "previous_version": "2.3.7",
+    "rollback_available": true
+   },
+   "result_summary": "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+   "error": null,
+   "evidence_ids": [
+    "d4967013-2a30-477d-8b69-8d5686c743fc"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.782070Z",
+   "updated_at": "2026-09-15T11:45:53.782071Z",
+   "id": "2567ba8b-46b1-4b3d-9db5-ccf56f5ce31d",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "972d4d47-0de0-4bc1-985a-865558e83c12",
+   "tool_name": "inspect_deployment",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "order-service"
+   },
+   "idempotency_key": "bec3d5fd3e13d2c59d71a0f0936f6c32",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "972d4d47-0de0-4bc1-985a-865558e83c12",
+    "tool_name": "inspect_deployment",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_deployment@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_deployment is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_deployment"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits inspect_deployment"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key bec3d5fd3e13\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 9/45, iterations 9/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.781540Z"
+   },
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.781540Z",
+   "finished_at": "2026-09-15T11:45:53.784366Z",
+   "duration_ms": 2.826,
+   "result": {
+    "recent": false,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "4.1.0",
+      "deployed_at": "2026-09-14T11:44:29.126624+00:00"
+     }
+    ],
+    "service": "order-service",
+    "age_minutes": 1441.4109619,
+    "deployed_at": "2026-09-14T11:44:29.126624+00:00",
+    "is_rollback": false,
+    "current_version": "4.1.0",
+    "previous_version": "4.0.9",
+    "rollback_available": true
+   },
+   "result_summary": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "error": null,
+   "evidence_ids": [
+    "d6b17ead-d609-4bc1-9086-925894a8fe79"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.826026Z",
+   "updated_at": "2026-09-15T11:45:53.826027Z",
+   "id": "5bd52631-ad7c-41bf-9c17-d7261b277030",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "bbceb701-ff0b-4a18-b948-032b551f2e35",
+   "tool_name": "inspect_deployment",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "idempotency_key": "68204e108037d104864ce8d15462bf77",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "bbceb701-ff0b-4a18-b948-032b551f2e35",
+    "tool_name": "inspect_deployment",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_deployment@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_deployment is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_deployment"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits inspect_deployment"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 68204e108037\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 10/45, iterations 10/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:53.825439Z"
+   },
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:53.825439Z",
+   "finished_at": "2026-09-15T11:45:53.828372Z",
+   "duration_ms": 2.933,
+   "result": {
+    "recent": false,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "3.2.1",
+      "deployed_at": "2026-09-14T11:44:29.126624+00:00"
+     }
+    ],
+    "service": "api-gateway",
+    "age_minutes": 1441.4116953333332,
+    "deployed_at": "2026-09-14T11:44:29.126624+00:00",
+    "is_rollback": false,
+    "current_version": "3.2.1",
+    "previous_version": "3.2.0",
+    "rollback_available": true
+   },
+   "result_summary": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "error": null,
+   "evidence_ids": [
+    "76571f64-04b1-4e62-885a-2a3624c43ed8"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T11:45:54.246644Z",
+   "updated_at": "2026-09-15T11:45:54.246645Z",
+   "id": "ea30094f-8224-4b36-9420-4492e302f0a5",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "request_id": "7818ec09-682b-4b82-949e-998626b4d2c7",
+   "tool_name": "compare_baseline",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "metric": "error_rate",
+    "service": "payment-service"
+   },
+   "idempotency_key": "d6fadd5c2de245d4dc036adbe40b3fb8",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "7818ec09-682b-4b82-949e-998626b4d2c7",
+    "tool_name": "compare_baseline",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "compare_baseline@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1125 is validating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "compare_baseline is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'validate' lists compare_baseline"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev2 permits compare_baseline"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:f3913751-76f6-4a42-a88d-1b3683c46310 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling low"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "2 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key d6fadd5c2de2\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 11/45, iterations 12/40"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T11:45:54.246049Z"
+   },
+   "agent_run_id": "f3913751-76f6-4a42-a88d-1b3683c46310",
+   "action_plan_id": null,
+   "phase": "validate",
+   "attempt": 1,
+   "started_at": "2026-09-15T11:45:54.246049Z",
+   "finished_at": "2026-09-15T11:45:54.250647Z",
+   "duration_ms": 4.598,
+   "result": {
+    "unit": "ratio",
+    "ratio": 41.61464149504786,
+    "metric": "error_rate",
+    "current": 0.041985743801970614,
+    "service": "payment-service",
+    "verdict": "+4061% vs baseline",
+    "baseline": 0.0010089175899056324
+   },
+   "result_summary": "payment-service error_rate: current 4.2% vs baseline 0.1% \u2192 +4061% vs baseline",
+   "error": null,
+   "evidence_ids": [
+    "d96f0f3b-c2a9-46f3-93cf-d1465d6aea8d"
+   ],
+   "trace_id": null
+  }
+ ],
+ "recent_events": [
+  {
+   "id": "2a783abb-b53f-433c-9c79-08d06b3746d0",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 21,
+   "type": "tool.executed",
+   "at": "2026-09-15T11:45:53.526194Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_redis: redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clien",
+   "payload": {
+    "tool": "inspect_redis",
+    "status": "succeeded",
+    "summary": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+    "arguments": {
+     "component": "redis"
+    },
+    "duration_ms": 4.453,
+    "evidence_ids": [
+     "fffad6ab-c99f-4713-a796-3c9c86a5afb4"
+    ],
+    "tool_execution_id": "7a2d221c-3f64-4d2d-8bd5-0e14cc61419b"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "1a8dbe03-4143-41cc-a8d9-f6af864e7517",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 22,
+   "type": "evidence.collected",
+   "at": "2026-09-15T11:45:53.527779Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_redis",
+   "payload": {
+    "evidence": [
+     {
+      "id": "fffad6ab-c99f-4713-a796-3c9c86a5afb4",
+      "kind": "diagnostic",
+      "title": "redis connection analysis",
+      "service": "redis",
+      "strength": 0.2
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "1807ed83-279c-4f7e-b3c8-20270b9796fc",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 23,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:53.552023Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "a0307a6c-84a9-4e98-a52a-b0ee614bb3ef",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "c2bf5e3a-e3a3-49be-94d9-cfcd4fdd12b6",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 24,
+   "type": "tool.executed",
+   "at": "2026-09-15T11:45:53.567478Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_database: postgres: 11/100 connections (11% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+   "payload": {
+    "tool": "inspect_database",
+    "status": "succeeded",
+    "summary": "postgres: 11/100 connections (11% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+    "arguments": {
+     "component": "postgres"
+    },
+    "duration_ms": 2.928,
+    "evidence_ids": [
+     "ef1a4500-0ab9-4e39-8a5d-347071d8ed59"
+    ],
+    "tool_execution_id": "5ba1bd04-4730-4ed6-ab6e-e0dde886fa78"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "2067d24c-d58b-466e-b379-696134a3a905",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 25,
+   "type": "evidence.collected",
+   "at": "2026-09-15T11:45:53.569021Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_database",
+   "payload": {
+    "evidence": [
+     {
+      "id": "ef1a4500-0ab9-4e39-8a5d-347071d8ed59",
+      "kind": "diagnostic",
+      "title": "postgres connection analysis",
+      "service": "postgres",
+      "strength": 0.2
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "4ac8a4d6-9efa-47b5-b4ab-21f9a0e52ca0",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 26,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:53.589996Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "66507dba-d02b-4e91-9775-b5c95cde1264",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "b4cf08cc-38a2-4ede-b27e-4970b2fbb2c7",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 27,
+   "type": "tool.executed",
+   "at": "2026-09-15T11:45:53.606832Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_dependencies: api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy de",
+   "payload": {
+    "tool": "inspect_dependencies",
+    "status": "succeeded",
+    "summary": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), payment-service (7% errors); own error rate 0.0%, own latency 8ms",
+    "arguments": {
+     "service": "api-gateway"
+    },
+    "duration_ms": 3.5170000000000003,
+    "evidence_ids": [
+     "e94dbdd4-6034-4948-8bc3-6b1e5b9fb484"
+    ],
+    "tool_execution_id": "25b4cbea-12e8-49ec-a36c-34b5bb41bf6f"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "dfa26079-97b8-453d-a239-e332e6b8bb8c",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 28,
+   "type": "evidence.collected",
+   "at": "2026-09-15T11:45:53.608173Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_dependencies",
+   "payload": {
+    "evidence": [
+     {
+      "id": "e94dbdd4-6034-4948-8bc3-6b1e5b9fb484",
+      "kind": "topology",
+      "title": "api-gateway dependencies",
+      "service": "order-service",
+      "strength": 0.8
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "89b74a61-5956-4f07-ae03-3db9d42f20d5",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 29,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:53.634069Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "551b4f6c-9f08-4dd6-90e0-377c4ac88a18",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "45518b93-74ff-4cfc-8e12-f081d7e0422e",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 30,
+   "type": "tool.executed",
+   "at": "2026-09-15T11:45:53.653409Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_dependencies: order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); ",
+   "payload": {
+    "tool": "inspect_dependencies",
+    "status": "succeeded",
+    "summary": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "arguments": {
+     "service": "order-service"
+    },
+    "duration_ms": 4.041,
+    "evidence_ids": [
+     "364639b2-26ac-4042-be95-bdc67cddc13c"
+    ],
+    "tool_execution_id": "ba975cb4-590e-4d4d-88a0-21af017793bd"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "8f49e4d8-a633-47e2-9b31-2a0261db1590",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 31,
+   "type": "evidence.collected",
+   "at": "2026-09-15T11:45:53.655143Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_dependencies",
+   "payload": {
+    "evidence": [
+     {
+      "id": "364639b2-26ac-4042-be95-bdc67cddc13c",
+      "kind": "topology",
+      "title": "order-service dependencies",
+      "service": "payment-service",
+      "strength": 0.8
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "289f53a8-9efa-4a13-b982-9e08bd7aac52",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 32,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:53.681136Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "9683509f-6bb7-4906-9570-a7b6a3f14550",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "dd2e6316-c39c-4e49-913a-1387eb972b5a",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 33,
+   "type": "tool.executed",
+   "at": "2026-09-15T11:45:53.701854Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "query_traces: 3 traces sampled, 3 errored, avg 692ms; failure origin (deepest failing span): payment-service x3; slowest span most often in: payment-service x2, order-service",
+   "payload": {
+    "tool": "query_traces",
+    "status": "succeeded",
+    "summary": "3 traces sampled, 3 errored, avg 692ms; failure origin (deepest failing span): payment-service x3; slowest span most often in: payment-service x2, order-service x1",
+    "arguments": {
+     "errors_only": true
+    },
+    "duration_ms": 2.943,
+    "evidence_ids": [
+     "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575"
+    ],
+    "tool_execution_id": "047b3ac8-9518-4d80-b5bb-d68eba8cc0c5"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "51e3f91a-04ba-423f-92db-07f22b3bdd5f",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 34,
+   "type": "evidence.collected",
+   "at": "2026-09-15T11:45:53.703458Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from query_traces",
+   "payload": {
+    "evidence": [
+     {
+      "id": "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+      "kind": "trace",
+      "title": "trace analysis",
+      "service": "payment-service",
+      "strength": 0.9
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "0ff7563c-3f6b-4378-85e6-92b301725ef0",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 35,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:53.730086Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "910185cd-40fe-4145-aaa6-26412d213ad1",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "17c0462a-9315-4f9c-9dd2-3c52602dbfe0",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 36,
+   "type": "tool.executed",
+   "at": "2026-09-15T11:45:53.749597Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_deployment: payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the ",
+   "payload": {
+    "tool": "inspect_deployment",
+    "status": "succeeded",
+    "summary": "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "arguments": {
+     "service": "payment-service"
+    },
+    "duration_ms": 4.169,
+    "evidence_ids": [
+     "d4967013-2a30-477d-8b69-8d5686c743fc"
+    ],
+    "tool_execution_id": "9bb48a43-f8e4-4490-b17f-e80e90ec0aa8"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "f25ce6bd-8fd0-4e38-90f4-fcfddf4b5e0c",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 37,
+   "type": "evidence.collected",
+   "at": "2026-09-15T11:45:53.751161Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_deployment",
+   "payload": {
+    "evidence": [
+     {
+      "id": "d4967013-2a30-477d-8b69-8d5686c743fc",
+      "kind": "deployment",
+      "title": "payment-service deployment 2.4.0",
+      "service": "payment-service",
+      "strength": 0.85
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "f677a5ca-1f6f-4be2-92d9-89230d625963",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 38,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:53.774832Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "6f91868a-e80c-49f5-b8a5-6b0a0f4a83fa",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "0ba95013-c5a1-45a0-97db-9a7c57ace1f9",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 39,
+   "type": "tool.executed",
+   "at": "2026-09-15T11:45:53.791406Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_deployment: order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "payload": {
+    "tool": "inspect_deployment",
+    "status": "succeeded",
+    "summary": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "arguments": {
+     "service": "order-service"
+    },
+    "duration_ms": 2.826,
+    "evidence_ids": [
+     "d6b17ead-d609-4bc1-9086-925894a8fe79"
+    ],
+    "tool_execution_id": "2567ba8b-46b1-4b3d-9db5-ccf56f5ce31d"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "ebf1e045-2658-42d5-8347-948ab9df336d",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 40,
+   "type": "evidence.collected",
+   "at": "2026-09-15T11:45:53.792776Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_deployment",
+   "payload": {
+    "evidence": [
+     {
+      "id": "d6b17ead-d609-4bc1-9086-925894a8fe79",
+      "kind": "deployment",
+      "title": "order-service deployment 4.1.0",
+      "service": "order-service",
+      "strength": 0.15
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "d0597f3c-0470-4935-919c-da47b8104c6c",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 41,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:53.818627Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "72e0dd3b-0821-4f60-a05e-92546c0c55dc",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "cdff9f2d-1090-484e-9603-b740069be0e0",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 42,
+   "type": "tool.executed",
+   "at": "2026-09-15T11:45:53.836133Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_deployment: api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "payload": {
+    "tool": "inspect_deployment",
+    "status": "succeeded",
+    "summary": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "arguments": {
+     "service": "api-gateway"
+    },
+    "duration_ms": 2.933,
+    "evidence_ids": [
+     "76571f64-04b1-4e62-885a-2a3624c43ed8"
+    ],
+    "tool_execution_id": "5bd52631-ad7c-41bf-9c17-d7261b277030"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "7d46e418-8301-4174-97a5-d79c5abaaa03",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 43,
+   "type": "evidence.collected",
+   "at": "2026-09-15T11:45:53.837692Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_deployment",
+   "payload": {
+    "evidence": [
+     {
+      "id": "76571f64-04b1-4e62-885a-2a3624c43ed8",
+      "kind": "deployment",
+      "title": "api-gateway deployment 3.2.1",
+      "service": "api-gateway",
+      "strength": 0.15
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "923280a7-40a4-405c-b38a-980272153144",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 44,
+   "type": "flow.phase_exited",
+   "at": "2026-09-15T11:45:53.857222Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Phase 'investigate' complete (exhausted) \u2192 'hypothesize'",
+   "payload": {
+    "facts": {
+     "iterations": 8,
+     "action_planned": false,
+     "evidence_count": 11,
+     "top_confidence": 0.0,
+     "hypotheses_count": 0,
+     "no_action_required": false,
+     "hypothesis_validated": false
+    },
+    "phase": "investigate",
+    "trigger": "exhausted",
+    "next_phase": "hypothesize"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "a9c339b9-87de-407a-a86d-888c5538f3d0",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 45,
+   "type": "agent.run_finished",
+   "at": "2026-09-15T11:45:53.886171Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent finished phase 'investigate': phase_complete",
+   "payload": {
+    "phase": "investigate",
+    "steps": 24,
+    "usage": {
+     "llm_calls": 0,
+     "iterations": 11,
+     "llm_tokens": 0,
+     "tool_calls": 11,
+     "runtime_seconds": 0.50511,
+     "remediation_attempts": 0
+    },
+    "summary": "exhausted \u2192 hypothesize",
+    "decision": "transition",
+    "next_phase": "hypothesize",
+    "termination": "phase_complete",
+    "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "becc2123-577c-4fdf-814e-afa23c70f3a8",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 46,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T11:45:53.929283Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "investigating \u2192 hypothesis_formed: entering phase 'hypothesize'",
+   "payload": {
+    "to": "hypothesis_formed",
+    "from": "investigating",
+    "reason": "entering phase 'hypothesize'"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "e45ff816-f447-4b98-8c10-cffa168bf9f0",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 47,
+   "type": "agent.run_started",
+   "at": "2026-09-15T11:45:53.970577Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:3fb00583-d31a-4fd2-b309-2538c74d48c5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent started phase 'hypothesize'",
+   "payload": {
+    "flow": "error-rate-investigation@1.1.0",
+    "phase": "hypothesize",
+    "budget": {
+     "max_llm_calls": 32,
+     "max_iterations": 40,
+     "max_llm_tokens": 275000,
+     "max_tool_calls": 45,
+     "max_runtime_seconds": 1125,
+     "max_remediation_attempts": 2
+    },
+    "agent_run_id": "3fb00583-d31a-4fd2-b309-2538c74d48c5"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "710baa70-2026-4d32-a49d-3fd9ec6243ac",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 48,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:53.995796Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:3fb00583-d31a-4fd2-b309-2538c74d48c5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[hypothesize] propose_hypotheses: Evidence implicates specific components.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "propose_hypotheses",
+    "tokens": 0,
+    "step_id": "5845f0b0-17f7-42d2-8491-35b148f07ec1",
+    "rationale": "deterministic planner derived hypotheses from evidence strength",
+    "observation": "Evidence implicates specific components."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "ad4c69a8-3b5a-40bc-abed-ecf3f97899eb",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 49,
+   "type": "hypothesis.created",
+   "at": "2026-09-15T11:45:54.015764Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:3fb00583-d31a-4fd2-b309-2538c74d48c5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Hypothesis: A recent deployment of payment-service introduced a regression causing the symptoms. (confidence 82%)",
+   "payload": {
+    "score": {
+     "total": 0.8228,
+     "explanation": [
+      "4 supporting evidence items (strength 0.94)",
+      "temporal alignment 1.00",
+      "payment-service explains 3/3 symptomatic services"
+     ],
+     "validation_bonus": 0.0,
+     "evidence_strength": 0.9395,
+     "temporal_alignment": 1.0,
+     "dependency_alignment": 1.0,
+     "contradiction_penalty": 0.0,
+     "historical_similarity": 0.0
+    },
+    "status": "supported",
+    "category": "deployment_regression",
+    "statement": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+    "confidence": 0.8228,
+    "supporting": 4,
+    "contradicting": 0,
+    "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "root_cause_service": "payment-service"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "5256226e-4f72-472d-91e0-47b81579591f",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 50,
+   "type": "hypothesis.created",
+   "at": "2026-09-15T11:45:54.017368Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:3fb00583-d31a-4fd2-b309-2538c74d48c5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Hypothesis: order-service is the most implicated component in the collected evidence. (confidence 78%)",
+   "payload": {
+    "score": {
+     "total": 0.7816,
+     "explanation": [
+      "2 supporting evidence items (strength 0.85)",
+      "temporal alignment 1.00",
+      "order-service explains 3/3 symptomatic services"
+     ],
+     "validation_bonus": 0.0,
+     "evidence_strength": 0.848,
+     "temporal_alignment": 1.0,
+     "dependency_alignment": 1.0,
+     "contradiction_penalty": 0.0,
+     "historical_similarity": 0.0
+    },
+    "status": "supported",
+    "category": "unknown",
+    "statement": "order-service is the most implicated component in the collected evidence.",
+    "confidence": 0.7816,
+    "supporting": 2,
+    "contradicting": 0,
+    "hypothesis_id": "08dabb1d-1249-47db-8d00-4faf2b278fd6",
+    "root_cause_service": "order-service"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "c2443459-5c8b-49e9-9b71-7bb07391791f",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 51,
+   "type": "hypothesis.created",
+   "at": "2026-09-15T11:45:54.019127Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:3fb00583-d31a-4fd2-b309-2538c74d48c5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Hypothesis: api-gateway is the most implicated component in the collected evidence. (confidence 50%)",
+   "payload": {
+    "score": {
+     "total": 0.5033,
+     "explanation": [
+      "1 supporting evidence items (strength 0.60)",
+      "temporal alignment 1.00",
+      "api-gateway explains 1/3 symptomatic services"
+     ],
+     "validation_bonus": 0.0,
+     "evidence_strength": 0.6,
+     "temporal_alignment": 1.0,
+     "dependency_alignment": 0.3333,
+     "contradiction_penalty": 0.0,
+     "historical_similarity": 0.0
+    },
+    "status": "proposed",
+    "category": "unknown",
+    "statement": "api-gateway is the most implicated component in the collected evidence.",
+    "confidence": 0.5033,
+    "supporting": 1,
+    "contradicting": 0,
+    "hypothesis_id": "5113a1d3-fb87-487f-937e-ff3124022a6f",
+    "root_cause_service": "api-gateway"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "c088d246-26a1-40ac-a99c-533e8e70ba91",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 52,
+   "type": "flow.phase_exited",
+   "at": "2026-09-15T11:45:54.047519Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:3fb00583-d31a-4fd2-b309-2538c74d48c5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Phase 'hypothesize' complete (exit_conditions_met) \u2192 'validate'",
+   "payload": {
+    "facts": {
+     "iterations": 1,
+     "action_planned": false,
+     "evidence_count": 11,
+     "top_confidence": 0.8228,
+     "hypotheses_count": 3,
+     "no_action_required": false,
+     "hypothesis_validated": false
+    },
+    "phase": "hypothesize",
+    "trigger": "exit_conditions_met",
+    "next_phase": "validate"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "a3d3b91c-ac6e-4421-8987-cc77f38d2e02",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 53,
+   "type": "agent.run_finished",
+   "at": "2026-09-15T11:45:54.067991Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:3fb00583-d31a-4fd2-b309-2538c74d48c5",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent finished phase 'hypothesize': phase_complete",
+   "payload": {
+    "phase": "hypothesize",
+    "steps": 2,
+    "usage": {
+     "llm_calls": 0,
+     "iterations": 12,
+     "llm_tokens": 0,
+     "tool_calls": 11,
+     "runtime_seconds": 0.560344,
+     "remediation_attempts": 0
+    },
+    "summary": "exit_conditions_met \u2192 validate",
+    "decision": "transition",
+    "next_phase": "validate",
+    "termination": "phase_complete",
+    "agent_run_id": "3fb00583-d31a-4fd2-b309-2538c74d48c5"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "1083bc21-e222-4671-b277-5737d6cfd35b",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 54,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T11:45:54.136117Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "hypothesis_formed \u2192 validating: entering phase 'validate'",
+   "payload": {
+    "to": "validating",
+    "from": "hypothesis_formed",
+    "reason": "entering phase 'validate'"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "2cae9ef6-4327-4962-87c4-14cf0481c1aa",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 55,
+   "type": "agent.run_started",
+   "at": "2026-09-15T11:45:54.204657Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:f3913751-76f6-4a42-a88d-1b3683c46310",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent started phase 'validate'",
+   "payload": {
+    "flow": "error-rate-investigation@1.1.0",
+    "phase": "validate",
+    "budget": {
+     "max_llm_calls": 32,
+     "max_iterations": 40,
+     "max_llm_tokens": 275000,
+     "max_tool_calls": 45,
+     "max_runtime_seconds": 1125,
+     "max_remediation_attempts": 2
+    },
+    "agent_run_id": "f3913751-76f6-4a42-a88d-1b3683c46310"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "53edce25-a805-4d47-8156-c6c22d6a66f4",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 56,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:54.238309Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:f3913751-76f6-4a42-a88d-1b3683c46310",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[validate] call_tool: Testing H1: A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "2aa99dd2-556b-408e-9d04-582ea584ad8f",
+    "rationale": "deterministic planner",
+    "observation": "Testing H1: A recent deployment of payment-service introduced a regression causing the symptoms."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "be3f594f-7c8f-4392-90fb-87c6ff91931e",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 57,
+   "type": "tool.executed",
+   "at": "2026-09-15T11:45:54.258566Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:f3913751-76f6-4a42-a88d-1b3683c46310",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "compare_baseline: payment-service error_rate: current 4.2% vs baseline 0.1% \u2192 +4061% vs baseline",
+   "payload": {
+    "tool": "compare_baseline",
+    "status": "succeeded",
+    "summary": "payment-service error_rate: current 4.2% vs baseline 0.1% \u2192 +4061% vs baseline",
+    "arguments": {
+     "metric": "error_rate",
+     "service": "payment-service"
+    },
+    "duration_ms": 4.598,
+    "evidence_ids": [
+     "d96f0f3b-c2a9-46f3-93cf-d1465d6aea8d"
+    ],
+    "tool_execution_id": "ea30094f-8224-4b36-9420-4492e302f0a5"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "9788e3f1-027e-4c15-89fe-e8f5e984c037",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 58,
+   "type": "evidence.collected",
+   "at": "2026-09-15T11:45:54.260193Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:f3913751-76f6-4a42-a88d-1b3683c46310",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from compare_baseline",
+   "payload": {
+    "evidence": [
+     {
+      "id": "d96f0f3b-c2a9-46f3-93cf-d1465d6aea8d",
+      "kind": "metric",
+      "title": "payment-service error_rate vs baseline",
+      "service": "payment-service",
+      "strength": 0.9
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "f58b882a-d9ed-40af-95bc-be5d61ba5326",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 59,
+   "type": "hypothesis.validated",
+   "at": "2026-09-15T11:45:54.263660Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:f3913751-76f6-4a42-a88d-1b3683c46310",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Test confirmed: A recent deployment of payment-service introduced a regression causing the symptoms. (confidence 97%)",
+   "payload": {
+    "test": {
+     "at": "2026-09-15T11:45:54.262116Z",
+     "id": "85b1859b-bb0c-43a2-81db-1a3977d50d3a",
+     "detail": "deterministic judgement: diagnostic strongly implicates the suspected service",
+     "outcome": "confirmed",
+     "tool_name": "compare_baseline",
+     "expectation": "result implicates payment-service",
+     "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+     "tool_execution_id": null
+    },
+    "score": {
+     "total": 0.9728,
+     "explanation": [
+      "4 supporting evidence items (strength 0.94)",
+      "temporal alignment 1.00",
+      "payment-service explains 3/3 symptomatic services",
+      "tests: 1 confirmed, 0 refuted"
+     ],
+     "validation_bonus": 0.15,
+     "evidence_strength": 0.9395,
+     "temporal_alignment": 1.0,
+     "dependency_alignment": 1.0,
+     "contradiction_penalty": 0.0,
+     "historical_similarity": 0.0
+    },
+    "status": "confirmed",
+    "category": "deployment_regression",
+    "statement": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+    "confidence": 0.9728,
+    "supporting": 4,
+    "contradicting": 0,
+    "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "root_cause_service": "payment-service"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "e6c8e488-ffad-4f8c-a996-82d278ffddb4",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 60,
+   "type": "flow.phase_exited",
+   "at": "2026-09-15T11:45:54.282648Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:f3913751-76f6-4a42-a88d-1b3683c46310",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Phase 'validate' complete (exit_conditions_met) \u2192 'remediate'",
+   "payload": {
+    "facts": {
+     "iterations": 1,
+     "action_planned": false,
+     "evidence_count": 12,
+     "top_confidence": 0.9728,
+     "hypotheses_count": 3,
+     "no_action_required": false,
+     "hypothesis_validated": true
+    },
+    "phase": "validate",
+    "trigger": "exit_conditions_met",
+    "next_phase": "remediate"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "ae07d407-ce5c-430c-aa05-e56d606a8823",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 61,
+   "type": "agent.run_finished",
+   "at": "2026-09-15T11:45:54.301405Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:f3913751-76f6-4a42-a88d-1b3683c46310",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent finished phase 'validate': phase_complete",
+   "payload": {
+    "phase": "validate",
+    "steps": 3,
+    "usage": {
+     "llm_calls": 0,
+     "iterations": 13,
+     "llm_tokens": 0,
+     "tool_calls": 12,
+     "runtime_seconds": 0.61949,
+     "remediation_attempts": 0
+    },
+    "summary": "exit_conditions_met \u2192 remediate",
+    "decision": "transition",
+    "next_phase": "remediate",
+    "termination": "phase_complete",
+    "agent_run_id": "f3913751-76f6-4a42-a88d-1b3683c46310"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "ea7bb7cd-b55c-4a6b-af75-0ff889e9bb99",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 62,
+   "type": "agent.run_started",
+   "at": "2026-09-15T11:45:54.356015Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:eec7135e-fee5-4033-b454-9f2a71677687",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent started phase 'remediate'",
+   "payload": {
+    "flow": "error-rate-investigation@1.1.0",
+    "phase": "remediate",
+    "budget": {
+     "max_llm_calls": 32,
+     "max_iterations": 40,
+     "max_llm_tokens": 275000,
+     "max_tool_calls": 45,
+     "max_runtime_seconds": 1125,
+     "max_remediation_attempts": 2
+    },
+    "agent_run_id": "eec7135e-fee5-4033-b454-9f2a71677687"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "5ddce4da-3346-4fc5-9d1c-347c842b5301",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 63,
+   "type": "agent.step",
+   "at": "2026-09-15T11:45:54.385239Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:eec7135e-fee5-4033-b454-9f2a71677687",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[remediate] plan_remediation: Planning remediation for H1.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "plan_remediation",
+    "tokens": 0,
+    "step_id": "5fff8c56-c8a5-478e-ad30-94ac90a43406",
+    "rationale": "deterministic planner category playbook",
+    "observation": "Planning remediation for H1."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "d090a605-8c31-49f0-b34f-4ca4b67b6d02",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 64,
+   "type": "remediation.proposed",
+   "at": "2026-09-15T11:45:54.405043Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:eec7135e-fee5-4033-b454-9f2a71677687",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Remediation proposed: rollback_deployment on payment-service",
+   "payload": {
+    "risk": "medium",
+    "tool": "rollback_deployment",
+    "reason": "addresses deployment_regression on payment-service",
+    "rollback": {
+     "reason": "original version unknown until execution",
+     "arguments": {},
+     "available": false,
+     "tool_name": null
+    },
+    "arguments": {
+     "service": "payment-service"
+    },
+    "confidence": 0.9728,
+    "hypothesis": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+    "verification": {
+     "conditions": [
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "api-gateway",
+       "comparator": "lte",
+       "description": "api-gateway error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "order-service",
+       "comparator": "lte",
+       "description": "order-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "payment-service",
+       "comparator": "lte",
+       "description": "payment-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "latency_p95_ms",
+       "target": null,
+       "service": "payment-service",
+       "comparator": "lte",
+       "description": "payment-service latency_p95_ms within 1.5x of baseline",
+       "max_ratio_to_baseline": 1.5
+      },
+      {
+       "metric": "up",
+       "target": 1.0,
+       "service": "payment-service",
+       "comparator": "gte",
+       "description": "payment-service up gte 1",
+       "max_ratio_to_baseline": null
+      }
+     ],
+     "require_all": true,
+     "timeout_seconds": 240,
+     "stabilization_seconds": 30
+    },
+    "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "action_plan_id": "38459026-892c-44c7-8457-49439cad8248",
+    "expected_effect": "symptomatic metrics return to baseline"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "5d49b42d-e3c1-4649-999a-9a35b9a19210",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 65,
+   "type": "agent.run_finished",
+   "at": "2026-09-15T11:45:54.434081Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:eec7135e-fee5-4033-b454-9f2a71677687",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent finished phase 'remediate': action_planned",
+   "payload": {
+    "phase": "remediate",
+    "steps": 2,
+    "usage": {
+     "llm_calls": 0,
+     "iterations": 13,
+     "llm_tokens": 0,
+     "tool_calls": 12,
+     "runtime_seconds": 0.623817,
+     "remediation_attempts": 0
+    },
+    "summary": "planned rollback_deployment on payment-service",
+    "decision": "action_planned",
+    "next_phase": null,
+    "termination": "action_planned",
+    "agent_run_id": "eec7135e-fee5-4033-b454-9f2a71677687"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "9181de5c-ccbf-43e9-a4fe-bee7099c9892",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 66,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T11:45:54.504014Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "validating \u2192 remediation_planned: remediation planned",
+   "payload": {
+    "to": "remediation_planned",
+    "from": "validating",
+    "reason": "remediation planned"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "4d6cc1a2-5467-4f1f-9c86-d52666ff7577",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 67,
+   "type": "policy.decided",
+   "at": "2026-09-15T11:45:54.566143Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Policy: require approval for rollback_deployment (approve-rollback)",
+   "payload": {
+    "effect": "require_approval",
+    "reason": "Rollbacks change what is running and always require approval.",
+    "invariant": null,
+    "matched_rule": "approve-rollback",
+    "action_plan_id": "38459026-892c-44c7-8457-49439cad8248",
+    "evaluated_rules": [
+     "deny-dangerous",
+     "allow-read-only",
+     "allow-diagnostics",
+     "approve-diagnostics-medium-risk",
+     "deny-high-risk-mutation-production",
+     "approve-rollback"
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "e6d78aa9-8eef-47a6-9026-020b94ab164b",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 68,
+   "type": "approval.requested",
+   "at": "2026-09-15T11:45:54.573605Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Approval required: rollback_deployment on payment-service (risk medium)",
+   "payload": {
+    "risk": "medium",
+    "confidence": 0.9728,
+    "expires_at": "2026-09-15T12:00:54.561387+00:00",
+    "hypothesis": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+    "approval_id": "0729b3d8-d279-4287-9c45-bb357d8a37ce",
+    "action_plan_id": "38459026-892c-44c7-8457-49439cad8248"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "8caf9e49-9b57-419e-9302-62fed43e2d04",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 69,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T11:45:54.641441Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "remediation_planned \u2192 awaiting_approval: awaiting human approval",
+   "payload": {
+    "to": "awaiting_approval",
+    "from": "remediation_planned",
+    "reason": "awaiting human approval"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "f2431fe3-d3d9-4db5-a954-cbcf0e7587eb",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "seq": 70,
+   "type": "incident.signal_attached",
+   "at": "2026-09-15T11:45:58.060696Z",
+   "actor": {
+    "kind": "detector",
+    "id": "detector",
+    "display_name": "Detection engine",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "3 new signal(s): api-gateway latency_p95_ms, order-service latency_p95_ms, payment-service latency_p95_ms",
+   "payload": {
+    "signals": [
+     {
+      "id": "d2ef8dbf-33cb-4667-a8c8-38dd3436e34a",
+      "kind": "latency",
+      "metric": "latency_p95_ms",
+      "service": "api-gateway",
+      "detector": "latency_p95_ms:latency",
+      "description": "api-gateway latency_p95_ms 203 -> 740 (+264%): p95 latency regression",
+      "detected_at": "2026-09-15T11:45:58.126624Z",
+      "baseline_value": 203.2292684218027,
+      "observed_value": 740.2407844926378,
+      "window_seconds": 3,
+      "deviation_sigma": 52.84785210723357
+     },
+     {
+      "id": "399a35ff-522c-4f7e-b80a-026c7b3e44de",
+      "kind": "latency",
+      "metric": "latency_p95_ms",
+      "service": "order-service",
+      "detector": "latency_p95_ms:latency",
+      "description": "order-service latency_p95_ms 117 -> 511 (+337%): p95 latency regression",
+      "detected_at": "2026-09-15T11:45:58.126624Z",
+      "baseline_value": 116.78244079458902,
+      "observed_value": 510.7556374247035,
+      "window_seconds": 3,
+      "deviation_sigma": 67.47130715020451
+     },
+     {
+      "id": "9f1fb5e8-3232-4361-9dfa-656f5864966a",
+      "kind": "latency",
+      "metric": "latency_p95_ms",
+      "service": "payment-service",
+      "detector": "latency_p95_ms:latency",
+      "description": "payment-service latency_p95_ms 69.9 -> 661 (+844%): p95 latency regression",
+      "detected_at": "2026-09-15T11:45:58.126624Z",
+      "baseline_value": 69.93860944647899,
+      "observed_value": 660.5354634610657,
+      "window_seconds": 3,
+      "deviation_sigma": 168.89007622221746
+     }
+    ],
+    "affected_services": [
+     "api-gateway",
+     "order-service",
+     "payment-service"
+    ]
+   },
+   "trace_id": null
+  }
+ ]
+}

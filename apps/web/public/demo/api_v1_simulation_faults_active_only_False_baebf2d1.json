@@ -1,0 +1,18 @@
+[
+ {
+  "id": "fault-10",
+  "scenario_id": "bad-deployment",
+  "fault_type": "bad_deployment",
+  "params": {
+   "service": "payment-service",
+   "version": "2.4.0",
+   "error_rate": 0.35,
+   "added_latency_ms": 350.0
+  },
+  "started_at": 1789472747.126624,
+  "duration_seconds": null,
+  "cleared_at": null,
+  "cleared_by": null,
+  "active": true
+ }
+]

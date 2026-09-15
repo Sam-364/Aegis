@@ -1,0 +1,18 @@
+{
+ "component": "order-service",
+ "time": "2026-09-15T11:50:43.126624+00:00",
+ "metrics": {
+  "request_rate": 61.19226609620557,
+  "error_rate": 0.14172036184245307,
+  "latency_p50_ms": 205.31666167538202,
+  "latency_p95_ms": 517.9734263770315,
+  "cpu_percent": 27.986745510430094,
+  "memory_percent": 37.75787724284169,
+  "db_pool_in_use": 3.0,
+  "db_pool_wait_ms": 0.0,
+  "redis_pool_in_use": 3.0,
+  "redis_pool_wait_ms": 0.0,
+  "replicas_ready": 3.0,
+  "up": 1.0
+ }
+}

@@ -1,0 +1,347 @@
+{
+ "approval": {
+  "created_at": "2026-09-15T10:32:16.441581Z",
+  "updated_at": "2026-09-15T10:32:16.847908Z",
+  "id": "c97fd22b-7d2b-41a1-87a7-1b6f1597239a",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "action_plan_id": "3d085c86-5e28-4cd3-b447-60acbe7ab841",
+  "status": "approved",
+  "title": "restart_service on order-service",
+  "summary": "addresses resource_exhaustion on order-service",
+  "risk": "medium",
+  "expected_impact": "symptomatic metrics return to baseline",
+  "rollback_summary": "restart_service is not reversible; a failed verification escalates",
+  "hypothesis_id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+  "hypothesis_statement": "order-service is exhausting a shared resource (connections), degrading callers.",
+  "hypothesis_confidence": 0.9704,
+  "evidence_ids": [
+   "c2c5051d-58c8-40bd-90cc-474f58c169d8"
+  ],
+  "requested_by": "workflow:incident-c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "requested_at": "2026-09-15T10:32:16.425676Z",
+  "expires_at": "2026-09-15T10:47:16.425676Z",
+  "decided_at": "2026-09-15T10:32:16.847908Z",
+  "decided_by": "user:local-operator",
+  "decision_reason": "e2e harness",
+  "context": {
+   "policy": {
+    "effect": "require_approval",
+    "reason": "Medium and higher risk mutations require approval.",
+    "invariant": null,
+    "matched_rule": "approve-medium-risk-mutations",
+    "evaluated_rules": [
+     "deny-dangerous",
+     "allow-read-only",
+     "allow-diagnostics",
+     "approve-diagnostics-medium-risk",
+     "deny-high-risk-mutation-production",
+     "approve-rollback",
+     "approve-production-mutations",
+     "approve-sev1-mutations",
+     "approve-medium-risk-mutations"
+    ]
+   },
+   "rollback": null,
+   "arguments": {
+    "service": "order-service"
+   },
+   "tool_name": "restart_service",
+   "verification": {
+    "conditions": [
+     {
+      "metric": "connections",
+      "target": null,
+      "service": "redis",
+      "comparator": "lte",
+      "description": "redis connections within 1.6x of baseline",
+      "max_ratio_to_baseline": 1.6
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "order-service",
+      "comparator": "lte",
+      "description": "order-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "latency_p95_ms",
+      "target": null,
+      "service": "order-service",
+      "comparator": "lte",
+      "description": "order-service latency_p95_ms within 1.5x of baseline",
+      "max_ratio_to_baseline": 1.5
+     },
+     {
+      "metric": "up",
+      "target": 1.0,
+      "service": "order-service",
+      "comparator": "gte",
+      "description": "order-service up gte 1",
+      "max_ratio_to_baseline": null
+     }
+    ],
+    "require_all": true,
+    "timeout_seconds": 240,
+    "stabilization_seconds": 30
+   }
+  }
+ },
+ "action_plan": {
+  "created_at": "2026-09-15T10:32:16.232931Z",
+  "updated_at": "2026-09-15T10:33:07.298625Z",
+  "id": "3d085c86-5e28-4cd3-b447-60acbe7ab841",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "hypothesis_id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+  "tool_name": "restart_service",
+  "tool_version": "1",
+  "arguments": {
+   "service": "order-service"
+  },
+  "reason": "addresses resource_exhaustion on order-service",
+  "expected_effect": "symptomatic metrics return to baseline",
+  "risk": "medium",
+  "rollback": {
+   "available": false,
+   "tool_name": null,
+   "arguments": {},
+   "reason": "restart_service is not reversible; a failed verification escalates"
+  },
+  "verification": {
+   "conditions": [
+    {
+     "metric": "connections",
+     "service": "redis",
+     "comparator": "lte",
+     "target": null,
+     "max_ratio_to_baseline": 1.6,
+     "description": "redis connections within 1.6x of baseline"
+    },
+    {
+     "metric": "error_rate",
+     "service": "order-service",
+     "comparator": "lte",
+     "target": 0.03,
+     "max_ratio_to_baseline": null,
+     "description": "order-service error_rate lte 0.03"
+    },
+    {
+     "metric": "latency_p95_ms",
+     "service": "order-service",
+     "comparator": "lte",
+     "target": null,
+     "max_ratio_to_baseline": 1.5,
+     "description": "order-service latency_p95_ms within 1.5x of baseline"
+    },
+    {
+     "metric": "up",
+     "service": "order-service",
+     "comparator": "gte",
+     "target": 1.0,
+     "max_ratio_to_baseline": null,
+     "description": "order-service up gte 1"
+    }
+   ],
+   "stabilization_seconds": 30,
+   "timeout_seconds": 240,
+   "require_all": true
+  },
+  "timeout_seconds": 90,
+  "status": "verified",
+  "idempotency_key": "5c996c21041e1cc3e0e410f91da2b8ec",
+  "proposed_by": "deterministic",
+  "agent_run_id": "88335516-c719-470e-a493-3eb12c539680",
+  "approval_id": "c97fd22b-7d2b-41a1-87a7-1b6f1597239a",
+  "policy_decision": {
+   "effect": "require_approval",
+   "reason": "Medium and higher risk mutations require approval.",
+   "invariant": null,
+   "matched_rule": "approve-medium-risk-mutations",
+   "evaluated_rules": [
+    "deny-dangerous",
+    "allow-read-only",
+    "allow-diagnostics",
+    "approve-diagnostics-medium-risk",
+    "deny-high-risk-mutation-production",
+    "approve-rollback",
+    "approve-production-mutations",
+    "approve-sev1-mutations",
+    "approve-medium-risk-mutations"
+   ]
+  },
+  "attempt": 1,
+  "verification_result": {
+   "status": "passed",
+   "checked_at": "2026-09-15T10:33:07.295782Z",
+   "condition_results": [
+    {
+     "ok": true,
+     "value": 12.0,
+     "detail": "redis.connections=12 vs 1.6x baseline(12)=19.2",
+     "metric": "connections",
+     "service": "redis",
+     "baseline": 12.0,
+     "description": "redis connections within 1.6x of baseline",
+     "accumulation_share": 0.0
+    },
+    {
+     "ok": true,
+     "value": 0.0028717272393400384,
+     "detail": "order-service.error_rate=0.00287 lte 0.03",
+     "metric": "error_rate",
+     "service": "order-service",
+     "baseline": 0.0030869145572047394,
+     "description": "order-service error_rate lte 0.03",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 117.43187691493684,
+     "detail": "order-service.latency_p95_ms=117 vs 1.5x baseline(116)=175",
+     "metric": "latency_p95_ms",
+     "service": "order-service",
+     "baseline": 116.49444414951111,
+     "description": "order-service latency_p95_ms within 1.5x of baseline",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 1.0,
+     "detail": "order-service.up=1 gte 1",
+     "metric": "up",
+     "service": "order-service",
+     "baseline": 1.0,
+     "description": "order-service up gte 1",
+     "accumulation_share": null
+    }
+   ],
+   "summary": "all 4 conditions held for 3 consecutive polls",
+   "before": {
+    "order-service.up": 1.0,
+    "redis.connections": 140.75,
+    "order-service.error_rate": 0.0029366292982676576,
+    "order-service.latency_p95_ms": 118.49086438990695
+   },
+   "after": {
+    "order-service.up": 1.0,
+    "redis.connections": 12.0,
+    "order-service.error_rate": 0.0028717272393400384,
+    "order-service.latency_p95_ms": 117.43187691493684
+   }
+  }
+ },
+ "incident": {
+  "id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "display_id": "INC-1117",
+  "title": "redis connections saturation",
+  "severity": "sev3",
+  "status": "resolved"
+ },
+ "hypothesis": {
+  "created_at": "2026-09-15T10:32:15.512114Z",
+  "updated_at": "2026-09-15T10:32:16.021702Z",
+  "id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "statement": "order-service is exhausting a shared resource (connections), degrading callers.",
+  "category": "resource_exhaustion",
+  "suspected_root_cause_service": "order-service",
+  "mechanism": "derived deterministically from evidence strength and service attribution",
+  "affected_services": [
+   "redis"
+  ],
+  "status": "confirmed",
+  "confidence": 0.9704,
+  "score": {
+   "evidence_strength": 0.9342,
+   "temporal_alignment": 1.0,
+   "dependency_alignment": 1.0,
+   "historical_similarity": 0.0,
+   "contradiction_penalty": 0.0,
+   "validation_bonus": 0.15,
+   "total": 0.9704,
+   "explanation": [
+    "redis saturation is attributable to order-service (95% of connections)",
+    "1 supporting evidence items (strength 0.93)",
+    "temporal alignment 1.00",
+    "order-service explains 1/1 symptomatic services",
+    "tests: 1 confirmed, 0 refuted"
+   ]
+  },
+  "supporting_evidence_ids": [
+   "c2c5051d-58c8-40bd-90cc-474f58c169d8"
+  ],
+  "contradicting_evidence_ids": [],
+  "suggested_tests": [],
+  "tests": [
+   {
+    "id": "f9049f93-d80c-47cd-8542-cfda6e3ce02c",
+    "hypothesis_id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+    "tool_execution_id": null,
+    "tool_name": "run_database_diagnostic",
+    "expectation": "result implicates order-service",
+    "outcome": "inconclusive",
+    "detail": "deterministic judgement: not implicated",
+    "at": "2026-09-15T10:32:15.963685Z"
+   },
+   {
+    "id": "c9731a2b-5d0b-46b0-a7fa-201743f62087",
+    "hypothesis_id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+    "tool_execution_id": null,
+    "tool_name": "run_cache_diagnostic",
+    "expectation": "result implicates order-service",
+    "outcome": "confirmed",
+    "detail": "deterministic judgement: diagnostic strongly implicates the suspected service",
+    "at": "2026-09-15T10:32:16.020750Z"
+   }
+  ],
+  "proposed_by": "deterministic",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "version": 4
+ },
+ "evidence": [
+  {
+   "created_at": "2026-09-15T10:32:14.947882Z",
+   "updated_at": "2026-09-15T10:32:14.947882Z",
+   "id": "c2c5051d-58c8-40bd-90cc-474f58c169d8",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "diagnostic",
+   "source": "inspect_redis",
+   "service": "order-service",
+   "title": "redis connection analysis",
+   "summary": "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: order-service 162; hit rate 97%, blocked clients 0",
+   "data": {
+    "at": "2026-09-15T10:32:15.126624+00:00",
+    "hit_rate": 0.97,
+    "available": true,
+    "component": "redis",
+    "saturation": 0.698,
+    "top_client": "order-service",
+    "max_clients": 250,
+    "ops_per_sec": 368,
+    "latency_p95_ms": 1.62,
+    "blocked_clients": 0,
+    "connected_clients": 174,
+    "leaked_by_service": {
+     "order-service": 162
+    },
+    "clients_by_service": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 166,
+     "payment-service": 2,
+     "inventory-service": 2,
+     "notification-service": 1
+    }
+   },
+   "strength": 0.9,
+   "observed_at": "2026-09-15T10:32:14.947848Z",
+   "tool_execution_id": "27463e7b-6549-4aee-bde2-463a7f50188a",
+   "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+   "phase": "investigate",
+   "tags": [
+    "cache",
+    "ok"
+   ]
+  }
+ ]
+}

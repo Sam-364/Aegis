@@ -1,0 +1,19 @@
+{
+ "status": "ready",
+ "checks": {
+  "database": {
+   "ok": true,
+   "revision": "0002_audit_truncate_guard",
+   "head": "0002_audit_truncate_guard"
+  },
+  "redis": {
+   "ok": true
+  },
+  "temporal": {
+   "ok": true
+  },
+  "simulator": {
+   "ok": true
+  }
+ }
+}

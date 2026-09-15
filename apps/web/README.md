@@ -164,3 +164,27 @@ status, `title`, `detail`, per-field `errors[{loc,msg}]` for 422, `retry-after` 
 `request_id` so a console error can be traced to a server log line. A 409 `invalid_transition` from a
 human action renders in place next to the button that caused it. 4xx responses are never retried;
 network and 5xx errors are retried twice.
+
+## Demo mode
+
+The console is a pure client of the Aegis API: with no control plane to reach it renders an empty
+shell. `NEXT_PUBLIC_AEGIS_DEMO=1` makes it replay a recording instead — real responses captured
+from a running stack, served as static assets from `public/demo/`, so none of it enters the
+JavaScript bundle and none of it can be mistaken for live:
+
+* a banner states that it is a recording and when it was captured;
+* reads resolve from the recording (`src/lib/demo.ts`), falling back from the exact call to the
+  bare path so a different `limit` still answers;
+* writes are **refused**, not faked — a demo that let you click "approve" and appeared to
+  remediate something would lie about the one thing this system is careful about;
+* the SSE stream is not opened, because there is nothing live to subscribe to.
+
+Refresh the recording against a running stack:
+
+```bash
+uv run python scripts/capture_demo_fixtures.py --incident 1125 --incident 1117   # repeatable
+uv run python scripts/check_demo_fixtures.py                                     # runs in CI
+```
+
+The first `--incident` is the one the console opens by default; pick an incident that is
+`awaiting_approval` if you want the approval console to have something in it.

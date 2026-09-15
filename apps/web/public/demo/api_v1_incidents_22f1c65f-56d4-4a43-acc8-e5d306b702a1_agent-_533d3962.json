@@ -1,0 +1,37 @@
+[
+ {
+  "created_at": "2026-09-15T10:37:36.685959Z",
+  "updated_at": "2026-09-15T10:37:36.685961Z",
+  "id": "eda4f659-4cf4-4808-bf01-d613f67f8885",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "flow_name": "incident-investigation",
+  "flow_version": "1.1.0",
+  "phase": "triage",
+  "status": "completed",
+  "budget": {
+   "max_iterations": 26,
+   "max_tool_calls": 30,
+   "max_llm_calls": 22,
+   "max_llm_tokens": 187500,
+   "max_runtime_seconds": 675,
+   "max_remediation_attempts": 2
+  },
+  "usage": {
+   "iterations": 1,
+   "tool_calls": 1,
+   "llm_calls": 0,
+   "llm_tokens": 0,
+   "runtime_seconds": 0.052768999999999996,
+   "remediation_attempts": 0
+  },
+  "model": "deterministic-planner",
+  "started_at": "2026-09-15T10:37:36.685943Z",
+  "finished_at": "2026-09-15T10:37:36.779195Z",
+  "termination_reason": "no_action_required",
+  "summary": "detection signals returned within baseline without remediation",
+  "error": null,
+  "steps_count": 4,
+  "workflow_id": "incident-22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "attempt": 1
+ }
+]

@@ -5,7 +5,9 @@
  * - Errors surface as `ApiError` carrying the `application/problem+json` body
  *   ({type,title,status,detail,request_id}). `detail` may be a string, `{}` or `{errors:[{loc,msg}]}`.
  */
+import { ApiError, type Problem, type ProblemError } from "@/lib/api-error";
 import { config } from "@/lib/config";
+import { demoGet, demoWrite } from "@/lib/demo";
 import type {
   AgentRun,
   AgentRunDetail,
@@ -43,63 +45,8 @@ import type {
   WorkflowInfo,
 } from "@/lib/types";
 
-export interface ProblemError {
-  loc?: (string | number)[];
-  msg?: string;
-  type?: string;
-}
-
-export interface Problem {
-  type?: string;
-  title?: string;
-  status?: number;
-  detail?: unknown;
-  request_id?: string;
-  [key: string]: unknown;
-}
-
-export class ApiError extends Error {
-  readonly status: number;
-  readonly title: string;
-  readonly detail: string | undefined;
-  readonly type: string | undefined;
-  readonly requestId: string | undefined;
-  readonly errors: ProblemError[];
-  readonly problem: Problem | undefined;
-  readonly url: string;
-  readonly method: string;
-  readonly retryAfter: number | undefined;
-
-  constructor(init: {
-    status: number;
-    title: string;
-    detail?: string;
-    type?: string;
-    requestId?: string;
-    errors?: ProblemError[];
-    problem?: Problem;
-    url: string;
-    method: string;
-    retryAfter?: number;
-  }) {
-    super(init.detail ? `${init.title}: ${init.detail}` : init.title);
-    this.name = "ApiError";
-    this.status = init.status;
-    this.title = init.title;
-    this.detail = init.detail;
-    this.type = init.type;
-    this.requestId = init.requestId;
-    this.errors = init.errors ?? [];
-    this.problem = init.problem;
-    this.url = init.url;
-    this.method = init.method;
-    this.retryAfter = init.retryAfter;
-  }
-
-  get isNetwork(): boolean {
-    return this.status === 0;
-  }
-}
+export { ApiError } from "@/lib/api-error";
+export type { Problem, ProblemError } from "@/lib/api-error";
 
 export function isApiError(e: unknown): e is ApiError {
   return e instanceof ApiError;
@@ -204,6 +151,10 @@ async function readProblem(res: Response): Promise<{ problem: Problem | undefine
 
 export async function apiFetch<T>(path: string, opts: RequestOptions = {}): Promise<T> {
   const method = opts.method ?? "GET";
+  if (config.demo) {
+    if (method !== "GET") demoWrite(path, method);
+    return demoGet<T>(path, opts.query as Record<string, unknown> | undefined);
+  }
   const url = apiUrl(path, opts.query);
   const headers: Record<string, string> = {
     Accept: "application/json, application/problem+json",

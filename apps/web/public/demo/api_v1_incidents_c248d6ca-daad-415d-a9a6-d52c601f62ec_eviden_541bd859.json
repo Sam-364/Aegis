@@ -1,0 +1,901 @@
+{
+ "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+ "evidence": [
+  {
+   "created_at": "2026-09-15T10:31:29.213669Z",
+   "updated_at": "2026-09-15T10:31:29.213669Z",
+   "id": "742a3439-b13e-45f7-b672-727fb223ee9d",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "health",
+   "source": "get_health",
+   "service": "redis",
+   "title": "redis health",
+   "summary": "redis is healthy; all checks passing",
+   "data": {
+    "state": "healthy",
+    "checks": {
+     "latency_ok": true,
+     "process_up": true,
+     "connections_ok": true
+    },
+    "message": "all checks passing",
+    "service": "redis"
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:31:29.213575Z",
+   "tool_execution_id": "56a55df1-6bd0-4639-83fe-f7f5f956cab3",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "phase": "triage",
+   "tags": [
+    "healthy"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:31:29.255957Z",
+   "updated_at": "2026-09-15T10:31:29.255958Z",
+   "id": "57a012f4-5f6a-4884-b881-715bc2a05fac",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "metric",
+   "source": "compare_baseline",
+   "service": "redis",
+   "title": "redis connections vs baseline",
+   "summary": "redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+   "data": {
+    "unit": "count",
+    "ratio": 1.6597222222222223,
+    "metric": "connections",
+    "current": 19.916666666666668,
+    "service": "redis",
+    "verdict": "+66% vs baseline",
+    "baseline": 12.0
+   },
+   "strength": 0.5,
+   "observed_at": "2026-09-15T10:31:29.255887Z",
+   "tool_execution_id": "cb302215-065f-4095-8b4a-58a48c7f2443",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "phase": "triage",
+   "tags": [
+    "connections",
+    "baseline"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:31:29.551289Z",
+   "updated_at": "2026-09-15T10:31:29.551290Z",
+   "id": "845c9d4b-dde9-4e5c-aaa0-d278f4aeb567",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "diagnostic",
+   "source": "inspect_redis",
+   "service": "order-service",
+   "title": "redis connection analysis",
+   "summary": "redis: 62/250 connections (25% saturation), p95 0.8ms; by client: order-service 53, auth-service 2, user-service 2, payment-service 2; order-service holds 85% of connections; leaked by service: order-service 50; hit rate 97%, blocked clients 0",
+   "data": {
+    "at": "2026-09-15T10:31:30.126624+00:00",
+    "hit_rate": 0.97,
+    "available": true,
+    "component": "redis",
+    "saturation": 0.248,
+    "top_client": "order-service",
+    "max_clients": 250,
+    "ops_per_sec": 372,
+    "latency_p95_ms": 0.84,
+    "blocked_clients": 0,
+    "connected_clients": 62,
+    "leaked_by_service": {
+     "order-service": 50
+    },
+    "clients_by_service": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 53,
+     "payment-service": 2,
+     "inventory-service": 2,
+     "notification-service": 1
+    }
+   },
+   "strength": 0.2,
+   "observed_at": "2026-09-15T10:31:29.551226Z",
+   "tool_execution_id": "c4febb48-012e-47a8-8c69-28a45a1af7da",
+   "agent_run_id": "5cf4cbde-3b03-4512-abe7-b67cce54063d",
+   "phase": "investigate",
+   "tags": [
+    "cache",
+    "ok"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:31:29.583377Z",
+   "updated_at": "2026-09-15T10:31:29.583377Z",
+   "id": "ecc985ec-d374-4f5a-b3dc-78bad22fcc62",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "trace",
+   "source": "query_traces",
+   "service": null,
+   "title": "trace query",
+   "summary": "no error traces found",
+   "data": {},
+   "strength": 0.2,
+   "observed_at": "2026-09-15T10:31:29.583316Z",
+   "tool_execution_id": "348723ea-1c7b-4475-a1e1-4119385f8a62",
+   "agent_run_id": "5cf4cbde-3b03-4512-abe7-b67cce54063d",
+   "phase": "investigate",
+   "tags": []
+  },
+  {
+   "created_at": "2026-09-15T10:31:29.658701Z",
+   "updated_at": "2026-09-15T10:31:29.658702Z",
+   "id": "31e7e7e6-a61f-43f6-a721-93e676202e2f",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "memory",
+   "source": "search_incident_memory",
+   "service": "payment-service",
+   "title": "similar incident INC-1067",
+   "summary": "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automated remediation; outcome escalated",
+   "data": {
+    "actions": [],
+    "outcome": "escalated",
+    "memory_id": "f1814e78-3bee-4672-87c5-bf77c58aa5e1",
+    "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+    "similarity": 0.6577316761016846,
+    "incident_id": "c4b38d5e-23c5-47e8-a542-86dccceef6e3",
+    "root_cause_service": "payment-service"
+   },
+   "strength": 0.46041217327117917,
+   "observed_at": "2026-09-15T10:31:29.658621Z",
+   "tool_execution_id": "dc6524bd-9b90-4e01-9bd2-192c6df5b452",
+   "agent_run_id": "5cf4cbde-3b03-4512-abe7-b67cce54063d",
+   "phase": "investigate",
+   "tags": [
+    "memory",
+    "deployment_regression"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:31:29.658724Z",
+   "updated_at": "2026-09-15T10:31:29.658724Z",
+   "id": "f4aeec6c-db2e-433f-90be-7ec5a3e9fabc",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "memory",
+   "source": "search_incident_memory",
+   "service": "order-service",
+   "title": "similar incident INC-1083",
+   "summary": "INC-1083 (65% similar): redis connections saturation; root cause: order-service is exhausting a shared resource (connections), degrading callers.; resolution: restart_service(service=order-service) \u2192 passed; outcome resolved",
+   "data": {
+    "actions": [
+     {
+      "risk": "medium",
+      "tool": "restart_service",
+      "status": "verified",
+      "arguments": {
+       "service": "order-service"
+      }
+     }
+    ],
+    "outcome": "resolved",
+    "memory_id": "3c971d76-d91c-431f-945e-0bb37d5ecccf",
+    "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+    "similarity": 0.654416823387146,
+    "incident_id": "e4b9eac5-d3bb-450a-a558-c03dd172b812",
+    "root_cause_service": "order-service"
+   },
+   "strength": 0.4580917763710022,
+   "observed_at": "2026-09-15T10:31:29.658621Z",
+   "tool_execution_id": "dc6524bd-9b90-4e01-9bd2-192c6df5b452",
+   "agent_run_id": "5cf4cbde-3b03-4512-abe7-b67cce54063d",
+   "phase": "investigate",
+   "tags": [
+    "memory",
+    "resource_exhaustion"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:31:29.658731Z",
+   "updated_at": "2026-09-15T10:31:29.658731Z",
+   "id": "006e92e2-2d87-442c-8f62-4e2341745ebf",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "memory",
+   "source": "search_incident_memory",
+   "service": "order-service",
+   "title": "similar incident INC-1075",
+   "summary": "INC-1075 (65% similar): redis connections saturation; root cause: order-service is exhausting a shared resource (connections), degrading callers.; resolution: restart_service(service=order-service) \u2192 passed; outcome resolved",
+   "data": {
+    "actions": [
+     {
+      "risk": "medium",
+      "tool": "restart_service",
+      "status": "verified",
+      "arguments": {
+       "service": "order-service"
+      }
+     }
+    ],
+    "outcome": "resolved",
+    "memory_id": "d70941d9-4401-41dd-9a75-ef9e257473c4",
+    "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+    "similarity": 0.654416823387146,
+    "incident_id": "99323bf5-c06c-443f-8822-ee6d93ae12a5",
+    "root_cause_service": "order-service"
+   },
+   "strength": 0.4580917763710022,
+   "observed_at": "2026-09-15T10:31:29.658621Z",
+   "tool_execution_id": "dc6524bd-9b90-4e01-9bd2-192c6df5b452",
+   "agent_run_id": "5cf4cbde-3b03-4512-abe7-b67cce54063d",
+   "phase": "investigate",
+   "tags": [
+    "memory",
+    "resource_exhaustion"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:14.947882Z",
+   "updated_at": "2026-09-15T10:32:14.947882Z",
+   "id": "c2c5051d-58c8-40bd-90cc-474f58c169d8",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "diagnostic",
+   "source": "inspect_redis",
+   "service": "order-service",
+   "title": "redis connection analysis",
+   "summary": "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: order-service 162; hit rate 97%, blocked clients 0",
+   "data": {
+    "at": "2026-09-15T10:32:15.126624+00:00",
+    "hit_rate": 0.97,
+    "available": true,
+    "component": "redis",
+    "saturation": 0.698,
+    "top_client": "order-service",
+    "max_clients": 250,
+    "ops_per_sec": 368,
+    "latency_p95_ms": 1.62,
+    "blocked_clients": 0,
+    "connected_clients": 174,
+    "leaked_by_service": {
+     "order-service": 162
+    },
+    "clients_by_service": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 166,
+     "payment-service": 2,
+     "inventory-service": 2,
+     "notification-service": 1
+    }
+   },
+   "strength": 0.9,
+   "observed_at": "2026-09-15T10:32:14.947848Z",
+   "tool_execution_id": "27463e7b-6549-4aee-bde2-463a7f50188a",
+   "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+   "phase": "investigate",
+   "tags": [
+    "cache",
+    "ok"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:15.001856Z",
+   "updated_at": "2026-09-15T10:32:15.001857Z",
+   "id": "1b1d637f-26da-46f1-9459-3a8912ad9d81",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "trace",
+   "source": "query_traces",
+   "service": null,
+   "title": "trace query",
+   "summary": "no error traces found",
+   "data": {},
+   "strength": 0.2,
+   "observed_at": "2026-09-15T10:32:15.001736Z",
+   "tool_execution_id": "e0123015-41be-4871-9835-f49be567cb75",
+   "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+   "phase": "investigate",
+   "tags": []
+  },
+  {
+   "created_at": "2026-09-15T10:32:15.095729Z",
+   "updated_at": "2026-09-15T10:32:15.095730Z",
+   "id": "08b53634-90a6-419f-b190-e16c1a033411",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "deployment",
+   "source": "inspect_deployment",
+   "service": "order-service",
+   "title": "order-service deployment 4.1.0",
+   "summary": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "data": {
+    "recent": false,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "4.1.0",
+      "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+     }
+    ],
+    "service": "order-service",
+    "age_minutes": 1441.2328146333334,
+    "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+    "is_rollback": false,
+    "current_version": "4.1.0",
+    "previous_version": "4.0.9",
+    "rollback_available": true
+   },
+   "strength": 0.15,
+   "observed_at": "2026-09-15T10:32:15.095592Z",
+   "tool_execution_id": "510c0858-942b-493c-9895-b13c2fd690cd",
+   "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+   "phase": "investigate",
+   "tags": [
+    "stable"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:15.192157Z",
+   "updated_at": "2026-09-15T10:32:15.192158Z",
+   "id": "5aceba02-e1df-4520-b259-955e4f8441e6",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "log",
+   "source": "get_logs",
+   "service": "order-service",
+   "title": "order-service logs (WARN+)",
+   "summary": "order-service: 9 WARN+ log lines in 300s (WARN 9); top: redis client count for this process is unusually high (N) (x9); dependencies mentioned: redis x9",
+   "data": {
+    "count": 9,
+    "levels": {
+     "WARN": 9
+    },
+    "samples": [
+     {
+      "at": "2026-09-15T10:32:12.126624+00:00",
+      "level": "WARN",
+      "message": "redis client count for this process is unusually high (158)"
+     },
+     {
+      "at": "2026-09-15T10:32:11.126624+00:00",
+      "level": "WARN",
+      "message": "redis client count for this process is unusually high (156)"
+     },
+     {
+      "at": "2026-09-15T10:32:05.126624+00:00",
+      "level": "WARN",
+      "message": "redis client count for this process is unusually high (140)"
+     },
+     {
+      "at": "2026-09-15T10:31:58.126624+00:00",
+      "level": "WARN",
+      "message": "redis client count for this process is unusually high (123)"
+     },
+     {
+      "at": "2026-09-15T10:31:52.126624+00:00",
+      "level": "WARN",
+      "message": "redis client count for this process is unusually high (108)"
+     },
+     {
+      "at": "2026-09-15T10:31:46.126624+00:00",
+      "level": "WARN",
+      "message": "redis client count for this process is unusually high (93)"
+     },
+     {
+      "at": "2026-09-15T10:31:45.126624+00:00",
+      "level": "WARN",
+      "message": "redis client count for this process is unusually high (90)"
+     },
+     {
+      "at": "2026-09-15T10:31:43.126624+00:00",
+      "level": "WARN",
+      "message": "redis client count for this process is unusually high (86)"
+     }
+    ],
+    "service": "order-service",
+    "patterns": [
+     {
+      "count": 9,
+      "pattern": "redis client count for this process is unusually high (N)"
+     }
+    ],
+    "dependencies_mentioned": {
+     "redis": 9
+    }
+   },
+   "strength": 0.4,
+   "observed_at": "2026-09-15T10:32:15.191913Z",
+   "tool_execution_id": "3f85f6ff-5ee5-41a8-8357-b27a9998338c",
+   "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+   "phase": "investigate",
+   "tags": [
+    "redis"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:15.287825Z",
+   "updated_at": "2026-09-15T10:32:15.287826Z",
+   "id": "cee17f3c-e63a-45c6-b9bb-8a6934f4b7ff",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "health",
+   "source": "inspect_service",
+   "service": "order-service",
+   "title": "order-service inspection",
+   "summary": "order-service (service) is healthy; error_rate 0.3%, p95 111ms, cpu 29%, mem 38%; version 4.1.0, uptime 75s, replicas 3.0/3, restarts 0, open redis conns 168, open db conns 3",
+   "data": {
+    "kind": "service",
+    "health": "healthy",
+    "metrics": {
+     "up": 1.0,
+     "error_rate": 0.002968016027341101,
+     "cpu_percent": 28.729876435784856,
+     "request_rate": 63.28911585866669,
+     "db_pool_in_use": 3.0,
+     "latency_p50_ms": 58.790114093023064,
+     "latency_p95_ms": 111.1911740600901,
+     "memory_percent": 38.30914097415116,
+     "replicas_ready": 3.0,
+     "db_pool_wait_ms": 0.0,
+     "redis_pool_in_use": 3.0,
+     "redis_pool_wait_ms": 0.0
+    },
+    "process": {
+     "at": "2026-09-15T10:32:16.126624+00:00",
+     "up": true,
+     "crashed": false,
+     "service": "order-service",
+     "version": "4.1.0",
+     "replicas": 3,
+     "restarting": false,
+     "cpu_percent": 28.7,
+     "restart_count": 0,
+     "memory_percent": 38.3,
+     "replicas_ready": 3.0,
+     "uptime_seconds": 75,
+     "open_db_connections": 3,
+     "open_redis_connections": 168
+    },
+    "service": "order-service",
+    "attributes": {
+     "up": "true",
+     "version": "4.1.0",
+     "replicas": "3",
+     "restart_count": "0"
+    },
+    "top_clients": {},
+    "failing_checks": []
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:32:15.287721Z",
+   "tool_execution_id": "3a17ab16-fbe7-4b51-bb70-6f3906fddbdb",
+   "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+   "phase": "investigate",
+   "tags": [
+    "healthy"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:15.477572Z",
+   "updated_at": "2026-09-15T10:32:15.477573Z",
+   "id": "54fa1ec7-d0bf-43ef-8744-5e6095f00cfb",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "memory",
+   "source": "search_incident_memory",
+   "service": "payment-service",
+   "title": "similar incident INC-1067",
+   "summary": "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automated remediation; outcome escalated",
+   "data": {
+    "actions": [],
+    "outcome": "escalated",
+    "memory_id": "f1814e78-3bee-4672-87c5-bf77c58aa5e1",
+    "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+    "similarity": 0.6577316761016846,
+    "incident_id": "c4b38d5e-23c5-47e8-a542-86dccceef6e3",
+    "root_cause_service": "payment-service"
+   },
+   "strength": 0.46041217327117917,
+   "observed_at": "2026-09-15T10:32:15.477533Z",
+   "tool_execution_id": "97ebf496-17d7-4218-be6c-11b591aae4ea",
+   "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+   "phase": "investigate",
+   "tags": [
+    "memory",
+    "deployment_regression"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:15.477592Z",
+   "updated_at": "2026-09-15T10:32:15.477592Z",
+   "id": "04759752-ec3d-4ccb-b50a-0dcb2b11cfe2",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "memory",
+   "source": "search_incident_memory",
+   "service": "order-service",
+   "title": "similar incident INC-1083",
+   "summary": "INC-1083 (65% similar): redis connections saturation; root cause: order-service is exhausting a shared resource (connections), degrading callers.; resolution: restart_service(service=order-service) \u2192 passed; outcome resolved",
+   "data": {
+    "actions": [
+     {
+      "risk": "medium",
+      "tool": "restart_service",
+      "status": "verified",
+      "arguments": {
+       "service": "order-service"
+      }
+     }
+    ],
+    "outcome": "resolved",
+    "memory_id": "3c971d76-d91c-431f-945e-0bb37d5ecccf",
+    "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+    "similarity": 0.654416823387146,
+    "incident_id": "e4b9eac5-d3bb-450a-a558-c03dd172b812",
+    "root_cause_service": "order-service"
+   },
+   "strength": 0.4580917763710022,
+   "observed_at": "2026-09-15T10:32:15.477533Z",
+   "tool_execution_id": "97ebf496-17d7-4218-be6c-11b591aae4ea",
+   "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+   "phase": "investigate",
+   "tags": [
+    "memory",
+    "resource_exhaustion"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:15.477600Z",
+   "updated_at": "2026-09-15T10:32:15.477600Z",
+   "id": "0d12ea12-6e5f-4803-b465-4dbf851147dc",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "memory",
+   "source": "search_incident_memory",
+   "service": "order-service",
+   "title": "similar incident INC-1075",
+   "summary": "INC-1075 (65% similar): redis connections saturation; root cause: order-service is exhausting a shared resource (connections), degrading callers.; resolution: restart_service(service=order-service) \u2192 passed; outcome resolved",
+   "data": {
+    "actions": [
+     {
+      "risk": "medium",
+      "tool": "restart_service",
+      "status": "verified",
+      "arguments": {
+       "service": "order-service"
+      }
+     }
+    ],
+    "outcome": "resolved",
+    "memory_id": "d70941d9-4401-41dd-9a75-ef9e257473c4",
+    "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+    "similarity": 0.654416823387146,
+    "incident_id": "99323bf5-c06c-443f-8822-ee6d93ae12a5",
+    "root_cause_service": "order-service"
+   },
+   "strength": 0.4580917763710022,
+   "observed_at": "2026-09-15T10:32:15.477533Z",
+   "tool_execution_id": "97ebf496-17d7-4218-be6c-11b591aae4ea",
+   "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+   "phase": "investigate",
+   "tags": [
+    "memory",
+    "resource_exhaustion"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:15.936925Z",
+   "updated_at": "2026-09-15T10:32:15.936928Z",
+   "id": "fbe3c433-090f-4439-b1fb-ec0038fd5b79",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "diagnostic",
+   "source": "run_database_diagnostic",
+   "service": "postgres",
+   "title": "postgres diagnostic",
+   "summary": "postgres diagnostic: saturation 11%, 11 connections; top client order-service (3, 27%); lock waits 0",
+   "data": {
+    "at": "2026-09-15T10:32:16.126624+00:00",
+    "available": true,
+    "component": "postgres",
+    "lock_waits": 0.0,
+    "saturation": 0.11,
+    "top_client": "order-service",
+    "connections": 11,
+    "latency_p95_ms": 4.02,
+    "max_connections": 100,
+    "idle_in_transaction": 0,
+    "connections_by_client": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 3,
+     "payment-service": 2,
+     "inventory-service": 2
+    },
+    "idle_in_transaction_by_client": {}
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:32:15.936661Z",
+   "tool_execution_id": "923745c7-74a3-4c94-a36f-4346bce8df7e",
+   "agent_run_id": "7bd33cd8-6cec-4333-beee-4ace1ed5c63e",
+   "phase": "validate",
+   "tags": [
+    "database"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:16.009776Z",
+   "updated_at": "2026-09-15T10:32:16.009777Z",
+   "id": "4dab53ef-4599-4aa8-85fa-6727f615cb54",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "diagnostic",
+   "source": "run_cache_diagnostic",
+   "service": "order-service",
+   "title": "redis diagnostic",
+   "summary": "redis diagnostic: saturation 71%, 177 connections; top client order-service (168, 95%); leaked: order-service=165",
+   "data": {
+    "at": "2026-09-15T10:32:16.126624+00:00",
+    "hit_rate": 0.97,
+    "available": true,
+    "component": "redis",
+    "saturation": 0.708,
+    "top_client": "order-service",
+    "max_clients": 250,
+    "ops_per_sec": 368,
+    "latency_p95_ms": 1.65,
+    "blocked_clients": 0,
+    "connected_clients": 177,
+    "leaked_by_service": {
+     "order-service": 165
+    },
+    "clients_by_service": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 168,
+     "payment-service": 2,
+     "inventory-service": 2,
+     "notification-service": 1
+    }
+   },
+   "strength": 0.9,
+   "observed_at": "2026-09-15T10:32:16.009712Z",
+   "tool_execution_id": "77aee99d-21bb-43a4-bea0-b3c415c8c9b1",
+   "agent_run_id": "7bd33cd8-6cec-4333-beee-4ace1ed5c63e",
+   "phase": "validate",
+   "tags": [
+    "cache",
+    "order-service"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:32:17.079668Z",
+   "updated_at": "2026-09-15T10:32:17.079670Z",
+   "id": "5c8c93ee-7330-48a6-bc89-f035cf961084",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "kind": "action_result",
+   "source": "restart_service",
+   "service": "order-service",
+   "title": "restart order-service",
+   "summary": "restart of order-service restarting (eta 10s, version 4.1.0)",
+   "data": {
+    "at": "2026-09-15T10:32:17.126624+00:00",
+    "action": "restart",
+    "status": "restarting",
+    "target": "order-service",
+    "version": "4.1.0",
+    "eta_seconds": 10.0
+   },
+   "strength": 0.5,
+   "observed_at": "2026-09-15T10:32:17.079543Z",
+   "tool_execution_id": "9d12e66d-8b44-4366-a092-0f4f73e0f14e",
+   "agent_run_id": null,
+   "phase": "remediate",
+   "tags": [
+    "remediation",
+    "restart"
+   ]
+  }
+ ],
+ "relations": [
+  {
+   "id": "6c528e1e-ef88-4d21-8cf0-59813f590f28",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "742a3439-b13e-45f7-b672-727fb223ee9d",
+   "from_kind": "evidence",
+   "to_id": "redis",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:31:29.221471Z",
+   "created_by": "get_health"
+  },
+  {
+   "id": "501081b3-8e07-4de1-bdb3-fae0dc3a92c7",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "57a012f4-5f6a-4884-b881-715bc2a05fac",
+   "from_kind": "evidence",
+   "to_id": "redis",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:31:29.261403Z",
+   "created_by": "compare_baseline"
+  },
+  {
+   "id": "334c0dc5-1bf8-47b3-b917-12223dd4f7e7",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "845c9d4b-dde9-4e5c-aaa0-d278f4aeb567",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:31:29.555630Z",
+   "created_by": "inspect_redis"
+  },
+  {
+   "id": "80212376-1b24-409d-a812-4165548ef7cb",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "31e7e7e6-a61f-43f6-a721-93e676202e2f",
+   "from_kind": "evidence",
+   "to_id": "payment-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:31:29.667153Z",
+   "created_by": "search_incident_memory"
+  },
+  {
+   "id": "9e65481e-f788-4082-ad54-988d1e8f57dc",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "f4aeec6c-db2e-433f-90be-7ec5a3e9fabc",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:31:29.668214Z",
+   "created_by": "search_incident_memory"
+  },
+  {
+   "id": "6073e986-e871-41bf-a50a-e1d356c6ccea",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "006e92e2-2d87-442c-8f62-4e2341745ebf",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:31:29.668911Z",
+   "created_by": "search_incident_memory"
+  },
+  {
+   "id": "df51543c-e392-4f38-b228-cfd84f07685b",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "c2c5051d-58c8-40bd-90cc-474f58c169d8",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:14.952322Z",
+   "created_by": "inspect_redis"
+  },
+  {
+   "id": "5e22ced0-144d-4e54-9720-1b3cd5ff62de",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "08b53634-90a6-419f-b190-e16c1a033411",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:15.108478Z",
+   "created_by": "inspect_deployment"
+  },
+  {
+   "id": "386289a7-7abb-458c-a13e-d7e57e9f7803",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "cee17f3c-e63a-45c6-b9bb-8a6934f4b7ff",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:15.411829Z",
+   "created_by": "inspect_service"
+  },
+  {
+   "id": "5487ffce-7641-4995-b242-ab22a1961c55",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "c2c5051d-58c8-40bd-90cc-474f58c169d8",
+   "from_kind": "evidence",
+   "to_id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+   "to_kind": "hypothesis",
+   "kind": "supports",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:15.515175Z",
+   "created_by": "runtime"
+  },
+  {
+   "id": "cc01efa1-530f-4f58-b769-944afbf02d25",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+   "from_kind": "hypothesis",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "caused_by",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:15.515720Z",
+   "created_by": "runtime"
+  },
+  {
+   "id": "30e5710f-467c-4fd1-9c15-d8ffb620ee51",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "4dab53ef-4599-4aa8-85fa-6727f615cb54",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:16.014331Z",
+   "created_by": "run_cache_diagnostic"
+  },
+  {
+   "id": "3899295a-9bc0-4a8b-bf37-5fd2abc1b676",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+   "from_kind": "hypothesis",
+   "to_id": "3d085c86-5e28-4cd3-b447-60acbe7ab841",
+   "to_kind": "action",
+   "kind": "resolved_by",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:16.242584Z",
+   "created_by": "workflow"
+  },
+  {
+   "id": "630e592f-87fe-44b5-ac9e-742ce37b4869",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "5aceba02-e1df-4520-b259-955e4f8441e6",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:15.204665Z",
+   "created_by": "get_logs"
+  },
+  {
+   "id": "f1757d4b-f060-48ad-8cf8-b214d8b57d8a",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "54fa1ec7-d0bf-43ef-8744-5e6095f00cfb",
+   "from_kind": "evidence",
+   "to_id": "payment-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:15.483115Z",
+   "created_by": "search_incident_memory"
+  },
+  {
+   "id": "f2cdbf6c-9d80-4ecb-9316-6672281f6723",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "04759752-ec3d-4ccb-b50a-0dcb2b11cfe2",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:15.483684Z",
+   "created_by": "search_incident_memory"
+  },
+  {
+   "id": "6be14a7c-b972-40e8-9676-ada2c2469164",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "0d12ea12-6e5f-4803-b465-4dbf851147dc",
+   "from_kind": "evidence",
+   "to_id": "order-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:15.484189Z",
+   "created_by": "search_incident_memory"
+  },
+  {
+   "id": "5323f8e3-c9dd-4833-b1be-db630dd6323c",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "from_id": "fbe3c433-090f-4439-b1fb-ec0038fd5b79",
+   "from_kind": "evidence",
+   "to_id": "postgres",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:32:15.951734Z",
+   "created_by": "run_database_diagnostic"
+  }
+ ]
+}

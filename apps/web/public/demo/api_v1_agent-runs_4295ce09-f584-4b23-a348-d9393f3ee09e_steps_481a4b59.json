@@ -1,0 +1,539 @@
+[
+ {
+  "id": "35937232-f25b-4dcd-824d-f5926b172015",
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 1,
+  "phase": "triage",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:36:26.248013Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "triage",
+   "evidence": 0,
+   "iteration": 0,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "get_health",
+     "expectation": "",
+     "arguments_json": "{\"service\": \"api-gateway\"}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "c708c812-ab73-43ec-b914-2cdce24c8a7d",
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 2,
+  "phase": "triage",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:36:26.261620Z",
+  "title": "allowed: get_health",
+  "input": {
+   "tool": "get_health",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "get_health@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1120 is triaging",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "get_health is part of flow error-rate-investigation@1.1.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'triage' lists get_health",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev1 permits get_health",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "1 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key e8986700598f\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 0/54, iterations 0/48",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "get_health",
+    "decided_at": "2026-09-15T10:36:26.256174Z",
+    "request_id": "b8c34c1e-f03d-45e2-9506-10a81755d444",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "131a9955-61f9-42e4-93fc-b9635435bdb4",
+  "trace_id": null
+ },
+ {
+  "id": "40c359a9-975b-4c32-8f9b-f92d2ee22125",
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 3,
+  "phase": "triage",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:36:26.264643Z",
+  "title": "get_health: api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+  "input": {
+   "tool": "get_health",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+   "duration_ms": 3.056,
+   "evidence_ids": [
+    "a5b7bc5a-3bde-41f8-a541-c30d7a4eb46f"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 3.056,
+  "tool_execution_id": "131a9955-61f9-42e4-93fc-b9635435bdb4",
+  "trace_id": null
+ },
+ {
+  "id": "bf582955-ce38-4e00-939f-f5554b330f63",
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 4,
+  "phase": "triage",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:36:26.295529Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "triage",
+   "evidence": 1,
+   "iteration": 1,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "get_health",
+     "expectation": "",
+     "arguments_json": "{\"service\": \"order-service\"}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "3cc3f5e8-5381-4f81-9781-44fbee241663",
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 5,
+  "phase": "triage",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:36:26.312217Z",
+  "title": "allowed: get_health",
+  "input": {
+   "tool": "get_health",
+   "arguments": {
+    "service": "order-service"
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "get_health@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1120 is triaging",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "get_health is part of flow error-rate-investigation@1.1.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'triage' lists get_health",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev1 permits get_health",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "1 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key b2b697d0a15e\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 1/54, iterations 1/48",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "get_health",
+    "decided_at": "2026-09-15T10:36:26.304327Z",
+    "request_id": "3dc32b96-4d3e-4ba6-96f3-d5978baa1288",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "be2582aa-693d-4808-85e1-b05aad90048e",
+  "trace_id": null
+ },
+ {
+  "id": "c0299047-fe8a-41bb-b52e-3e0393b4517a",
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 6,
+  "phase": "triage",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:36:26.315373Z",
+  "title": "get_health: order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+  "input": {
+   "tool": "get_health",
+   "arguments": {
+    "service": "order-service"
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+   "duration_ms": 4.723,
+   "evidence_ids": [
+    "e72c5b65-3f49-4dec-8974-614474a4bfa1"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 4.723,
+  "tool_execution_id": "be2582aa-693d-4808-85e1-b05aad90048e",
+  "trace_id": null
+ },
+ {
+  "id": "9494afb9-4a01-4395-a245-77e1a8077e01",
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 7,
+  "phase": "triage",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:36:26.344253Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "triage",
+   "evidence": 2,
+   "iteration": 2,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "get_health",
+     "expectation": "",
+     "arguments_json": "{\"service\": \"inventory-service\"}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "b72ef060-472b-4b41-88b9-b980034c1f19",
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 8,
+  "phase": "triage",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:36:26.357858Z",
+  "title": "allowed: get_health",
+  "input": {
+   "tool": "get_health",
+   "arguments": {
+    "service": "inventory-service"
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "get_health@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1120 is triaging",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "get_health is part of flow error-rate-investigation@1.1.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'triage' lists get_health",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev1 permits get_health",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "1 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key dd5b911b9120\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 2/54, iterations 2/48",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "get_health",
+    "decided_at": "2026-09-15T10:36:26.352042Z",
+    "request_id": "c4f67d54-d025-4759-b52a-3f9a559c97b0",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "851357c0-d9a0-4543-a784-82050e079f3a",
+  "trace_id": null
+ },
+ {
+  "id": "c4330517-c4ed-467b-afa7-2e78921b835d",
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 9,
+  "phase": "triage",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:36:26.361368Z",
+  "title": "get_health: inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+  "input": {
+   "tool": "get_health",
+   "arguments": {
+    "service": "inventory-service"
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+   "duration_ms": 2.9949999999999997,
+   "evidence_ids": [
+    "3056ad35-c147-43ca-8766-2fe15eb99938"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 2.9949999999999997,
+  "tool_execution_id": "851357c0-d9a0-4543-a784-82050e079f3a",
+  "trace_id": null
+ }
+]

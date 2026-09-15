@@ -1,0 +1,776 @@
+[
+ {
+  "name": "api-latency-investigation",
+  "version": "1.2.0",
+  "description": "Latency-led investigation that walks the dependency chain for saturation.",
+  "applies_to": [
+   "latency",
+   "saturation"
+  ],
+  "priority": 10,
+  "initial_phase": "triage",
+  "phases": [
+   {
+    "name": "triage",
+    "objective": "Confirm the latency regression and find which dependency chain carries it.",
+    "allowed_tools": [
+     "inspect_dependencies",
+     "get_metrics",
+     "get_health",
+     "compare_baseline"
+    ],
+    "max_iterations": 4,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [
+     {
+      "kind": "min_evidence",
+      "value": 3.0,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "investigate"
+     },
+     {
+      "on": "exhausted",
+      "to": "investigate"
+     }
+    ],
+    "terminal": false,
+    "guidance": "Latency at the gateway is almost always inherited. Find the slowest dependency first.",
+    "plans_remediation": false
+   },
+   {
+    "name": "investigate",
+    "objective": "Attribute the latency to a saturated resource, slow dependency or code change.",
+    "allowed_tools": [
+     "inspect_database",
+     "inspect_dependencies",
+     "inspect_service",
+     "compare_baseline",
+     "get_health",
+     "inspect_redis",
+     "query_traces",
+     "inspect_deployment",
+     "search_incident_memory",
+     "get_metrics",
+     "get_logs"
+    ],
+    "max_iterations": 8,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [
+     {
+      "kind": "min_evidence",
+      "value": 6.0,
+      "description": ""
+     },
+     {
+      "kind": "min_hypotheses",
+      "value": 1.0,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "hypothesize"
+     },
+     {
+      "on": "exhausted",
+      "to": "hypothesize"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "Traces show where time is spent. Pool wait metrics show which service is starving. Infra top-client lists show who is consuming the shared resource.\n",
+    "plans_remediation": false
+   },
+   {
+    "name": "hypothesize",
+    "objective": "Rank root causes; the top hypothesis must name a single service.",
+    "allowed_tools": [
+     "compare_baseline",
+     "inspect_deployment",
+     "search_incident_memory",
+     "get_metrics",
+     "get_logs"
+    ],
+    "max_iterations": 3,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [
+     {
+      "kind": "min_hypothesis_confidence",
+      "value": 0.55,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "validate"
+     },
+     {
+      "on": "exhausted",
+      "to": "investigate"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "",
+    "plans_remediation": false
+   },
+   {
+    "name": "validate",
+    "objective": "Confirm the root cause with a targeted diagnostic.",
+    "allowed_tools": [
+     "run_load_projection",
+     "compare_baseline",
+     "run_database_diagnostic",
+     "run_process_diagnostic",
+     "reproduce_issue",
+     "run_cache_diagnostic",
+     "get_metrics",
+     "run_connectivity_test"
+    ],
+    "max_iterations": 4,
+    "timeout_seconds": 300,
+    "risk_ceiling": "low",
+    "exit_conditions": [
+     {
+      "kind": "hypothesis_validated",
+      "value": null,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "remediate"
+     },
+     {
+      "on": "exhausted",
+      "to": "hypothesize"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "",
+    "plans_remediation": false
+   },
+   {
+    "name": "remediate",
+    "objective": "Plan one reversible remediation against the root-cause service.",
+    "allowed_tools": [
+     "compare_baseline",
+     "get_health",
+     "inspect_deployment"
+    ],
+    "max_iterations": 4,
+    "timeout_seconds": 300,
+    "risk_ceiling": "high",
+    "exit_conditions": [
+     {
+      "kind": "action_planned",
+      "value": null,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "verify"
+     },
+     {
+      "on": "exhausted",
+      "to": "escalate"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "",
+    "plans_remediation": true
+   },
+   {
+    "name": "verify",
+    "objective": "Runtime verification.",
+    "allowed_tools": [],
+    "max_iterations": 6,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [],
+    "transitions": [],
+    "terminal": true,
+    "guidance": "",
+    "plans_remediation": false
+   },
+   {
+    "name": "escalate",
+    "objective": "Human handover.",
+    "allowed_tools": [],
+    "max_iterations": 6,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [],
+    "transitions": [],
+    "terminal": true,
+    "guidance": "",
+    "plans_remediation": false
+   }
+  ],
+  "remediation_tools": [
+   "scale_service",
+   "rollback_deployment",
+   "clear_cache",
+   "rotate_connection_pool",
+   "restart_service"
+  ],
+  "remediation_risk_ceiling": "high",
+  "budget": {
+   "max_iterations": 32,
+   "max_tool_calls": 36,
+   "max_llm_calls": 26,
+   "max_llm_tokens": 220000,
+   "max_runtime_seconds": 900,
+   "max_remediation_attempts": 2
+  },
+  "severity_budget_factor": {
+   "sev1": 1.5,
+   "sev2": 1.25,
+   "sev3": 1.0,
+   "sev4": 0.75
+  },
+  "checksum": "72f7c110492a6e6d"
+ },
+ {
+  "name": "error-rate-investigation",
+  "version": "1.1.0",
+  "description": "Error-led investigation that checks recent deployments and unavailable dependencies first.",
+  "applies_to": [
+   "availability",
+   "error_rate"
+  ],
+  "priority": 10,
+  "initial_phase": "triage",
+  "phases": [
+   {
+    "name": "triage",
+    "objective": "Find which services are failing and whether any dependency is down.",
+    "allowed_tools": [
+     "compare_baseline",
+     "get_health",
+     "inspect_deployment",
+     "inspect_dependencies",
+     "get_metrics"
+    ],
+    "max_iterations": 4,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [
+     {
+      "kind": "min_evidence",
+      "value": 3.0,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "investigate"
+     },
+     {
+      "on": "exhausted",
+      "to": "investigate"
+     }
+    ],
+    "terminal": false,
+    "guidance": "Check health of the whole chain and recent deployments before anything else.",
+    "plans_remediation": false
+   },
+   {
+    "name": "investigate",
+    "objective": "Attribute the errors to a deployment, a crashed dependency or a saturated resource.",
+    "allowed_tools": [
+     "inspect_database",
+     "inspect_dependencies",
+     "inspect_service",
+     "compare_baseline",
+     "get_health",
+     "inspect_redis",
+     "query_traces",
+     "inspect_deployment",
+     "search_incident_memory",
+     "get_metrics",
+     "get_logs"
+    ],
+    "max_iterations": 8,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [
+     {
+      "kind": "min_evidence",
+      "value": 6.0,
+      "description": ""
+     },
+     {
+      "kind": "min_hypotheses",
+      "value": 1.0,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "hypothesize"
+     },
+     {
+      "on": "exhausted",
+      "to": "hypothesize"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "Error logs name the failing handler and version. Traces show which span fails first. An unavailable dependency explains every caller above it.\n",
+    "plans_remediation": false
+   },
+   {
+    "name": "hypothesize",
+    "objective": "Rank root causes; the top hypothesis must name a single service.",
+    "allowed_tools": [
+     "compare_baseline",
+     "inspect_deployment",
+     "search_incident_memory",
+     "get_metrics",
+     "get_logs"
+    ],
+    "max_iterations": 3,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [
+     {
+      "kind": "min_hypothesis_confidence",
+      "value": 0.55,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "validate"
+     },
+     {
+      "on": "exhausted",
+      "to": "investigate"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "",
+    "plans_remediation": false
+   },
+   {
+    "name": "validate",
+    "objective": "Confirm the root cause with a targeted diagnostic.",
+    "allowed_tools": [
+     "compare_baseline",
+     "run_database_diagnostic",
+     "run_process_diagnostic",
+     "reproduce_issue",
+     "run_cache_diagnostic",
+     "get_metrics",
+     "run_connectivity_test"
+    ],
+    "max_iterations": 4,
+    "timeout_seconds": 300,
+    "risk_ceiling": "low",
+    "exit_conditions": [
+     {
+      "kind": "hypothesis_validated",
+      "value": null,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "remediate"
+     },
+     {
+      "on": "exhausted",
+      "to": "hypothesize"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "",
+    "plans_remediation": false
+   },
+   {
+    "name": "remediate",
+    "objective": "Plan one reversible remediation against the root-cause service.",
+    "allowed_tools": [
+     "compare_baseline",
+     "get_health",
+     "inspect_deployment"
+    ],
+    "max_iterations": 4,
+    "timeout_seconds": 300,
+    "risk_ceiling": "high",
+    "exit_conditions": [
+     {
+      "kind": "action_planned",
+      "value": null,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "verify"
+     },
+     {
+      "on": "exhausted",
+      "to": "escalate"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "",
+    "plans_remediation": true
+   },
+   {
+    "name": "verify",
+    "objective": "Runtime verification.",
+    "allowed_tools": [],
+    "max_iterations": 6,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [],
+    "transitions": [],
+    "terminal": true,
+    "guidance": "",
+    "plans_remediation": false
+   },
+   {
+    "name": "escalate",
+    "objective": "Human handover.",
+    "allowed_tools": [],
+    "max_iterations": 6,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [],
+    "transitions": [],
+    "terminal": true,
+    "guidance": "",
+    "plans_remediation": false
+   }
+  ],
+  "remediation_tools": [
+   "scale_service",
+   "rollback_deployment",
+   "clear_cache",
+   "rotate_connection_pool",
+   "restart_service"
+  ],
+  "remediation_risk_ceiling": "high",
+  "budget": {
+   "max_iterations": 32,
+   "max_tool_calls": 36,
+   "max_llm_calls": 26,
+   "max_llm_tokens": 220000,
+   "max_runtime_seconds": 900,
+   "max_remediation_attempts": 2
+  },
+  "severity_budget_factor": {
+   "sev1": 1.5,
+   "sev2": 1.25,
+   "sev3": 1.0,
+   "sev4": 0.75
+  },
+  "checksum": "9692d5e876c331df"
+ },
+ {
+  "name": "incident-investigation",
+  "version": "1.1.0",
+  "description": "General incident investigation. Triage the blast radius, collect evidence across metrics, logs, traces and dependencies, form and validate hypotheses, then plan (never execute) a remediation.\n",
+  "applies_to": [],
+  "priority": 0,
+  "initial_phase": "triage",
+  "phases": [
+   {
+    "name": "triage",
+    "objective": "Establish blast radius and the dependency chain around the anomalous services.",
+    "allowed_tools": [
+     "inspect_dependencies",
+     "get_metrics",
+     "get_health",
+     "compare_baseline"
+    ],
+    "max_iterations": 4,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [
+     {
+      "kind": "min_evidence",
+      "value": 3.0,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "investigate"
+     },
+     {
+      "on": "exhausted",
+      "to": "investigate"
+     }
+    ],
+    "terminal": false,
+    "guidance": "Start from the services carrying detection signals. Compare current metrics with baselines and map which dependencies are unhealthy. Do not hypothesize yet.\n",
+    "plans_remediation": false
+   },
+   {
+    "name": "investigate",
+    "objective": "Collect evidence that discriminates between candidate root causes.",
+    "allowed_tools": [
+     "inspect_database",
+     "inspect_dependencies",
+     "inspect_service",
+     "compare_baseline",
+     "get_health",
+     "inspect_redis",
+     "query_traces",
+     "inspect_deployment",
+     "search_incident_memory",
+     "get_metrics",
+     "get_logs"
+    ],
+    "max_iterations": 8,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [
+     {
+      "kind": "min_evidence",
+      "value": 6.0,
+      "description": ""
+     },
+     {
+      "kind": "min_hypotheses",
+      "value": 1.0,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "hypothesize"
+     },
+     {
+      "on": "exhausted",
+      "to": "hypothesize"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "Follow the dependency graph downstream from the symptomatic services. Prefer evidence that attributes load or errors to a specific component (top clients, recent deployments, unavailable dependencies). Propose hypotheses as soon as evidence supports them.\n",
+    "plans_remediation": false
+   },
+   {
+    "name": "hypothesize",
+    "objective": "Rank candidate root causes and choose the discriminating diagnostic.",
+    "allowed_tools": [
+     "compare_baseline",
+     "inspect_deployment",
+     "search_incident_memory",
+     "get_metrics",
+     "get_logs"
+    ],
+    "max_iterations": 3,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [
+     {
+      "kind": "min_hypothesis_confidence",
+      "value": 0.55,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "validate"
+     },
+     {
+      "on": "exhausted",
+      "to": "investigate"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "",
+    "plans_remediation": false
+   },
+   {
+    "name": "validate",
+    "objective": "Confirm or refute the leading hypothesis with targeted diagnostics.",
+    "allowed_tools": [
+     "run_load_projection",
+     "compare_baseline",
+     "run_database_diagnostic",
+     "run_process_diagnostic",
+     "reproduce_issue",
+     "run_cache_diagnostic",
+     "get_metrics",
+     "run_connectivity_test"
+    ],
+    "max_iterations": 4,
+    "timeout_seconds": 300,
+    "risk_ceiling": "low",
+    "exit_conditions": [
+     {
+      "kind": "hypothesis_validated",
+      "value": null,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "remediate"
+     },
+     {
+      "on": "exhausted",
+      "to": "hypothesize"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "",
+    "plans_remediation": false
+   },
+   {
+    "name": "remediate",
+    "objective": "Plan one reversible remediation for the confirmed root cause. Planning only.",
+    "allowed_tools": [
+     "compare_baseline",
+     "get_health",
+     "inspect_deployment"
+    ],
+    "max_iterations": 4,
+    "timeout_seconds": 300,
+    "risk_ceiling": "high",
+    "exit_conditions": [
+     {
+      "kind": "action_planned",
+      "value": null,
+      "description": ""
+     }
+    ],
+    "transitions": [
+     {
+      "on": "exit_conditions_met",
+      "to": "verify"
+     },
+     {
+      "on": "exhausted",
+      "to": "escalate"
+     },
+     {
+      "on": "no_action_required",
+      "to": "verify"
+     }
+    ],
+    "terminal": false,
+    "guidance": "Choose the least invasive action that addresses the root cause service, not the symptomatic one. Restarting a healthy caller never fixes an unhealthy dependency. Include a rollback plan and measurable verification conditions.\n",
+    "plans_remediation": true
+   },
+   {
+    "name": "verify",
+    "objective": "Verification is performed by the runtime; this phase records the outcome.",
+    "allowed_tools": [],
+    "max_iterations": 6,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [],
+    "transitions": [],
+    "terminal": true,
+    "guidance": "",
+    "plans_remediation": false
+   },
+   {
+    "name": "escalate",
+    "objective": "Hand over to a human with the evidence collected so far.",
+    "allowed_tools": [],
+    "max_iterations": 6,
+    "timeout_seconds": 300,
+    "risk_ceiling": "none",
+    "exit_conditions": [],
+    "transitions": [],
+    "terminal": true,
+    "guidance": "",
+    "plans_remediation": false
+   }
+  ],
+  "remediation_tools": [
+   "scale_service",
+   "rollback_deployment",
+   "clear_cache",
+   "rotate_connection_pool",
+   "restart_service"
+  ],
+  "remediation_risk_ceiling": "high",
+  "budget": {
+   "max_iterations": 34,
+   "max_tool_calls": 40,
+   "max_llm_calls": 30,
+   "max_llm_tokens": 250000,
+   "max_runtime_seconds": 900,
+   "max_remediation_attempts": 2
+  },
+  "severity_budget_factor": {
+   "sev1": 1.5,
+   "sev2": 1.25,
+   "sev3": 1.0,
+   "sev4": 0.75
+  },
+  "checksum": "17b7f1ba3e1d0a47"
+ }
+]

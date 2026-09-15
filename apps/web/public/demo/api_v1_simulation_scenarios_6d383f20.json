@@ -1,0 +1,387 @@
+[
+ {
+  "id": "redis-connection-leak",
+  "title": "Redis connection leak in order-service",
+  "description": "order-service workers hold Redis connections without releasing them. Redis approaches max clients, order-service waits on its pool, API latency and 5xx rise.",
+  "fault_type": "redis_connection_leak",
+  "default_params": {
+   "service": "order-service",
+   "rate_per_second": 2.5
+  },
+  "root_cause_service": "order-service",
+  "root_cause_category": "resource_exhaustion",
+  "expected_symptoms": [
+   "api-gateway latency_p95_ms",
+   "redis connections",
+   "order-service redis_pool_wait_ms",
+   "api-gateway error_rate"
+  ],
+  "correct_remediations": [
+   {
+    "action": "restart",
+    "target": "order-service",
+    "extra": {}
+   },
+   {
+    "action": "rotate_pool",
+    "target": "order-service",
+    "extra": {
+     "target": "redis"
+    }
+   }
+  ],
+  "incorrect_remediations": [
+   {
+    "action": "restart",
+    "target": "api-gateway",
+    "extra": {}
+   },
+   {
+    "action": "restart",
+    "target": "redis",
+    "extra": {}
+   },
+   {
+    "action": "clear_cache",
+    "target": "redis",
+    "extra": {}
+   },
+   {
+    "action": "scale",
+    "target": "order-service",
+    "extra": {}
+   }
+  ],
+  "expect_no_action": false,
+  "expect_escalation": false,
+  "self_resolving_seconds": null,
+  "detection_hint_metrics": [
+   "latency_p95_ms",
+   "connections",
+   "redis_pool_wait_ms"
+  ]
+ },
+ {
+  "id": "bad-deployment",
+  "title": "Regression in payment-service 2.4.0",
+  "description": "payment-service 2.4.0 ships a bug in the checkout handler: elevated 5xx and latency on payment calls, propagating to order-service and the gateway.",
+  "fault_type": "bad_deployment",
+  "default_params": {
+   "service": "payment-service",
+   "version": "2.4.0",
+   "error_rate": 0.35,
+   "added_latency_ms": 350.0
+  },
+  "root_cause_service": "payment-service",
+  "root_cause_category": "deployment_regression",
+  "expected_symptoms": [
+   "payment-service error_rate",
+   "api-gateway error_rate",
+   "new deployment payment-service 2.4.0"
+  ],
+  "correct_remediations": [
+   {
+    "action": "rollback",
+    "target": "payment-service",
+    "extra": {}
+   }
+  ],
+  "incorrect_remediations": [
+   {
+    "action": "restart",
+    "target": "payment-service",
+    "extra": {}
+   },
+   {
+    "action": "restart",
+    "target": "order-service",
+    "extra": {}
+   },
+   {
+    "action": "scale",
+    "target": "payment-service",
+    "extra": {}
+   }
+  ],
+  "expect_no_action": false,
+  "expect_escalation": false,
+  "self_resolving_seconds": null,
+  "detection_hint_metrics": [
+   "error_rate",
+   "latency_p95_ms"
+  ]
+ },
+ {
+  "id": "db-pool-exhaustion",
+  "title": "Postgres connection exhaustion from user-service",
+  "description": "user-service leaves sessions idle-in-transaction. Postgres runs out of connection slots; every database-backed service waits on its pool.",
+  "fault_type": "db_pool_exhaustion",
+  "default_params": {
+   "service": "user-service",
+   "rate_per_second": 1.2
+  },
+  "root_cause_service": "user-service",
+  "root_cause_category": "resource_exhaustion",
+  "expected_symptoms": [
+   "postgres connections",
+   "postgres idle_in_transaction",
+   "user-service db_pool_wait_ms",
+   "api-gateway latency_p95_ms"
+  ],
+  "correct_remediations": [
+   {
+    "action": "rotate_pool",
+    "target": "user-service",
+    "extra": {
+     "target": "postgres"
+    }
+   },
+   {
+    "action": "restart",
+    "target": "user-service",
+    "extra": {}
+   }
+  ],
+  "incorrect_remediations": [
+   {
+    "action": "scale",
+    "target": "user-service",
+    "extra": {}
+   },
+   {
+    "action": "restart",
+    "target": "postgres",
+    "extra": {}
+   },
+   {
+    "action": "restart",
+    "target": "order-service",
+    "extra": {}
+   }
+  ],
+  "expect_no_action": false,
+  "expect_escalation": false,
+  "self_resolving_seconds": null,
+  "detection_hint_metrics": [
+   "connections",
+   "db_pool_wait_ms",
+   "latency_p95_ms"
+  ]
+ },
+ {
+  "id": "cascading-dependency",
+  "title": "inventory-service crash cascades to orders and the gateway",
+  "description": "inventory-service is OOM-killed. order-service depends on it critically; order errors propagate to the gateway. The gateway is a symptom, not the cause.",
+  "fault_type": "service_crash",
+  "default_params": {
+   "service": "inventory-service"
+  },
+  "root_cause_service": "inventory-service",
+  "root_cause_category": "dependency_failure",
+  "expected_symptoms": [
+   "inventory-service up",
+   "order-service error_rate",
+   "api-gateway error_rate"
+  ],
+  "correct_remediations": [
+   {
+    "action": "restart",
+    "target": "inventory-service",
+    "extra": {}
+   }
+  ],
+  "incorrect_remediations": [
+   {
+    "action": "restart",
+    "target": "api-gateway",
+    "extra": {}
+   },
+   {
+    "action": "restart",
+    "target": "order-service",
+    "extra": {}
+   },
+   {
+    "action": "scale",
+    "target": "order-service",
+    "extra": {}
+   }
+  ],
+  "expect_no_action": false,
+  "expect_escalation": false,
+  "self_resolving_seconds": null,
+  "detection_hint_metrics": [
+   "up",
+   "error_rate"
+  ]
+ },
+ {
+  "id": "transient-spike",
+  "title": "Short traffic burst that self-recovers",
+  "description": "A 45 second burst triples entry traffic. Latency rises briefly and recovers without intervention. The correct action is none.",
+  "fault_type": "traffic_spike",
+  "default_params": {
+   "multiplier": 3.0,
+   "duration_seconds": 45.0
+  },
+  "root_cause_service": "api-gateway",
+  "root_cause_category": "transient",
+  "expected_symptoms": [
+   "api-gateway request_rate",
+   "api-gateway latency_p95_ms"
+  ],
+  "correct_remediations": [
+   {
+    "action": "none",
+    "target": "",
+    "extra": {}
+   }
+  ],
+  "incorrect_remediations": [
+   {
+    "action": "restart",
+    "target": "api-gateway",
+    "extra": {}
+   },
+   {
+    "action": "scale",
+    "target": "api-gateway",
+    "extra": {}
+   }
+  ],
+  "expect_no_action": true,
+  "expect_escalation": false,
+  "self_resolving_seconds": 45.0,
+  "detection_hint_metrics": [
+   "request_rate",
+   "latency_p95_ms"
+  ]
+ },
+ {
+  "id": "memory-leak",
+  "title": "Memory leak in payment-service",
+  "description": "payment-service heap grows steadily; GC pauses inflate latency and the process eventually restarts on OOM.",
+  "fault_type": "memory_leak",
+  "default_params": {
+   "service": "payment-service",
+   "rate_mb_per_second": 4.0
+  },
+  "root_cause_service": "payment-service",
+  "root_cause_category": "resource_exhaustion",
+  "expected_symptoms": [
+   "payment-service memory_percent",
+   "payment-service latency_p95_ms"
+  ],
+  "correct_remediations": [
+   {
+    "action": "restart",
+    "target": "payment-service",
+    "extra": {}
+   }
+  ],
+  "incorrect_remediations": [
+   {
+    "action": "rollback",
+    "target": "payment-service",
+    "extra": {}
+   },
+   {
+    "action": "restart",
+    "target": "order-service",
+    "extra": {}
+   }
+  ],
+  "expect_no_action": false,
+  "expect_escalation": false,
+  "self_resolving_seconds": null,
+  "detection_hint_metrics": [
+   "memory_percent",
+   "latency_p95_ms"
+  ]
+ },
+ {
+  "id": "cpu-saturation",
+  "title": "CPU saturation in notification-service",
+  "description": "A burst of notification jobs pins the single notification-service replica. Its latency climbs; the gateway is barely affected because the call is non-critical.",
+  "fault_type": "cpu_saturation",
+  "default_params": {
+   "service": "notification-service",
+   "pressure": 75.0
+  },
+  "root_cause_service": "notification-service",
+  "root_cause_category": "capacity",
+  "expected_symptoms": [
+   "notification-service cpu_percent",
+   "notification-service latency_p95_ms"
+  ],
+  "correct_remediations": [
+   {
+    "action": "scale",
+    "target": "notification-service",
+    "extra": {
+     "replicas": 2
+    }
+   }
+  ],
+  "incorrect_remediations": [
+   {
+    "action": "restart",
+    "target": "notification-service",
+    "extra": {}
+   },
+   {
+    "action": "restart",
+    "target": "api-gateway",
+    "extra": {}
+   }
+  ],
+  "expect_no_action": false,
+  "expect_escalation": false,
+  "self_resolving_seconds": null,
+  "detection_hint_metrics": [
+   "cpu_percent",
+   "latency_p95_ms"
+  ]
+ },
+ {
+  "id": "network-latency",
+  "title": "Network latency between api-gateway and payment-service",
+  "description": "An upstream network path adds 800ms to gateway\u2192payment calls. No in-scope remediation fixes the network; the correct outcome is escalation.",
+  "fault_type": "network_latency",
+  "default_params": {
+   "source": "api-gateway",
+   "target": "payment-service",
+   "added_ms": 800.0
+  },
+  "root_cause_service": "payment-service",
+  "root_cause_category": "network",
+  "expected_symptoms": [
+   "api-gateway latency_p95_ms"
+  ],
+  "correct_remediations": [
+   {
+    "action": "none",
+    "target": "",
+    "extra": {}
+   }
+  ],
+  "incorrect_remediations": [
+   {
+    "action": "restart",
+    "target": "payment-service",
+    "extra": {}
+   },
+   {
+    "action": "rollback",
+    "target": "payment-service",
+    "extra": {}
+   }
+  ],
+  "expect_no_action": false,
+  "expect_escalation": true,
+  "self_resolving_seconds": null,
+  "detection_hint_metrics": [
+   "latency_p95_ms"
+  ]
+ }
+]

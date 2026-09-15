@@ -1,0 +1,9 @@
+{
+ "workflow_id": "incident-c248d6ca-daad-415d-a9a6-d52c601f62ec",
+ "run_id": "eb1a0dc9-03ee-40de-b98d-34614a3d256d",
+ "status": "COMPLETED",
+ "start_time": "2026-09-15T10:31:29.034236+00:00",
+ "close_time": "2026-09-15T10:33:07.435662+00:00",
+ "task_queue": "aegis-incidents",
+ "query": null
+}

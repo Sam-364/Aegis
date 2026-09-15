@@ -1,0 +1,249 @@
+{
+ "rules": [
+  {
+   "name": "deny-dangerous",
+   "description": "",
+   "priority": 1000,
+   "effect": "deny",
+   "tools": [],
+   "categories": [
+    "dangerous"
+   ],
+   "min_risk": null,
+   "max_risk": null,
+   "environments": [],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "Dangerous tools exist only as policy test cases."
+  },
+  {
+   "name": "allow-read-only",
+   "description": "",
+   "priority": 900,
+   "effect": "allow",
+   "tools": [],
+   "categories": [
+    "read_only"
+   ],
+   "min_risk": null,
+   "max_risk": null,
+   "environments": [],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "Read-only tools are always safe to run."
+  },
+  {
+   "name": "allow-diagnostics",
+   "description": "",
+   "priority": 890,
+   "effect": "allow",
+   "tools": [],
+   "categories": [
+    "diagnostic"
+   ],
+   "min_risk": null,
+   "max_risk": "low",
+   "environments": [],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "Low-risk diagnostics are safe to run autonomously."
+  },
+  {
+   "name": "approve-diagnostics-medium-risk",
+   "description": "",
+   "priority": 880,
+   "effect": "require_approval",
+   "tools": [],
+   "categories": [
+    "diagnostic"
+   ],
+   "min_risk": "medium",
+   "max_risk": null,
+   "environments": [],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "Medium-risk diagnostics (load projections against production) need a human."
+  },
+  {
+   "name": "deny-high-risk-mutation-production",
+   "description": "",
+   "priority": 800,
+   "effect": "deny",
+   "tools": [],
+   "categories": [
+    "mutating"
+   ],
+   "min_risk": "high",
+   "max_risk": null,
+   "environments": [
+    "production"
+   ],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "High-risk mutations are never autonomous in production."
+  },
+  {
+   "name": "approve-rollback",
+   "description": "",
+   "priority": 700,
+   "effect": "require_approval",
+   "tools": [
+    "rollback_deployment"
+   ],
+   "categories": [],
+   "min_risk": null,
+   "max_risk": null,
+   "environments": [],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "Rollbacks change what is running and always require approval."
+  },
+  {
+   "name": "approve-production-mutations",
+   "description": "",
+   "priority": 650,
+   "effect": "require_approval",
+   "tools": [],
+   "categories": [
+    "mutating"
+   ],
+   "min_risk": null,
+   "max_risk": null,
+   "environments": [
+    "staging",
+    "production"
+   ],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "Every mutation in staging or production requires approval."
+  },
+  {
+   "name": "approve-sev1-mutations",
+   "description": "",
+   "priority": 640,
+   "effect": "require_approval",
+   "tools": [],
+   "categories": [
+    "mutating"
+   ],
+   "min_risk": null,
+   "max_risk": null,
+   "environments": [],
+   "severities": [
+    "sev1"
+   ],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "SEV1 incidents have humans in the loop for every change."
+  },
+  {
+   "name": "approve-medium-risk-mutations",
+   "description": "",
+   "priority": 600,
+   "effect": "require_approval",
+   "tools": [],
+   "categories": [
+    "mutating"
+   ],
+   "min_risk": "medium",
+   "max_risk": null,
+   "environments": [],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "Medium and higher risk mutations require approval."
+  },
+  {
+   "name": "allow-low-risk-mutations-development",
+   "description": "",
+   "priority": 500,
+   "effect": "allow",
+   "tools": [],
+   "categories": [
+    "mutating"
+   ],
+   "min_risk": null,
+   "max_risk": "low",
+   "environments": [
+    "development"
+   ],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "Low-risk mutations (pool rotation, cache clear) may run autonomously in development."
+  },
+  {
+   "name": "approve-remaining-mutations",
+   "description": "",
+   "priority": 100,
+   "effect": "require_approval",
+   "tools": [],
+   "categories": [
+    "mutating"
+   ],
+   "min_risk": null,
+   "max_risk": null,
+   "environments": [],
+   "severities": [],
+   "phases": [],
+   "flows": [],
+   "actor_kinds": [],
+   "required_role": null,
+   "in_agent_loop": null,
+   "reason": "Any other mutation requires approval."
+  }
+ ],
+ "invariants": [
+  {
+   "name": "dangerous_tools_denied",
+   "description": "Dangerous tools are never executable."
+  },
+  {
+   "name": "no_mutation_inside_agent_loop",
+   "description": "Mutating tools run only through the workflow after policy and approval."
+  },
+  {
+   "name": "agent_cannot_mutate",
+   "description": "The agent proposes; only the workflow or a human executes."
+  }
+ ],
+ "default": "deny",
+ "environment": "development"
+}

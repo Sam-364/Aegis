@@ -1,0 +1,72 @@
+{
+ "name": "rollback_deployment",
+ "version": "1",
+ "description": "Roll a service back to its previous (or a named) version.",
+ "category": "mutating",
+ "risk": "medium",
+ "idempotent": true,
+ "timeout_seconds": 30.0,
+ "retry": {
+  "max_attempts": 1,
+  "initial_backoff_seconds": 0.5,
+  "backoff_multiplier": 2.0,
+  "max_backoff_seconds": 10.0
+ },
+ "capabilities": [],
+ "allowed_environments": [
+  "development",
+  "staging",
+  "production"
+ ],
+ "min_severity": null,
+ "enabled": true,
+ "arguments_schema": {
+  "additionalProperties": false,
+  "properties": {
+   "service": {
+    "title": "Service",
+    "type": "string"
+   },
+   "to_version": {
+    "anyOf": [
+     {
+      "pattern": "^[A-Za-z0-9._\\-]{1,40}$",
+      "type": "string"
+     },
+     {
+      "type": "null"
+     }
+    ],
+    "default": null,
+    "title": "To Version"
+   },
+   "reason": {
+    "default": "",
+    "maxLength": 300,
+    "title": "Reason",
+    "type": "string"
+   }
+  },
+  "required": [
+   "service"
+  ],
+  "title": "RollbackArgs",
+  "type": "object"
+ },
+ "produces_evidence": true,
+ "verification_metrics": [
+  "error_rate",
+  "latency_p95_ms"
+ ],
+ "used_in": {
+  "api-latency-investigation@1.2.0": [
+   "<remediation>"
+  ],
+  "error-rate-investigation@1.1.0": [
+   "<remediation>"
+  ],
+  "incident-investigation@1.1.0": [
+   "<remediation>"
+  ]
+ }
+}

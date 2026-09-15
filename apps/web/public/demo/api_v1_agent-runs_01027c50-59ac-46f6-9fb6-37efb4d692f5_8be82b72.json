@@ -1,0 +1,517 @@
+{
+ "run": {
+  "created_at": "2026-09-15T10:31:29.150450Z",
+  "updated_at": "2026-09-15T10:31:29.150451Z",
+  "id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "flow_name": "api-latency-investigation",
+  "flow_version": "1.2.0",
+  "phase": "triage",
+  "status": "completed",
+  "budget": {
+   "max_iterations": 32,
+   "max_tool_calls": 36,
+   "max_llm_calls": 26,
+   "max_llm_tokens": 220000,
+   "max_runtime_seconds": 900,
+   "max_remediation_attempts": 2
+  },
+  "usage": {
+   "iterations": 4,
+   "tool_calls": 2,
+   "llm_calls": 0,
+   "llm_tokens": 0,
+   "runtime_seconds": 0.16376200000000002,
+   "remediation_attempts": 0
+  },
+  "model": "deterministic-planner",
+  "started_at": "2026-09-15T10:31:29.150436Z",
+  "finished_at": "2026-09-15T10:31:29.388465Z",
+  "termination_reason": "phase_complete",
+  "summary": "exhausted \u2192 investigate",
+  "error": null,
+  "steps_count": 10,
+  "workflow_id": "incident-c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "attempt": 1
+ },
+ "steps": [
+  {
+   "id": "43fad3b6-9cc9-45ef-a868-9de9fe5f0011",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 1,
+   "phase": "triage",
+   "node": "propose",
+   "kind": "fallback",
+   "at": "2026-09-15T10:31:29.196039Z",
+   "title": "call_tool: Collecting evidence along the dependency chain.",
+   "input": {
+    "phase": "triage",
+    "evidence": 0,
+    "iteration": 0,
+    "hypotheses": 0
+   },
+   "output": {
+    "proposal": {
+     "action": "call_tool",
+     "rationale": "deterministic planner",
+     "tool_call": {
+      "purpose": "deterministic playbook step",
+      "tool_name": "get_health",
+      "expectation": "",
+      "arguments_json": "{\"service\": \"redis\"}",
+      "tests_hypothesis": null
+     },
+     "hypotheses": [],
+     "observation": "Collecting evidence along the dependency chain.",
+     "remediation": null,
+     "hypothesis_update": null
+    },
+    "recovered": false
+   },
+   "model": "deterministic-planner",
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "1c39d5c9-4349-4e86-89ac-4e95b4618d44",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 2,
+   "phase": "triage",
+   "node": "execute_tool",
+   "kind": "authorization",
+   "at": "2026-09-15T10:31:29.218433Z",
+   "title": "allowed: get_health",
+   "input": {
+    "tool": "get_health",
+    "arguments": {
+     "service": "redis"
+    }
+   },
+   "output": {
+    "decision": {
+     "checks": [
+      {
+       "name": "tool_registered",
+       "detail": "get_health@1 (read_only, risk none)",
+       "passed": true
+      },
+      {
+       "name": "tool_enabled",
+       "detail": "enabled",
+       "passed": true
+      },
+      {
+       "name": "incident_active",
+       "detail": "incident INC-1117 is triaging",
+       "passed": true
+      },
+      {
+       "name": "flow_allows",
+       "detail": "get_health is part of flow api-latency-investigation@1.2.0",
+       "passed": true
+      },
+      {
+       "name": "phase_allows",
+       "detail": "phase 'triage' lists get_health",
+       "passed": true
+      },
+      {
+       "name": "category_permitted",
+       "detail": "read_only permitted inside the agent loop",
+       "passed": true
+      },
+      {
+       "name": "environment_allows",
+       "detail": "permitted in development",
+       "passed": true
+      },
+      {
+       "name": "severity_allows",
+       "detail": "incident severity sev3 permits get_health",
+       "passed": true
+      },
+      {
+       "name": "actor_permitted",
+       "detail": "agent:01027c50-59ac-46f6-9fb6-37efb4d692f5 has role viewer",
+       "passed": true
+      },
+      {
+       "name": "risk_within_ceiling",
+       "detail": "risk none <= ceiling none",
+       "passed": true
+      },
+      {
+       "name": "policy_effect",
+       "detail": "allowed by rule 'allow-read-only'",
+       "passed": true
+      },
+      {
+       "name": "arguments_valid",
+       "detail": "1 argument(s) validated",
+       "passed": true
+      },
+      {
+       "name": "idempotency",
+       "detail": "key 446d4d31ed5e\u2026 is new",
+       "passed": true
+      },
+      {
+       "name": "budget_available",
+       "detail": "tool_calls 0/36, iterations 0/32",
+       "passed": true
+      }
+     ],
+     "effect": "allow",
+     "reason": "all checks passed",
+     "allowed": true,
+     "tool_name": "get_health",
+     "decided_at": "2026-09-15T10:31:29.208277Z",
+     "request_id": "1f981447-89a3-4140-a223-b89c7bcb1b15",
+     "denial_code": null,
+     "matched_policy": "allow-read-only"
+    }
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": "56a55df1-6bd0-4639-83fe-f7f5f956cab3",
+   "trace_id": null
+  },
+  {
+   "id": "bc34d9e0-c6be-4353-88b1-5074216d4d31",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 3,
+   "phase": "triage",
+   "node": "execute_tool",
+   "kind": "tool_execution",
+   "at": "2026-09-15T10:31:29.222921Z",
+   "title": "get_health: redis is healthy; all checks passing",
+   "input": {
+    "tool": "get_health",
+    "arguments": {
+     "service": "redis"
+    }
+   },
+   "output": {
+    "status": "succeeded",
+    "summary": "redis is healthy; all checks passing",
+    "duration_ms": 5.298,
+    "evidence_ids": [
+     "742a3439-b13e-45f7-b672-727fb223ee9d"
+    ]
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 5.298,
+   "tool_execution_id": "56a55df1-6bd0-4639-83fe-f7f5f956cab3",
+   "trace_id": null
+  },
+  {
+   "id": "72154099-0dba-473c-9916-7605ba020ab4",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 4,
+   "phase": "triage",
+   "node": "propose",
+   "kind": "fallback",
+   "at": "2026-09-15T10:31:29.241903Z",
+   "title": "call_tool: Collecting evidence along the dependency chain.",
+   "input": {
+    "phase": "triage",
+    "evidence": 1,
+    "iteration": 1,
+    "hypotheses": 0
+   },
+   "output": {
+    "proposal": {
+     "action": "call_tool",
+     "rationale": "deterministic planner",
+     "tool_call": {
+      "purpose": "deterministic playbook step",
+      "tool_name": "compare_baseline",
+      "expectation": "",
+      "arguments_json": "{\"service\": \"redis\", \"metric\": \"connections\"}",
+      "tests_hypothesis": null
+     },
+     "hypotheses": [],
+     "observation": "Collecting evidence along the dependency chain.",
+     "remediation": null,
+     "hypothesis_update": null
+    },
+    "recovered": false
+   },
+   "model": "deterministic-planner",
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "80f81f33-506a-451c-900a-424f77ded93f",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 5,
+   "phase": "triage",
+   "node": "execute_tool",
+   "kind": "authorization",
+   "at": "2026-09-15T10:31:29.259063Z",
+   "title": "allowed: compare_baseline",
+   "input": {
+    "tool": "compare_baseline",
+    "arguments": {
+     "metric": "connections",
+     "service": "redis"
+    }
+   },
+   "output": {
+    "decision": {
+     "checks": [
+      {
+       "name": "tool_registered",
+       "detail": "compare_baseline@1 (read_only, risk none)",
+       "passed": true
+      },
+      {
+       "name": "tool_enabled",
+       "detail": "enabled",
+       "passed": true
+      },
+      {
+       "name": "incident_active",
+       "detail": "incident INC-1117 is triaging",
+       "passed": true
+      },
+      {
+       "name": "flow_allows",
+       "detail": "compare_baseline is part of flow api-latency-investigation@1.2.0",
+       "passed": true
+      },
+      {
+       "name": "phase_allows",
+       "detail": "phase 'triage' lists compare_baseline",
+       "passed": true
+      },
+      {
+       "name": "category_permitted",
+       "detail": "read_only permitted inside the agent loop",
+       "passed": true
+      },
+      {
+       "name": "environment_allows",
+       "detail": "permitted in development",
+       "passed": true
+      },
+      {
+       "name": "severity_allows",
+       "detail": "incident severity sev3 permits compare_baseline",
+       "passed": true
+      },
+      {
+       "name": "actor_permitted",
+       "detail": "agent:01027c50-59ac-46f6-9fb6-37efb4d692f5 has role viewer",
+       "passed": true
+      },
+      {
+       "name": "risk_within_ceiling",
+       "detail": "risk none <= ceiling none",
+       "passed": true
+      },
+      {
+       "name": "policy_effect",
+       "detail": "allowed by rule 'allow-read-only'",
+       "passed": true
+      },
+      {
+       "name": "arguments_valid",
+       "detail": "2 argument(s) validated",
+       "passed": true
+      },
+      {
+       "name": "idempotency",
+       "detail": "key e9b7ad4ba718\u2026 is new",
+       "passed": true
+      },
+      {
+       "name": "budget_available",
+       "detail": "tool_calls 1/36, iterations 1/32",
+       "passed": true
+      }
+     ],
+     "effect": "allow",
+     "reason": "all checks passed",
+     "allowed": true,
+     "tool_name": "compare_baseline",
+     "decided_at": "2026-09-15T10:31:29.250875Z",
+     "request_id": "1c01149f-2873-4d80-be3d-94ef6b5cbbe9",
+     "denial_code": null,
+     "matched_policy": "allow-read-only"
+    }
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": "cb302215-065f-4095-8b4a-58a48c7f2443",
+   "trace_id": null
+  },
+  {
+   "id": "7a45ede9-d0ad-4c9b-bce1-ceadc03e4fa5",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 6,
+   "phase": "triage",
+   "node": "execute_tool",
+   "kind": "tool_execution",
+   "at": "2026-09-15T10:31:29.262749Z",
+   "title": "compare_baseline: redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+   "input": {
+    "tool": "compare_baseline",
+    "arguments": {
+     "metric": "connections",
+     "service": "redis"
+    }
+   },
+   "output": {
+    "status": "succeeded",
+    "summary": "redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+    "duration_ms": 5.012,
+    "evidence_ids": [
+     "57a012f4-5f6a-4884-b881-715bc2a05fac"
+    ]
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 5.012,
+   "tool_execution_id": "cb302215-065f-4095-8b4a-58a48c7f2443",
+   "trace_id": null
+  },
+  {
+   "id": "06207d5d-c9c2-49c6-82a0-d3e76c33236a",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 7,
+   "phase": "triage",
+   "node": "propose",
+   "kind": "fallback",
+   "at": "2026-09-15T10:31:29.285895Z",
+   "title": "phase_complete: triage queue exhausted",
+   "input": {
+    "phase": "triage",
+    "evidence": 2,
+    "iteration": 2,
+    "hypotheses": 0
+   },
+   "output": {
+    "proposal": {
+     "action": "phase_complete",
+     "rationale": "deterministic planner",
+     "tool_call": null,
+     "hypotheses": [],
+     "observation": "triage queue exhausted",
+     "remediation": null,
+     "hypothesis_update": null
+    },
+    "recovered": false
+   },
+   "model": "deterministic-planner",
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "abaf234d-006d-487a-ba5a-9e98e6985446",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 8,
+   "phase": "triage",
+   "node": "conclude",
+   "kind": "decision",
+   "at": "2026-09-15T10:31:29.295565Z",
+   "title": "phase_complete requested",
+   "input": {},
+   "output": {
+    "exit_met": false,
+    "unsatisfied": [
+     "min_evidence>=3"
+    ]
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "6e2d5180-5e94-45b9-a1b8-cb1419c716a0",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 9,
+   "phase": "triage",
+   "node": "propose",
+   "kind": "fallback",
+   "at": "2026-09-15T10:31:29.308198Z",
+   "title": "phase_complete: triage queue exhausted",
+   "input": {
+    "phase": "triage",
+    "evidence": 2,
+    "iteration": 3,
+    "hypotheses": 0
+   },
+   "output": {
+    "proposal": {
+     "action": "phase_complete",
+     "rationale": "deterministic planner",
+     "tool_call": null,
+     "hypotheses": [],
+     "observation": "triage queue exhausted",
+     "remediation": null,
+     "hypothesis_update": null
+    },
+    "recovered": false
+   },
+   "model": "deterministic-planner",
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "fe9b5313-24ba-4a8f-acc8-538d2d5733eb",
+   "agent_run_id": "01027c50-59ac-46f6-9fb6-37efb4d692f5",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "seq": 10,
+   "phase": "triage",
+   "node": "conclude",
+   "kind": "decision",
+   "at": "2026-09-15T10:31:29.317620Z",
+   "title": "phase_complete requested",
+   "input": {},
+   "output": {
+    "exit_met": false,
+    "unsatisfied": [
+     "min_evidence>=3"
+    ]
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  }
+ ]
+}

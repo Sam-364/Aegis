@@ -1,0 +1,181 @@
+[
+ {
+  "id": "4e7b3fc2-8883-4849-b412-514aa0155f8c",
+  "agent_run_id": "ae2ed101-78ff-4210-bfa8-84a611971c8f",
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "seq": 1,
+  "phase": "investigate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:44:57.428981Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "investigate",
+   "evidence": 16,
+   "iteration": 0,
+   "hypotheses": 1
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "inspect_redis",
+     "expectation": "",
+     "arguments_json": "{\"component\": \"redis\"}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "4c21c53a-87fa-4599-8e74-03079043ee6f",
+  "agent_run_id": "ae2ed101-78ff-4210-bfa8-84a611971c8f",
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "seq": 2,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:44:57.448142Z",
+  "title": "allowed: inspect_redis",
+  "input": {
+   "tool": "inspect_redis",
+   "arguments": {
+    "component": "redis"
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "inspect_redis@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1124 is investigating",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "inspect_redis is part of flow api-latency-investigation@1.2.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'investigate' lists inspect_redis",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev3 permits inspect_redis",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:ae2ed101-78ff-4210-bfa8-84a611971c8f has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "1 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key ea6499d8d3cc\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 16/36, iterations 31/32",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "inspect_redis",
+    "decided_at": "2026-09-15T10:44:57.439319Z",
+    "request_id": "ce122d0d-86bb-44b4-a7c2-61d9fda43f8a",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "f91b80cf-6dd9-4f7f-ab72-8380a1a5d059",
+  "trace_id": null
+ },
+ {
+  "id": "207271d3-6b9f-4c57-bbb2-ad34c983fe45",
+  "agent_run_id": "ae2ed101-78ff-4210-bfa8-84a611971c8f",
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "seq": 3,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:44:57.453183Z",
+  "title": "inspect_redis: redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clien",
+  "input": {
+   "tool": "inspect_redis",
+   "arguments": {
+    "component": "redis"
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+   "duration_ms": 5.3759999999999994,
+   "evidence_ids": [
+    "efc52733-b629-4c55-827d-4222100ef6c8"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 5.3759999999999994,
+  "tool_execution_id": "f91b80cf-6dd9-4f7f-ab72-8380a1a5d059",
+  "trace_id": null
+ }
+]

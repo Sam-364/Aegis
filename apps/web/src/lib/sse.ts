@@ -1,5 +1,6 @@
 "use client";
 
+import { config } from "@/lib/config";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { EVENT_TYPES } from "@/lib/events";
 
@@ -39,7 +40,14 @@ export function useEventSource<T = unknown>(opts: UseEventSourceOptions<T>): {
   attempts: number;
   reconnect: () => void;
 } {
-  const { buildUrl, eventTypes = EVENT_TYPES, initialSeq = null, enabled = true } = opts;
+  const {
+    buildUrl,
+    eventTypes = EVENT_TYPES,
+    initialSeq = null,
+    // A recording has no live stream to subscribe to; the fixtures already carry the whole
+    // timeline, so the console shows it as idle rather than failing to connect forever.
+    enabled = !config.demo,
+  } = opts;
   const [connStatus, setConnStatus] = useState<SseStatus>(enabled ? "connecting" : "idle");
   const [lastSeq, setLastSeq] = useState<number | null>(initialSeq);
   const [attempts, setAttempts] = useState(0);

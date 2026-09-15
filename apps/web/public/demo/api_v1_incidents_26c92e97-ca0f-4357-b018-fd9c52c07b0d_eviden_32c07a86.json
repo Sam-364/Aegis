@@ -1,0 +1,1191 @@
+{
+ "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+ "evidence": [
+  {
+   "created_at": "2026-09-15T10:43:23.961952Z",
+   "updated_at": "2026-09-15T10:43:23.961954Z",
+   "id": "5dab4dc3-6df7-4d4d-95b1-7413dd1031de",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "health",
+   "source": "get_health",
+   "service": "api-gateway",
+   "title": "api-gateway health",
+   "summary": "api-gateway is healthy; all checks passing",
+   "data": {
+    "state": "healthy",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": true,
+     "process_up": true,
+     "error_rate_ok": true,
+     "dependencies_ok": true
+    },
+    "message": "all checks passing",
+    "service": "api-gateway"
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:43:23.961903Z",
+   "tool_execution_id": "18babbbb-f77d-4abd-8701-7537cdb0a774",
+   "agent_run_id": "fdc02b4f-8b8b-468e-bf3f-54699b3e9205",
+   "phase": "triage",
+   "tags": [
+    "healthy"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.002838Z",
+   "updated_at": "2026-09-15T10:43:24.002839Z",
+   "id": "34e84620-ae13-49fa-ba69-f589a5c8b570",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "metric",
+   "source": "compare_baseline",
+   "service": "api-gateway",
+   "title": "api-gateway latency_p95_ms vs baseline",
+   "summary": "api-gateway latency_p95_ms: current 288 ms vs baseline 202 ms \u2192 +42% vs baseline",
+   "data": {
+    "unit": "ms",
+    "ratio": 1.421773431281271,
+    "metric": "latency_p95_ms",
+    "current": 287.7590013840388,
+    "service": "api-gateway",
+    "verdict": "+42% vs baseline",
+    "baseline": 202.39441464644383
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:43:24.002805Z",
+   "tool_execution_id": "65ad550e-8b30-4095-8e87-d3450fcd1236",
+   "agent_run_id": "fdc02b4f-8b8b-468e-bf3f-54699b3e9205",
+   "phase": "triage",
+   "tags": [
+    "latency_p95_ms",
+    "baseline"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.046088Z",
+   "updated_at": "2026-09-15T10:43:24.046089Z",
+   "id": "d944bbb1-0801-4430-893b-67be45c1a242",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "topology",
+   "source": "inspect_dependencies",
+   "service": "api-gateway",
+   "title": "api-gateway dependencies",
+   "summary": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; all dependencies healthy; own error rate 0.0%, own latency 8ms",
+   "data": {
+    "service": "api-gateway",
+    "dependents": [],
+    "dependencies": [
+     "auth-service",
+     "user-service",
+     "order-service",
+     "payment-service",
+     "inventory-service",
+     "notification-service"
+    ],
+    "contributions": [
+     {
+      "target": "auth-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 1500.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.001
+     },
+     {
+      "target": "user-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.6,
+      "error_contribution": 0.001
+     },
+     {
+      "target": "order-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 3000.0,
+      "calls_per_request": 0.5,
+      "error_contribution": 0.001
+     },
+     {
+      "target": "payment-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 3000.0,
+      "calls_per_request": 0.2,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "inventory-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.3,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "notification-service",
+      "critical": false,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.1,
+      "error_contribution": 0.0
+     }
+    ],
+    "own_error_rate": 0.0,
+    "own_latency_ms": 8.2,
+    "downstream_closure": [
+     "auth-service",
+     "user-service",
+     "order-service",
+     "payment-service",
+     "inventory-service",
+     "notification-service",
+     "redis",
+     "postgres"
+    ]
+   },
+   "strength": 0.35,
+   "observed_at": "2026-09-15T10:43:24.046036Z",
+   "tool_execution_id": "f18e7dd0-12b6-49b3-95a9-be2c354ec731",
+   "agent_run_id": "fdc02b4f-8b8b-468e-bf3f-54699b3e9205",
+   "phase": "triage",
+   "tags": []
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.313525Z",
+   "updated_at": "2026-09-15T10:43:24.313526Z",
+   "id": "3589014e-13f2-433f-b59a-db4de1abe21e",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "diagnostic",
+   "source": "inspect_redis",
+   "service": "redis",
+   "title": "redis connection analysis",
+   "summary": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+   "data": {
+    "at": "2026-09-15T10:43:25.126624+00:00",
+    "hit_rate": 0.97,
+    "available": true,
+    "component": "redis",
+    "saturation": 0.048,
+    "top_client": "order-service",
+    "max_clients": 250,
+    "ops_per_sec": 371,
+    "latency_p95_ms": 0.8,
+    "blocked_clients": 0,
+    "connected_clients": 12,
+    "leaked_by_service": {},
+    "clients_by_service": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 3,
+     "payment-service": 2,
+     "inventory-service": 2,
+     "notification-service": 1
+    }
+   },
+   "strength": 0.2,
+   "observed_at": "2026-09-15T10:43:24.313497Z",
+   "tool_execution_id": "56461518-f7d1-499d-bbb5-246d174d7674",
+   "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+   "phase": "investigate",
+   "tags": [
+    "cache",
+    "ok"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.346954Z",
+   "updated_at": "2026-09-15T10:43:24.346955Z",
+   "id": "b5517443-18eb-4faa-9854-99ff88d3857c",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "diagnostic",
+   "source": "inspect_database",
+   "service": "postgres",
+   "title": "postgres connection analysis",
+   "summary": "postgres: 11/100 connections (11% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+   "data": {
+    "at": "2026-09-15T10:43:25.126624+00:00",
+    "available": true,
+    "component": "postgres",
+    "lock_waits": 0.0,
+    "saturation": 0.11,
+    "top_client": "order-service",
+    "connections": 11,
+    "latency_p95_ms": 4.02,
+    "max_connections": 100,
+    "idle_in_transaction": 0,
+    "connections_by_client": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 3,
+     "payment-service": 2,
+     "inventory-service": 2
+    },
+    "idle_in_transaction_by_client": {}
+   },
+   "strength": 0.2,
+   "observed_at": "2026-09-15T10:43:24.346922Z",
+   "tool_execution_id": "ef7bec7b-cf07-4f90-87d5-8942ac16fc94",
+   "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+   "phase": "investigate",
+   "tags": [
+    "database",
+    "ok"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.381591Z",
+   "updated_at": "2026-09-15T10:43:24.381592Z",
+   "id": "92325dda-31e5-4cd9-8a08-a661adcfcc4c",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "topology",
+   "source": "inspect_dependencies",
+   "service": "api-gateway",
+   "title": "api-gateway dependencies",
+   "summary": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; all dependencies healthy; own error rate 0.0%, own latency 8ms",
+   "data": {
+    "service": "api-gateway",
+    "dependents": [],
+    "dependencies": [
+     "auth-service",
+     "user-service",
+     "order-service",
+     "payment-service",
+     "inventory-service",
+     "notification-service"
+    ],
+    "contributions": [
+     {
+      "target": "order-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 3000.0,
+      "calls_per_request": 0.5,
+      "error_contribution": 0.001
+     },
+     {
+      "target": "inventory-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.3,
+      "error_contribution": 0.001
+     },
+     {
+      "target": "auth-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 1500.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "user-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.6,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "payment-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 3000.0,
+      "calls_per_request": 0.2,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "notification-service",
+      "critical": false,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.1,
+      "error_contribution": 0.0
+     }
+    ],
+    "own_error_rate": 0.0,
+    "own_latency_ms": 8.2,
+    "downstream_closure": [
+     "auth-service",
+     "user-service",
+     "order-service",
+     "payment-service",
+     "inventory-service",
+     "notification-service",
+     "redis",
+     "postgres"
+    ]
+   },
+   "strength": 0.35,
+   "observed_at": "2026-09-15T10:43:24.381561Z",
+   "tool_execution_id": "2ae491bc-f4d0-40f5-9933-9017b06af7f2",
+   "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+   "phase": "investigate",
+   "tags": []
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.426234Z",
+   "updated_at": "2026-09-15T10:43:24.426235Z",
+   "id": "d62112a5-26e1-4d01-b129-2724aae6d42c",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "trace",
+   "source": "query_traces",
+   "service": "payment-service",
+   "title": "trace analysis",
+   "summary": "9 traces sampled, 9 errored, avg 127ms; failure origin (deepest failing span): payment-service x9; slowest span most often in: order-service x7, user-service x1",
+   "data": {
+    "count": 9,
+    "errored": 9,
+    "examples": [
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 92,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 49,
+        "error": true,
+        "service": "order-service"
+       },
+       {
+        "ms": 20,
+        "error": false,
+        "service": "inventory-service"
+       },
+       {
+        "ms": 24,
+        "error": false,
+        "service": "user-service"
+       },
+       {
+        "ms": 12,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "payment-service"
+       }
+      ],
+      "trace_id": "468d1dfae58412f33888a76933677617",
+      "duration_ms": 92
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 91,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 47,
+        "error": true,
+        "service": "order-service"
+       },
+       {
+        "ms": 16,
+        "error": false,
+        "service": "inventory-service"
+       },
+       {
+        "ms": 19,
+        "error": false,
+        "service": "user-service"
+       },
+       {
+        "ms": 12,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "payment-service"
+       }
+      ],
+      "trace_id": "e75b05398ec1203cd465361290d739a4",
+      "duration_ms": 91
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 97,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 49,
+        "error": false,
+        "service": "order-service"
+       },
+       {
+        "ms": 25,
+        "error": false,
+        "service": "inventory-service"
+       },
+       {
+        "ms": 18,
+        "error": false,
+        "service": "user-service"
+       },
+       {
+        "ms": 17,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "payment-service"
+       }
+      ],
+      "trace_id": "0fe2c9f74fe5f7d7bb115b4c0c5166d5",
+      "duration_ms": 97
+     }
+    ],
+    "slowest_span": {
+     "user-service": 1,
+     "order-service": 7,
+     "payment-service": 1
+    },
+    "failure_origin": {
+     "payment-service": 9
+    },
+    "avg_duration_ms": 126.57333333333334
+   },
+   "strength": 0.9,
+   "observed_at": "2026-09-15T10:43:24.426206Z",
+   "tool_execution_id": "2ec77648-5105-4ad4-b656-9b2aa450a3f7",
+   "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+   "phase": "investigate",
+   "tags": [
+    "payment-service"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.466260Z",
+   "updated_at": "2026-09-15T10:43:24.466261Z",
+   "id": "95e870f9-8c54-42ff-a8db-32d206db4ebe",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "deployment",
+   "source": "inspect_deployment",
+   "service": "payment-service",
+   "title": "payment-service deployment 2.3.7",
+   "summary": "payment-service runs 2.3.7 deployed 10 min ago (previous 2.4.0); change: rollback from 2.4.0; rollback available \u2014 this was a ROLLBACK to a version already run, not a new release \u2014 deployment precedes the incident window",
+   "data": {
+    "recent": true,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "2.3.7",
+      "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+     },
+     {
+      "summary": "checkout handler refactor; new retry path",
+      "version": "2.4.0",
+      "deployed_at": "2026-09-15T10:33:14.126624+00:00"
+     },
+     {
+      "summary": "rollback from 2.4.0",
+      "version": "2.3.7",
+      "deployed_at": "2026-09-15T10:33:23.126624+00:00"
+     }
+    ],
+    "service": "payment-service",
+    "age_minutes": 10.022326266666665,
+    "deployed_at": "2026-09-15T10:33:23.126624+00:00",
+    "is_rollback": true,
+    "current_version": "2.3.7",
+    "previous_version": "2.4.0",
+    "rollback_available": true
+   },
+   "strength": 0.85,
+   "observed_at": "2026-09-15T10:43:24.466234Z",
+   "tool_execution_id": "efdf149c-a38d-4a83-985a-d1fc94f35fff",
+   "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+   "phase": "investigate",
+   "tags": [
+    "rollback"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.503787Z",
+   "updated_at": "2026-09-15T10:43:24.503787Z",
+   "id": "2c4ef6be-6a76-4c5c-a69a-6df1f46ce92b",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "deployment",
+   "source": "inspect_deployment",
+   "service": "api-gateway",
+   "title": "api-gateway deployment 3.2.1",
+   "summary": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "data": {
+    "recent": false,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "3.2.1",
+      "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+     }
+    ],
+    "service": "api-gateway",
+    "age_minutes": 1452.3896183,
+    "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+    "is_rollback": false,
+    "current_version": "3.2.1",
+    "previous_version": "3.2.0",
+    "rollback_available": true
+   },
+   "strength": 0.15,
+   "observed_at": "2026-09-15T10:43:24.503752Z",
+   "tool_execution_id": "439c5c00-2953-491a-8987-2205b5fe65e6",
+   "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+   "phase": "investigate",
+   "tags": [
+    "stable"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.545583Z",
+   "updated_at": "2026-09-15T10:43:24.545584Z",
+   "id": "6659bc58-7482-41f9-8506-ad616643228b",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "deployment",
+   "source": "inspect_deployment",
+   "service": "auth-service",
+   "title": "auth-service deployment 2.8.0",
+   "summary": "auth-service runs 2.8.0 deployed 24 h ago (previous 2.7.3); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "data": {
+    "recent": false,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "2.8.0",
+      "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+     }
+    ],
+    "service": "auth-service",
+    "age_minutes": 1452.3903149166665,
+    "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+    "is_rollback": false,
+    "current_version": "2.8.0",
+    "previous_version": "2.7.3",
+    "rollback_available": true
+   },
+   "strength": 0.15,
+   "observed_at": "2026-09-15T10:43:24.545551Z",
+   "tool_execution_id": "e5352df7-bb3b-438e-b5a6-a2d3f13b3cd0",
+   "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+   "phase": "investigate",
+   "tags": [
+    "stable"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:24.593066Z",
+   "updated_at": "2026-09-15T10:43:24.593066Z",
+   "id": "a11f7bbf-4612-4c3a-85c8-3fe830ad1ba7",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "deployment",
+   "source": "inspect_deployment",
+   "service": "user-service",
+   "title": "user-service deployment 1.14.2",
+   "summary": "user-service runs 1.14.2 deployed 24 h ago (previous 1.14.1); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "data": {
+    "recent": false,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "1.14.2",
+      "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+     }
+    ],
+    "service": "user-service",
+    "age_minutes": 1452.3911063,
+    "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+    "is_rollback": false,
+    "current_version": "1.14.2",
+    "previous_version": "1.14.1",
+    "rollback_available": true
+   },
+   "strength": 0.15,
+   "observed_at": "2026-09-15T10:43:24.593033Z",
+   "tool_execution_id": "b826ad62-6a1e-4dc0-a2cc-3b29b699a0e0",
+   "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+   "phase": "investigate",
+   "tags": [
+    "stable"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:25.088232Z",
+   "updated_at": "2026-09-15T10:43:25.088233Z",
+   "id": "58812d5b-b225-4ac2-8e72-ec251ced69ab",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "diagnostic",
+   "source": "run_process_diagnostic",
+   "service": "payment-service",
+   "title": "payment-service process diagnostic",
+   "summary": "payment-service process: up, version 2.3.7, uptime 151s, replicas 2.0/2, restarts 1, mem 55.3%, cpu 36.5%, open redis conns 2, open db conns 2",
+   "data": {
+    "at": "2026-09-15T10:43:25.126624+00:00",
+    "up": true,
+    "crashed": false,
+    "service": "payment-service",
+    "version": "2.3.7",
+    "replicas": 2,
+    "restarting": false,
+    "cpu_percent": 36.5,
+    "restart_count": 1,
+    "memory_percent": 55.3,
+    "replicas_ready": 2.0,
+    "uptime_seconds": 151,
+    "open_db_connections": 2,
+    "open_redis_connections": 2
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:43:25.088200Z",
+   "tool_execution_id": "693dbc28-50ec-48ce-b73f-53cde764cce1",
+   "agent_run_id": "4664dcbc-9fe1-42f7-88d1-2c5806b2cbff",
+   "phase": "validate",
+   "tags": [
+    "normal"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:43:25.601887Z",
+   "updated_at": "2026-09-15T10:43:25.601888Z",
+   "id": "b606acb7-044a-470d-9154-75e4f30cfcda",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "diagnostic",
+   "source": "run_process_diagnostic",
+   "service": "payment-service",
+   "title": "payment-service process diagnostic",
+   "summary": "payment-service process: up, version 2.3.7, uptime 152s, replicas 2.0/2, restarts 1, mem 53.5%, cpu 35.9%, open redis conns 2, open db conns 2",
+   "data": {
+    "at": "2026-09-15T10:43:26.126624+00:00",
+    "up": true,
+    "crashed": false,
+    "service": "payment-service",
+    "version": "2.3.7",
+    "replicas": 2,
+    "restarting": false,
+    "cpu_percent": 35.9,
+    "restart_count": 1,
+    "memory_percent": 53.5,
+    "replicas_ready": 2.0,
+    "uptime_seconds": 152,
+    "open_db_connections": 2,
+    "open_redis_connections": 2
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:43:25.601777Z",
+   "tool_execution_id": "cfb7e891-5bac-4e94-a044-cea2021840d6",
+   "agent_run_id": "b89eaf5d-0831-4b2d-aaa5-848f952213b3",
+   "phase": "validate",
+   "tags": [
+    "normal"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:44:11.012456Z",
+   "updated_at": "2026-09-15T10:44:11.012457Z",
+   "id": "179deb4d-4fe4-4c00-a10d-dfce5c8d8463",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "diagnostic",
+   "source": "inspect_redis",
+   "service": "redis",
+   "title": "redis connection analysis",
+   "summary": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+   "data": {
+    "at": "2026-09-15T10:44:11.126624+00:00",
+    "hit_rate": 0.97,
+    "available": true,
+    "component": "redis",
+    "saturation": 0.048,
+    "top_client": "order-service",
+    "max_clients": 250,
+    "ops_per_sec": 347,
+    "latency_p95_ms": 0.8,
+    "blocked_clients": 0,
+    "connected_clients": 12,
+    "leaked_by_service": {},
+    "clients_by_service": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 3,
+     "payment-service": 2,
+     "inventory-service": 2,
+     "notification-service": 1
+    }
+   },
+   "strength": 0.2,
+   "observed_at": "2026-09-15T10:44:11.012423Z",
+   "tool_execution_id": "52d24a5e-24ea-4c99-955b-744e8ab5a29c",
+   "agent_run_id": "591e684f-23bd-45d4-8099-d4f0715be484",
+   "phase": "investigate",
+   "tags": [
+    "cache",
+    "ok"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:44:11.445851Z",
+   "updated_at": "2026-09-15T10:44:11.445852Z",
+   "id": "9dffeb94-55bf-4b9c-a499-172c7493b57a",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "diagnostic",
+   "source": "run_process_diagnostic",
+   "service": "payment-service",
+   "title": "payment-service process diagnostic",
+   "summary": "payment-service process: up, version 2.3.7, uptime 198s, replicas 2.0/2, restarts 1, mem 54.7%, cpu 34.1%, open redis conns 2, open db conns 2",
+   "data": {
+    "at": "2026-09-15T10:44:12.126624+00:00",
+    "up": true,
+    "crashed": false,
+    "service": "payment-service",
+    "version": "2.3.7",
+    "replicas": 2,
+    "restarting": false,
+    "cpu_percent": 34.1,
+    "restart_count": 1,
+    "memory_percent": 54.7,
+    "replicas_ready": 2.0,
+    "uptime_seconds": 198,
+    "open_db_connections": 2,
+    "open_redis_connections": 2
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:44:11.445798Z",
+   "tool_execution_id": "f07a9c40-7d49-4161-95c0-d30538e92efa",
+   "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "phase": "validate",
+   "tags": [
+    "normal"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:44:12.034473Z",
+   "updated_at": "2026-09-15T10:44:12.034474Z",
+   "id": "8711eb8a-7373-4056-a5e2-76f1b51fe453",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "diagnostic",
+   "source": "run_process_diagnostic",
+   "service": "payment-service",
+   "title": "payment-service process diagnostic",
+   "summary": "payment-service process: up, version 2.3.7, uptime 198s, replicas 2.0/2, restarts 1, mem 54.7%, cpu 34.1%, open redis conns 2, open db conns 2",
+   "data": {
+    "at": "2026-09-15T10:44:12.126624+00:00",
+    "up": true,
+    "crashed": false,
+    "service": "payment-service",
+    "version": "2.3.7",
+    "replicas": 2,
+    "restarting": false,
+    "cpu_percent": 34.1,
+    "restart_count": 1,
+    "memory_percent": 54.7,
+    "replicas_ready": 2.0,
+    "uptime_seconds": 198,
+    "open_db_connections": 2,
+    "open_redis_connections": 2
+   },
+   "strength": 0.3,
+   "observed_at": "2026-09-15T10:44:12.034443Z",
+   "tool_execution_id": "a962ae3b-666e-428e-a920-5f7da1c21f84",
+   "agent_run_id": "d921e2a4-8101-4450-aa0f-21c8af2f3859",
+   "phase": "validate",
+   "tags": [
+    "normal"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:44:57.444747Z",
+   "updated_at": "2026-09-15T10:44:57.444749Z",
+   "id": "efc52733-b629-4c55-827d-4222100ef6c8",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "kind": "diagnostic",
+   "source": "inspect_redis",
+   "service": "redis",
+   "title": "redis connection analysis",
+   "summary": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+   "data": {
+    "at": "2026-09-15T10:44:58.126624+00:00",
+    "hit_rate": 0.97,
+    "available": true,
+    "component": "redis",
+    "saturation": 0.048,
+    "top_client": "order-service",
+    "max_clients": 250,
+    "ops_per_sec": 354,
+    "latency_p95_ms": 0.8,
+    "blocked_clients": 0,
+    "connected_clients": 12,
+    "leaked_by_service": {},
+    "clients_by_service": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 3,
+     "payment-service": 2,
+     "inventory-service": 2,
+     "notification-service": 1
+    }
+   },
+   "strength": 0.2,
+   "observed_at": "2026-09-15T10:44:57.444695Z",
+   "tool_execution_id": "f91b80cf-6dd9-4f7f-ab72-8380a1a5d059",
+   "agent_run_id": "ae2ed101-78ff-4210-bfa8-84a611971c8f",
+   "phase": "investigate",
+   "tags": [
+    "cache",
+    "ok"
+   ]
+  }
+ ],
+ "relations": [
+  {
+   "id": "509bf73a-4276-490d-8ca5-49e7a5b16ee4",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "34e84620-ae13-49fa-ba69-f589a5c8b570",
+   "from_kind": "evidence",
+   "to_id": "api-gateway",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.007222Z",
+   "created_by": "compare_baseline"
+  },
+  {
+   "id": "b2d7a9af-14ec-4177-9985-0e9f6d94f790",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "3589014e-13f2-433f-b59a-db4de1abe21e",
+   "from_kind": "evidence",
+   "to_id": "redis",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.317723Z",
+   "created_by": "inspect_redis"
+  },
+  {
+   "id": "ff403aeb-ab48-4b8a-a221-978f9e59b152",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "92325dda-31e5-4cd9-8a08-a661adcfcc4c",
+   "from_kind": "evidence",
+   "to_id": "api-gateway",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.386487Z",
+   "created_by": "inspect_dependencies"
+  },
+  {
+   "id": "3e979263-b52f-49a2-83ad-d8cca095cd5d",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "5dab4dc3-6df7-4d4d-95b1-7413dd1031de",
+   "from_kind": "evidence",
+   "to_id": "api-gateway",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:23.966699Z",
+   "created_by": "get_health"
+  },
+  {
+   "id": "b2d5fa18-d156-42d4-a49d-740fbc6680ac",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "d944bbb1-0801-4430-893b-67be45c1a242",
+   "from_kind": "evidence",
+   "to_id": "api-gateway",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.051439Z",
+   "created_by": "inspect_dependencies"
+  },
+  {
+   "id": "cf64f70f-8dc6-44dc-891d-9b9f98dbe4ad",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "b5517443-18eb-4faa-9854-99ff88d3857c",
+   "from_kind": "evidence",
+   "to_id": "postgres",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.350860Z",
+   "created_by": "inspect_database"
+  },
+  {
+   "id": "15ab405d-9d6e-4a29-9efa-2e804c0817f1",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "d62112a5-26e1-4d01-b129-2724aae6d42c",
+   "from_kind": "evidence",
+   "to_id": "payment-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.431084Z",
+   "created_by": "query_traces"
+  },
+  {
+   "id": "c8bd28ef-fd40-4ef5-856f-f92930506374",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "2c4ef6be-6a76-4c5c-a69a-6df1f46ce92b",
+   "from_kind": "evidence",
+   "to_id": "api-gateway",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.509019Z",
+   "created_by": "inspect_deployment"
+  },
+  {
+   "id": "a99cf2b5-6841-4de2-b418-833b4ced7193",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "a11f7bbf-4612-4c3a-85c8-3fe830ad1ba7",
+   "from_kind": "evidence",
+   "to_id": "user-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.598346Z",
+   "created_by": "inspect_deployment"
+  },
+  {
+   "id": "081cccf7-2ab5-42b5-afdc-bcad68f972a7",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "58812d5b-b225-4ac2-8e72-ec251ced69ab",
+   "from_kind": "evidence",
+   "to_id": "payment-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:25.092518Z",
+   "created_by": "run_process_diagnostic"
+  },
+  {
+   "id": "f689f2de-1824-4a04-9d98-99efabc57e00",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "b606acb7-044a-470d-9154-75e4f30cfcda",
+   "from_kind": "evidence",
+   "to_id": "payment-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:25.607729Z",
+   "created_by": "run_process_diagnostic"
+  },
+  {
+   "id": "ca6576e4-8ed7-44b6-86b7-bf6d5c2e1593",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "179deb4d-4fe4-4c00-a10d-dfce5c8d8463",
+   "from_kind": "evidence",
+   "to_id": "redis",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:44:11.017097Z",
+   "created_by": "inspect_redis"
+  },
+  {
+   "id": "bcc23abf-5da0-42d0-8293-8f924bb2b937",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "9dffeb94-55bf-4b9c-a499-172c7493b57a",
+   "from_kind": "evidence",
+   "to_id": "payment-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:44:11.451271Z",
+   "created_by": "run_process_diagnostic"
+  },
+  {
+   "id": "48674944-cc7e-4ee8-986d-32daf0edf221",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "95e870f9-8c54-42ff-a8db-32d206db4ebe",
+   "from_kind": "evidence",
+   "to_id": "payment-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.470996Z",
+   "created_by": "inspect_deployment"
+  },
+  {
+   "id": "c6d96e9d-6db0-4fa2-85e4-7e2690b0bf3e",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "6659bc58-7482-41f9-8506-ad616643228b",
+   "from_kind": "evidence",
+   "to_id": "auth-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.552203Z",
+   "created_by": "inspect_deployment"
+  },
+  {
+   "id": "4a8db61e-aa8c-4107-b026-81b1b1e26ee8",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "d62112a5-26e1-4d01-b129-2724aae6d42c",
+   "from_kind": "evidence",
+   "to_id": "c709b547-5ab1-4b66-a86b-4ba5e2ac8e96",
+   "to_kind": "hypothesis",
+   "kind": "supports",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.903223Z",
+   "created_by": "runtime"
+  },
+  {
+   "id": "19abe64f-2b9b-47e6-aede-3b0bdb9a4ff3",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "95e870f9-8c54-42ff-a8db-32d206db4ebe",
+   "from_kind": "evidence",
+   "to_id": "c709b547-5ab1-4b66-a86b-4ba5e2ac8e96",
+   "to_kind": "hypothesis",
+   "kind": "supports",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.903827Z",
+   "created_by": "runtime"
+  },
+  {
+   "id": "b0ac70fb-843d-4eb0-a23f-c940713b54a8",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "c709b547-5ab1-4b66-a86b-4ba5e2ac8e96",
+   "from_kind": "hypothesis",
+   "to_id": "payment-service",
+   "to_kind": "service",
+   "kind": "caused_by",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:43:24.904433Z",
+   "created_by": "runtime"
+  },
+  {
+   "id": "7f0736c3-cb7b-437c-a4af-089933d2e2cd",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "8711eb8a-7373-4056-a5e2-76f1b51fe453",
+   "from_kind": "evidence",
+   "to_id": "payment-service",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:44:12.039273Z",
+   "created_by": "run_process_diagnostic"
+  },
+  {
+   "id": "629beb8f-077f-4f61-be6d-0243f8db09d9",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "from_id": "efc52733-b629-4c55-827d-4222100ef6c8",
+   "from_kind": "evidence",
+   "to_id": "redis",
+   "to_kind": "service",
+   "kind": "observed_on",
+   "weight": 1.0,
+   "created_at": "2026-09-15T10:44:57.451341Z",
+   "created_by": "inspect_redis"
+  }
+ ]
+}

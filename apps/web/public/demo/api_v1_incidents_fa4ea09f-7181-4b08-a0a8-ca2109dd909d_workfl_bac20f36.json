@@ -1,0 +1,23 @@
+{
+ "workflow_id": "incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+ "run_id": "6fc39c70-d748-433f-b620-0016fc681386",
+ "status": "RUNNING",
+ "start_time": "2026-09-15T11:45:53.017291+00:00",
+ "close_time": null,
+ "task_queue": "aegis-incidents",
+ "query": {
+  "phase": "remediate",
+  "status": "running",
+  "awaiting_approval_id": "0729b3d8-d279-4287-9c45-bb357d8a37ce",
+  "remediation_attempts": 1,
+  "reobservations": 0,
+  "phases": [
+   "triage",
+   "investigate",
+   "hypothesize",
+   "validate",
+   "remediate"
+  ],
+  "cancelled": false
+ }
+}

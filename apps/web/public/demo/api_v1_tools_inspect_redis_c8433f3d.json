@@ -1,0 +1,48 @@
+{
+ "name": "inspect_redis",
+ "version": "1",
+ "description": "Cache client connections by service, saturation, blocked clients, hit rate.",
+ "category": "read_only",
+ "risk": "none",
+ "idempotent": true,
+ "timeout_seconds": 10.0,
+ "retry": {
+  "max_attempts": 3,
+  "initial_backoff_seconds": 0.5,
+  "backoff_multiplier": 2.0,
+  "max_backoff_seconds": 10.0
+ },
+ "capabilities": [],
+ "allowed_environments": [
+  "development",
+  "staging",
+  "production"
+ ],
+ "min_severity": null,
+ "enabled": true,
+ "arguments_schema": {
+  "additionalProperties": false,
+  "properties": {
+   "component": {
+    "default": "redis",
+    "title": "Component",
+    "type": "string"
+   }
+  },
+  "title": "CacheArgs",
+  "type": "object"
+ },
+ "produces_evidence": true,
+ "verification_metrics": [],
+ "used_in": {
+  "api-latency-investigation@1.2.0": [
+   "investigate"
+  ],
+  "error-rate-investigation@1.1.0": [
+   "investigate"
+  ],
+  "incident-investigation@1.1.0": [
+   "investigate"
+  ]
+ }
+}

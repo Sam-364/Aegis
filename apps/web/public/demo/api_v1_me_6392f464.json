@@ -1,0 +1,8 @@
+{
+ "id": "user:local-operator",
+ "display_name": "Local operator",
+ "roles": [
+  "admin"
+ ],
+ "auth_mode": "disabled"
+}

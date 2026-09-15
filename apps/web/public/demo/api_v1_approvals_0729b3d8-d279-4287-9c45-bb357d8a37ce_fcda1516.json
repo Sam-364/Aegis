@@ -1,0 +1,590 @@
+{
+ "approval": {
+  "created_at": "2026-09-15T11:45:54.572538Z",
+  "updated_at": "2026-09-15T11:45:54.572540Z",
+  "id": "0729b3d8-d279-4287-9c45-bb357d8a37ce",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "action_plan_id": "38459026-892c-44c7-8457-49439cad8248",
+  "status": "pending",
+  "title": "rollback_deployment on payment-service",
+  "summary": "addresses deployment_regression on payment-service",
+  "risk": "medium",
+  "expected_impact": "symptomatic metrics return to baseline",
+  "rollback_summary": "original version unknown until execution",
+  "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+  "hypothesis_statement": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+  "hypothesis_confidence": 0.9728,
+  "evidence_ids": [
+   "135bdc19-f123-4e13-8239-bc25481960eb",
+   "364639b2-26ac-4042-be95-bdc67cddc13c",
+   "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+   "d4967013-2a30-477d-8b69-8d5686c743fc"
+  ],
+  "requested_by": "workflow:incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "requested_at": "2026-09-15T11:45:54.561387Z",
+  "expires_at": "2026-09-15T12:00:54.561387Z",
+  "decided_at": null,
+  "decided_by": null,
+  "decision_reason": "",
+  "context": {
+   "policy": {
+    "effect": "require_approval",
+    "reason": "Rollbacks change what is running and always require approval.",
+    "invariant": null,
+    "matched_rule": "approve-rollback",
+    "evaluated_rules": [
+     "deny-dangerous",
+     "allow-read-only",
+     "allow-diagnostics",
+     "approve-diagnostics-medium-risk",
+     "deny-high-risk-mutation-production",
+     "approve-rollback"
+    ]
+   },
+   "rollback": null,
+   "arguments": {
+    "service": "payment-service"
+   },
+   "tool_name": "rollback_deployment",
+   "verification": {
+    "conditions": [
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "api-gateway",
+      "comparator": "lte",
+      "description": "api-gateway error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "order-service",
+      "comparator": "lte",
+      "description": "order-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "payment-service",
+      "comparator": "lte",
+      "description": "payment-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "latency_p95_ms",
+      "target": null,
+      "service": "payment-service",
+      "comparator": "lte",
+      "description": "payment-service latency_p95_ms within 1.5x of baseline",
+      "max_ratio_to_baseline": 1.5
+     },
+     {
+      "metric": "up",
+      "target": 1.0,
+      "service": "payment-service",
+      "comparator": "gte",
+      "description": "payment-service up gte 1",
+      "max_ratio_to_baseline": null
+     }
+    ],
+    "require_all": true,
+    "timeout_seconds": 240,
+    "stabilization_seconds": 30
+   }
+  }
+ },
+ "action_plan": {
+  "created_at": "2026-09-15T11:45:54.399573Z",
+  "updated_at": "2026-09-15T11:45:54.561387Z",
+  "id": "38459026-892c-44c7-8457-49439cad8248",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+  "tool_name": "rollback_deployment",
+  "tool_version": "1",
+  "arguments": {
+   "service": "payment-service"
+  },
+  "reason": "addresses deployment_regression on payment-service",
+  "expected_effect": "symptomatic metrics return to baseline",
+  "risk": "medium",
+  "rollback": {
+   "available": false,
+   "tool_name": null,
+   "arguments": {},
+   "reason": "original version unknown until execution"
+  },
+  "verification": {
+   "conditions": [
+    {
+     "metric": "error_rate",
+     "service": "api-gateway",
+     "comparator": "lte",
+     "target": 0.03,
+     "max_ratio_to_baseline": null,
+     "description": "api-gateway error_rate lte 0.03"
+    },
+    {
+     "metric": "error_rate",
+     "service": "order-service",
+     "comparator": "lte",
+     "target": 0.03,
+     "max_ratio_to_baseline": null,
+     "description": "order-service error_rate lte 0.03"
+    },
+    {
+     "metric": "error_rate",
+     "service": "payment-service",
+     "comparator": "lte",
+     "target": 0.03,
+     "max_ratio_to_baseline": null,
+     "description": "payment-service error_rate lte 0.03"
+    },
+    {
+     "metric": "latency_p95_ms",
+     "service": "payment-service",
+     "comparator": "lte",
+     "target": null,
+     "max_ratio_to_baseline": 1.5,
+     "description": "payment-service latency_p95_ms within 1.5x of baseline"
+    },
+    {
+     "metric": "up",
+     "service": "payment-service",
+     "comparator": "gte",
+     "target": 1.0,
+     "max_ratio_to_baseline": null,
+     "description": "payment-service up gte 1"
+    }
+   ],
+   "stabilization_seconds": 30,
+   "timeout_seconds": 240,
+   "require_all": true
+  },
+  "timeout_seconds": 90,
+  "status": "awaiting_approval",
+  "idempotency_key": "4fdaa407d428271b07f56031fb3f4211",
+  "proposed_by": "deterministic",
+  "agent_run_id": "eec7135e-fee5-4033-b454-9f2a71677687",
+  "approval_id": "0729b3d8-d279-4287-9c45-bb357d8a37ce",
+  "policy_decision": {
+   "effect": "require_approval",
+   "reason": "Rollbacks change what is running and always require approval.",
+   "invariant": null,
+   "matched_rule": "approve-rollback",
+   "evaluated_rules": [
+    "deny-dangerous",
+    "allow-read-only",
+    "allow-diagnostics",
+    "approve-diagnostics-medium-risk",
+    "deny-high-risk-mutation-production",
+    "approve-rollback"
+   ]
+  },
+  "attempt": 1,
+  "verification_result": null
+ },
+ "incident": {
+  "id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "display_id": "INC-1125",
+  "title": "Elevated API error rate",
+  "severity": "sev2",
+  "status": "awaiting_approval"
+ },
+ "hypothesis": {
+  "created_at": "2026-09-15T11:45:54.004086Z",
+  "updated_at": "2026-09-15T11:45:54.262945Z",
+  "id": "1c849775-d672-47ff-8040-57abababf4d9",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "statement": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+  "category": "deployment_regression",
+  "suspected_root_cause_service": "payment-service",
+  "mechanism": "derived deterministically from evidence strength and service attribution",
+  "affected_services": [
+   "api-gateway",
+   "order-service",
+   "payment-service"
+  ],
+  "status": "confirmed",
+  "confidence": 0.9728,
+  "score": {
+   "evidence_strength": 0.9395,
+   "temporal_alignment": 1.0,
+   "dependency_alignment": 1.0,
+   "historical_similarity": 0.0,
+   "contradiction_penalty": 0.0,
+   "validation_bonus": 0.15,
+   "total": 0.9728,
+   "explanation": [
+    "4 supporting evidence items (strength 0.94)",
+    "temporal alignment 1.00",
+    "payment-service explains 3/3 symptomatic services",
+    "tests: 1 confirmed, 0 refuted"
+   ]
+  },
+  "supporting_evidence_ids": [
+   "135bdc19-f123-4e13-8239-bc25481960eb",
+   "364639b2-26ac-4042-be95-bdc67cddc13c",
+   "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+   "d4967013-2a30-477d-8b69-8d5686c743fc"
+  ],
+  "contradicting_evidence_ids": [],
+  "suggested_tests": [],
+  "tests": [
+   {
+    "id": "85b1859b-bb0c-43a2-81db-1a3977d50d3a",
+    "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "tool_execution_id": null,
+    "tool_name": "compare_baseline",
+    "expectation": "result implicates payment-service",
+    "outcome": "confirmed",
+    "detail": "deterministic judgement: diagnostic strongly implicates the suspected service",
+    "at": "2026-09-15T11:45:54.262116Z"
+   }
+  ],
+  "proposed_by": "deterministic",
+  "agent_run_id": "3fb00583-d31a-4fd2-b309-2538c74d48c5",
+  "version": 3
+ },
+ "evidence": [
+  {
+   "created_at": "2026-09-15T11:45:53.349894Z",
+   "updated_at": "2026-09-15T11:45:53.349894Z",
+   "id": "135bdc19-f123-4e13-8239-bc25481960eb",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "kind": "health",
+   "source": "get_health",
+   "service": "payment-service",
+   "title": "payment-service health",
+   "summary": "payment-service is degraded; failing checks: error_rate_ok, latency_ok",
+   "data": {
+    "state": "degraded",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": false,
+     "process_up": true,
+     "error_rate_ok": false,
+     "dependencies_ok": true
+    },
+    "message": "failing: error_rate_ok, latency_ok",
+    "service": "payment-service"
+   },
+   "strength": 0.6,
+   "observed_at": "2026-09-15T11:45:53.349863Z",
+   "tool_execution_id": "01e12359-a8ad-4f83-bf7a-4372e47f0ae1",
+   "agent_run_id": "255bd330-8604-4e3e-9906-0714333df968",
+   "phase": "triage",
+   "tags": [
+    "degraded",
+    "error_rate_ok",
+    "latency_ok"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.646762Z",
+   "updated_at": "2026-09-15T11:45:53.646763Z",
+   "id": "364639b2-26ac-4042-be95-bdc67cddc13c",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "kind": "topology",
+   "source": "inspect_dependencies",
+   "service": "payment-service",
+   "title": "order-service dependencies",
+   "summary": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+   "data": {
+    "service": "order-service",
+    "dependents": [
+     "api-gateway"
+    ],
+    "dependencies": [
+     "postgres",
+     "redis",
+     "inventory-service",
+     "payment-service"
+    ],
+    "contributions": [
+     {
+      "target": "payment-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2500.0,
+      "calls_per_request": 0.4,
+      "error_contribution": 0.14
+     },
+     {
+      "target": "postgres",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 1500.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "redis",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 500.0,
+      "calls_per_request": 1.5,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "inventory-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.0
+     }
+    ],
+    "own_error_rate": 0.0,
+    "own_latency_ms": 20.6,
+    "downstream_closure": [
+     "postgres",
+     "redis",
+     "inventory-service",
+     "payment-service"
+    ]
+   },
+   "strength": 0.8,
+   "observed_at": "2026-09-15T11:45:53.646732Z",
+   "tool_execution_id": "ba975cb4-590e-4d4d-88a0-21af017793bd",
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "phase": "investigate",
+   "tags": [
+    "payment-service"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.694972Z",
+   "updated_at": "2026-09-15T11:45:53.694973Z",
+   "id": "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "kind": "trace",
+   "source": "query_traces",
+   "service": "payment-service",
+   "title": "trace analysis",
+   "summary": "3 traces sampled, 3 errored, avg 692ms; failure origin (deepest failing span): payment-service x3; slowest span most often in: payment-service x2, order-service x1",
+   "data": {
+    "count": 3,
+    "errored": 3,
+    "examples": [
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 1030,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 458,
+        "error": true,
+        "service": "payment-service"
+       },
+       {
+        "ms": 538,
+        "error": false,
+        "service": "order-service"
+       },
+       {
+        "ms": 499,
+        "error": false,
+        "service": "payment-service"
+       },
+       {
+        "ms": 15,
+        "error": false,
+        "service": "inventory-service"
+       },
+       {
+        "ms": 20,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       }
+      ],
+      "trace_id": "08d0c0b4d64d83eadfd9e48c54f6e505",
+      "duration_ms": 1030
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 424,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 400,
+        "error": true,
+        "service": "payment-service"
+       },
+       {
+        "ms": 13,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       }
+      ],
+      "trace_id": "a3f517b8a64697f3542badab446c09a5",
+      "duration_ms": 424
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 622,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 583,
+        "error": true,
+        "service": "payment-service"
+       },
+       {
+        "ms": 18,
+        "error": false,
+        "service": "user-service"
+       },
+       {
+        "ms": 10,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       }
+      ],
+      "trace_id": "db116cb12d350e213ad968dea7247507",
+      "duration_ms": 622
+     }
+    ],
+    "slowest_span": {
+     "order-service": 1,
+     "payment-service": 2
+    },
+    "failure_origin": {
+     "payment-service": 3
+    },
+    "avg_duration_ms": 692.0500000000001
+   },
+   "strength": 0.9,
+   "observed_at": "2026-09-15T11:45:53.694943Z",
+   "tool_execution_id": "047b3ac8-9518-4d80-b5bb-d68eba8cc0c5",
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "phase": "investigate",
+   "tags": [
+    "payment-service"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T11:45:53.742648Z",
+   "updated_at": "2026-09-15T11:45:53.742649Z",
+   "id": "d4967013-2a30-477d-8b69-8d5686c743fc",
+   "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+   "kind": "deployment",
+   "source": "inspect_deployment",
+   "service": "payment-service",
+   "title": "payment-service deployment 2.4.0",
+   "summary": "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+   "data": {
+    "recent": true,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "2.3.7",
+      "deployed_at": "2026-09-14T11:44:29.126624+00:00"
+     },
+     {
+      "summary": "checkout handler refactor; new retry path",
+      "version": "2.4.0",
+      "deployed_at": "2026-09-15T11:45:47.126624+00:00"
+     }
+    ],
+    "service": "payment-service",
+    "age_minutes": 0.110266,
+    "deployed_at": "2026-09-15T11:45:47.126624+00:00",
+    "is_rollback": false,
+    "current_version": "2.4.0",
+    "previous_version": "2.3.7",
+    "rollback_available": true
+   },
+   "strength": 0.85,
+   "observed_at": "2026-09-15T11:45:53.742621Z",
+   "tool_execution_id": "9bb48a43-f8e4-4490-b17f-e80e90ec0aa8",
+   "agent_run_id": "397b9ab7-b194-4608-b9d9-bfe5ad752ce5",
+   "phase": "investigate",
+   "tags": [
+    "recent_deploy"
+   ]
+  }
+ ]
+}

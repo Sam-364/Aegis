@@ -1,0 +1,1175 @@
+[
+ {
+  "id": "5bdcfe7a-8cc7-4fd3-9b31-14fc26feb6aa",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 1,
+  "phase": "investigate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:32:14.934600Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "investigate",
+   "evidence": 7,
+   "iteration": 0,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "inspect_redis",
+     "expectation": "",
+     "arguments_json": "{\"component\": \"redis\"}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "1eefb05d-1a88-4f8b-95a1-2cae0b5d2a84",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 2,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:32:14.950546Z",
+  "title": "allowed: inspect_redis",
+  "input": {
+   "tool": "inspect_redis",
+   "arguments": {
+    "component": "redis"
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "inspect_redis@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1117 is investigating",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "inspect_redis is part of flow api-latency-investigation@1.2.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'investigate' lists inspect_redis",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev3 permits inspect_redis",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:1dd3bb17-b019-4400-a8e8-1fd448613cec has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "1 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key 372db3411f38\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 5/36, iterations 9/32",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "inspect_redis",
+    "decided_at": "2026-09-15T10:32:14.943780Z",
+    "request_id": "22a93cc8-f48b-437a-a5a8-b02872a8aab4",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "27463e7b-6549-4aee-bde2-463a7f50188a",
+  "trace_id": null
+ },
+ {
+  "id": "bc92917f-f1b1-4cb3-bf5b-b195cf623457",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 3,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:32:14.953443Z",
+  "title": "inspect_redis: redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95%",
+  "input": {
+   "tool": "inspect_redis",
+   "arguments": {
+    "component": "redis"
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: order-service 162; hit rate 97%, blocked clients 0",
+   "duration_ms": 4.068,
+   "evidence_ids": [
+    "c2c5051d-58c8-40bd-90cc-474f58c169d8"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 4.068,
+  "tool_execution_id": "27463e7b-6549-4aee-bde2-463a7f50188a",
+  "trace_id": null
+ },
+ {
+  "id": "cbcaefe0-0271-4e7f-9262-a92563bed577",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 4,
+  "phase": "investigate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:32:14.974707Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "investigate",
+   "evidence": 8,
+   "iteration": 1,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "query_traces",
+     "expectation": "",
+     "arguments_json": "{\"errors_only\": true}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "8fe35df4-da1f-4e2d-a82d-cea9cbecce25",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 5,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:32:15.010884Z",
+  "title": "allowed: query_traces",
+  "input": {
+   "tool": "query_traces",
+   "arguments": {
+    "errors_only": true
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "query_traces@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1117 is investigating",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "query_traces is part of flow api-latency-investigation@1.2.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'investigate' lists query_traces",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev3 permits query_traces",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:1dd3bb17-b019-4400-a8e8-1fd448613cec has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "1 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key cfc270852d79\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 6/36, iterations 10/32",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "query_traces",
+    "decided_at": "2026-09-15T10:32:14.990684Z",
+    "request_id": "2d1af451-ef21-46b3-b06e-722b4c520518",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "e0123015-41be-4871-9835-f49be567cb75",
+  "trace_id": null
+ },
+ {
+  "id": "14180300-dbec-483c-8d07-0d7de5f6f2ce",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 6,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:32:15.018757Z",
+  "title": "query_traces: no error traces found",
+  "input": {
+   "tool": "query_traces",
+   "arguments": {
+    "errors_only": true
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "no error traces found",
+   "duration_ms": 11.052,
+   "evidence_ids": [
+    "1b1d637f-26da-46f1-9459-3a8912ad9d81"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 11.052,
+  "tool_execution_id": "e0123015-41be-4871-9835-f49be567cb75",
+  "trace_id": null
+ },
+ {
+  "id": "ced48ed9-c2c4-4f40-896c-814c2f1c9b1b",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 7,
+  "phase": "investigate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:32:15.062881Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "investigate",
+   "evidence": 9,
+   "iteration": 2,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "inspect_deployment",
+     "expectation": "",
+     "arguments_json": "{\"service\": \"order-service\"}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "97ce6bb8-b9bd-487f-934d-fd0ad84f4b01",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 8,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:32:15.104019Z",
+  "title": "allowed: inspect_deployment",
+  "input": {
+   "tool": "inspect_deployment",
+   "arguments": {
+    "service": "order-service"
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "inspect_deployment@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1117 is investigating",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "inspect_deployment is part of flow api-latency-investigation@1.2.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'investigate' lists inspect_deployment",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev3 permits inspect_deployment",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:1dd3bb17-b019-4400-a8e8-1fd448613cec has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "1 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key 125dc7a6af5a\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 7/36, iterations 11/32",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "inspect_deployment",
+    "decided_at": "2026-09-15T10:32:15.085096Z",
+    "request_id": "f8104153-fd2b-427c-94c3-d5a35aeb5caf",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "510c0858-942b-493c-9895-b13c2fd690cd",
+  "trace_id": null
+ },
+ {
+  "id": "fe76bbbc-8f81-4de3-899d-81f5fb99ba87",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 9,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:32:15.111984Z",
+  "title": "inspect_deployment: order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+  "input": {
+   "tool": "inspect_deployment",
+   "arguments": {
+    "service": "order-service"
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "duration_ms": 10.496,
+   "evidence_ids": [
+    "08b53634-90a6-419f-b190-e16c1a033411"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 10.496,
+  "tool_execution_id": "510c0858-942b-493c-9895-b13c2fd690cd",
+  "trace_id": null
+ },
+ {
+  "id": "424f1559-d196-4455-a0c6-1ea5190b2690",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 10,
+  "phase": "investigate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:32:15.165606Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "investigate",
+   "evidence": 10,
+   "iteration": 3,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "get_logs",
+     "expectation": "",
+     "arguments_json": "{\"service\": \"order-service\", \"level\": \"WARN\"}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "9ce94fbd-adc9-4cba-ab07-e4c11bc846a9",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 11,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:32:15.200586Z",
+  "title": "allowed: get_logs",
+  "input": {
+   "tool": "get_logs",
+   "arguments": {
+    "level": "WARN",
+    "service": "order-service"
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "get_logs@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1117 is investigating",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "get_logs is part of flow api-latency-investigation@1.2.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'investigate' lists get_logs",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev3 permits get_logs",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:1dd3bb17-b019-4400-a8e8-1fd448613cec has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "2 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key 11764ffbf3dc\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 8/36, iterations 12/32",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "get_logs",
+    "decided_at": "2026-09-15T10:32:15.181828Z",
+    "request_id": "4c92e53a-d455-4c18-bf84-0b577e5e15be",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "3f85f6ff-5ee5-41a8-8357-b27a9998338c",
+  "trace_id": null
+ },
+ {
+  "id": "52d37379-0d79-4b17-ba67-c31c276a2db3",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 12,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:32:15.207672Z",
+  "title": "get_logs: order-service: 9 WARN+ log lines in 300s (WARN 9); top: redis client count for this process is unusually high (N) (x9); dependencies mentioned: redis x9",
+  "input": {
+   "tool": "get_logs",
+   "arguments": {
+    "level": "WARN",
+    "service": "order-service"
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "order-service: 9 WARN+ log lines in 300s (WARN 9); top: redis client count for this process is unusually high (N) (x9); dependencies mentioned: redis x9",
+   "duration_ms": 10.085,
+   "evidence_ids": [
+    "5aceba02-e1df-4520-b259-955e4f8441e6"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 10.085,
+  "tool_execution_id": "3f85f6ff-5ee5-41a8-8357-b27a9998338c",
+  "trace_id": null
+ },
+ {
+  "id": "6f464462-419c-4d94-aec1-2362e5973240",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 13,
+  "phase": "investigate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:32:15.257791Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "investigate",
+   "evidence": 11,
+   "iteration": 4,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "inspect_service",
+     "expectation": "",
+     "arguments_json": "{\"service\": \"order-service\"}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "7ebb6e9f-2dab-43e4-9a7a-6ab03dd17fd9",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 14,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:32:15.295221Z",
+  "title": "allowed: inspect_service",
+  "input": {
+   "tool": "inspect_service",
+   "arguments": {
+    "service": "order-service"
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "inspect_service@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1117 is investigating",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "inspect_service is part of flow api-latency-investigation@1.2.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'investigate' lists inspect_service",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev3 permits inspect_service",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:1dd3bb17-b019-4400-a8e8-1fd448613cec has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "1 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key 829121c1ec4a\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 9/36, iterations 13/32",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "inspect_service",
+    "decided_at": "2026-09-15T10:32:15.277458Z",
+    "request_id": "1f4179b5-11ac-4dc3-a467-76a52367b934",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "3a17ab16-fbe7-4b51-bb70-6f3906fddbdb",
+  "trace_id": null
+ },
+ {
+  "id": "50dfc89e-ecdf-4e50-a2ad-0dfaad135def",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 15,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:32:15.413613Z",
+  "title": "inspect_service: order-service (service) is healthy; error_rate 0.3%, p95 111ms, cpu 29%, mem 38%; version 4.1.0, uptime 75s, replicas 3.0/3, restarts 0, open redis conns 168, o",
+  "input": {
+   "tool": "inspect_service",
+   "arguments": {
+    "service": "order-service"
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "order-service (service) is healthy; error_rate 0.3%, p95 111ms, cpu 29%, mem 38%; version 4.1.0, uptime 75s, replicas 3.0/3, restarts 0, open redis conns 168, open db conns 3",
+   "duration_ms": 10.263,
+   "evidence_ids": [
+    "cee17f3c-e63a-45c6-b9bb-8a6934f4b7ff"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 10.263,
+  "tool_execution_id": "3a17ab16-fbe7-4b51-bb70-6f3906fddbdb",
+  "trace_id": null
+ },
+ {
+  "id": "846fd924-5efa-43b6-955d-2dd65d4c8292",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 16,
+  "phase": "investigate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:32:15.446125Z",
+  "title": "call_tool: Collecting evidence along the dependency chain.",
+  "input": {
+   "phase": "investigate",
+   "evidence": 12,
+   "iteration": 5,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "call_tool",
+    "rationale": "deterministic planner",
+    "tool_call": {
+     "purpose": "deterministic playbook step",
+     "tool_name": "search_incident_memory",
+     "expectation": "",
+     "arguments_json": "{\"query\": \"redis connections saturation\"}",
+     "tests_hypothesis": null
+    },
+    "hypotheses": [],
+    "observation": "Collecting evidence along the dependency chain.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "5d98cc17-44c6-46ff-ae88-21bce4364d11",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 17,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "authorization",
+  "at": "2026-09-15T10:32:15.480962Z",
+  "title": "allowed: search_incident_memory",
+  "input": {
+   "tool": "search_incident_memory",
+   "arguments": {
+    "query": "redis connections saturation"
+   }
+  },
+  "output": {
+   "decision": {
+    "checks": [
+     {
+      "name": "tool_registered",
+      "detail": "search_incident_memory@1 (read_only, risk none)",
+      "passed": true
+     },
+     {
+      "name": "tool_enabled",
+      "detail": "enabled",
+      "passed": true
+     },
+     {
+      "name": "incident_active",
+      "detail": "incident INC-1117 is investigating",
+      "passed": true
+     },
+     {
+      "name": "flow_allows",
+      "detail": "search_incident_memory is part of flow api-latency-investigation@1.2.0",
+      "passed": true
+     },
+     {
+      "name": "phase_allows",
+      "detail": "phase 'investigate' lists search_incident_memory",
+      "passed": true
+     },
+     {
+      "name": "category_permitted",
+      "detail": "read_only permitted inside the agent loop",
+      "passed": true
+     },
+     {
+      "name": "environment_allows",
+      "detail": "permitted in development",
+      "passed": true
+     },
+     {
+      "name": "severity_allows",
+      "detail": "incident severity sev3 permits search_incident_memory",
+      "passed": true
+     },
+     {
+      "name": "actor_permitted",
+      "detail": "agent:1dd3bb17-b019-4400-a8e8-1fd448613cec has role viewer",
+      "passed": true
+     },
+     {
+      "name": "risk_within_ceiling",
+      "detail": "risk none <= ceiling none",
+      "passed": true
+     },
+     {
+      "name": "policy_effect",
+      "detail": "allowed by rule 'allow-read-only'",
+      "passed": true
+     },
+     {
+      "name": "arguments_valid",
+      "detail": "1 argument(s) validated",
+      "passed": true
+     },
+     {
+      "name": "idempotency",
+      "detail": "key b4172eaa0e68\u2026 is new",
+      "passed": true
+     },
+     {
+      "name": "budget_available",
+      "detail": "tool_calls 10/36, iterations 14/32",
+      "passed": true
+     }
+    ],
+    "effect": "allow",
+    "reason": "all checks passed",
+    "allowed": true,
+    "tool_name": "search_incident_memory",
+    "decided_at": "2026-09-15T10:32:15.454720Z",
+    "request_id": "abbcacfb-3710-4a48-857d-de774a5f043b",
+    "denial_code": null,
+    "matched_policy": "allow-read-only"
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": "97ebf496-17d7-4218-be6c-11b591aae4ea",
+  "trace_id": null
+ },
+ {
+  "id": "c7b2c482-d87b-43f6-a67a-cfc1b6bd4d62",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 18,
+  "phase": "investigate",
+  "node": "execute_tool",
+  "kind": "tool_execution",
+  "at": "2026-09-15T10:32:15.485318Z",
+  "title": "search_incident_memory: 3 similar incidents: INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing th",
+  "input": {
+   "tool": "search_incident_memory",
+   "arguments": {
+    "query": "redis connections saturation"
+   }
+  },
+  "output": {
+   "status": "succeeded",
+   "summary": "3 similar incidents: INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automated remediation; outcome escalated || INC-1083 (65% similar): redis connections saturation; root cause: order-service is exhausting a shared resource (connections), degrading callers.; resolution: restart_service(service=order-service) \u2192 passed; outcome resolved || INC-1075 (65% similar): redis connections saturation; root cause: order-service is exhausting a shared resource (connections), degrading callers.; resolution: restart_service(service=order-service) \u2192 passed; outcome resolved",
+   "duration_ms": 22.813,
+   "evidence_ids": [
+    "54fa1ec7-d0bf-43ef-8744-5e6095f00cfb",
+    "04759752-ec3d-4ccb-b50a-0dcb2b11cfe2",
+    "0d12ea12-6e5f-4803-b465-4dbf851147dc"
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 22.813,
+  "tool_execution_id": "97ebf496-17d7-4218-be6c-11b591aae4ea",
+  "trace_id": null
+ },
+ {
+  "id": "8aa01a68-8148-45ab-b10f-9fad0bbfe12c",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 19,
+  "phase": "investigate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:32:15.503439Z",
+  "title": "propose_hypotheses: Evidence implicates specific components.",
+  "input": {
+   "phase": "investigate",
+   "evidence": 15,
+   "iteration": 6,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "propose_hypotheses",
+    "rationale": "deterministic planner derived hypotheses from evidence strength",
+    "tool_call": null,
+    "hypotheses": [
+     {
+      "category": "resource_exhaustion",
+      "mechanism": "derived deterministically from evidence strength and service attribution",
+      "statement": "order-service is exhausting a shared resource (connections), degrading callers.",
+      "suggested_tests": [],
+      "supporting_evidence": [
+       "E8"
+      ],
+      "contradicting_evidence": [],
+      "suspected_root_cause_service": "order-service"
+     }
+    ],
+    "observation": "Evidence implicates specific components.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "2073555a-f990-4422-b075-1485c239a7ef",
+  "agent_run_id": "1dd3bb17-b019-4400-a8e8-1fd448613cec",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 20,
+  "phase": "investigate",
+  "node": "apply_hypotheses",
+  "kind": "hypothesis_update",
+  "at": "2026-09-15T10:32:15.520085Z",
+  "title": "1 new, 1 total; leading confidence 0.81",
+  "input": {
+   "action": "propose_hypotheses"
+  },
+  "output": {
+   "hypotheses": [
+    {
+     "score": {
+      "total": 0.805,
+      "explanation": [
+       "1 supporting evidence items (strength 0.90)",
+       "temporal alignment 1.00",
+       "order-service explains 1/1 symptomatic services"
+      ],
+      "validation_bonus": 0.0,
+      "evidence_strength": 0.9,
+      "temporal_alignment": 1.0,
+      "dependency_alignment": 1.0,
+      "contradiction_penalty": 0.0,
+      "historical_similarity": 0.0
+     },
+     "status": "supported",
+     "category": "resource_exhaustion",
+     "statement": "order-service is exhausting a shared resource (connections), degrading callers.",
+     "confidence": 0.805,
+     "supporting": 1,
+     "contradicting": 0,
+     "hypothesis_id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+     "root_cause_service": "order-service"
+    }
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ }
+]

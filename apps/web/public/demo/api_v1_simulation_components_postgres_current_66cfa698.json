@@ -1,0 +1,17 @@
+{
+ "component": "postgres",
+ "time": "2026-09-15T11:50:43.126624+00:00",
+ "metrics": {
+  "connections": 11.0,
+  "max_connections": 100.0,
+  "saturation": 0.11,
+  "ops_per_sec": 305.96133048102786,
+  "latency_p95_ms": 4.015972,
+  "memory_percent": 34.349074056856594,
+  "blocked_clients": 0,
+  "idle_in_transaction": 0.0,
+  "lock_waits": 0.0,
+  "hit_rate": 0.97,
+  "up": 1.0
+ }
+}

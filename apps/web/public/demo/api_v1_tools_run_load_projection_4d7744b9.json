@@ -1,0 +1,60 @@
+{
+ "name": "run_load_projection",
+ "version": "1",
+ "description": "Project latency and replica headroom under a traffic multiplier (computation only, no load is generated).",
+ "category": "diagnostic",
+ "risk": "low",
+ "idempotent": true,
+ "timeout_seconds": 10.0,
+ "retry": {
+  "max_attempts": 3,
+  "initial_backoff_seconds": 0.5,
+  "backoff_multiplier": 2.0,
+  "max_backoff_seconds": 10.0
+ },
+ "capabilities": [],
+ "allowed_environments": [
+  "development",
+  "staging",
+  "production"
+ ],
+ "min_severity": null,
+ "enabled": true,
+ "arguments_schema": {
+  "additionalProperties": false,
+  "properties": {
+   "service": {
+    "title": "Service",
+    "type": "string"
+   },
+   "factor": {
+    "default": 1.5,
+    "description": "traffic multiplier to project",
+    "maximum": 5.0,
+    "minimum": 1.0,
+    "title": "Factor",
+    "type": "number"
+   },
+   "expectation": {
+    "default": "",
+    "title": "Expectation",
+    "type": "string"
+   }
+  },
+  "required": [
+   "service"
+  ],
+  "title": "LoadProjectionArgs",
+  "type": "object"
+ },
+ "produces_evidence": true,
+ "verification_metrics": [],
+ "used_in": {
+  "api-latency-investigation@1.2.0": [
+   "validate"
+  ],
+  "incident-investigation@1.1.0": [
+   "validate"
+  ]
+ }
+}

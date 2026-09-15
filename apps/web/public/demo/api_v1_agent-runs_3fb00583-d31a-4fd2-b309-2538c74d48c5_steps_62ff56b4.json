@@ -1,0 +1,171 @@
+[
+ {
+  "id": "5845f0b0-17f7-42d2-8491-35b148f07ec1",
+  "agent_run_id": "3fb00583-d31a-4fd2-b309-2538c74d48c5",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "seq": 1,
+  "phase": "hypothesize",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T11:45:53.994779Z",
+  "title": "propose_hypotheses: Evidence implicates specific components.",
+  "input": {
+   "phase": "hypothesize",
+   "evidence": 11,
+   "iteration": 0,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "propose_hypotheses",
+    "rationale": "deterministic planner derived hypotheses from evidence strength",
+    "tool_call": null,
+    "hypotheses": [
+     {
+      "category": "deployment_regression",
+      "mechanism": "derived deterministically from evidence strength and service attribution",
+      "statement": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+      "suggested_tests": [],
+      "supporting_evidence": [
+       "E3",
+       "E7",
+       "E8",
+       "E9"
+      ],
+      "contradicting_evidence": [],
+      "suspected_root_cause_service": "payment-service"
+     },
+     {
+      "category": "unknown",
+      "mechanism": "derived deterministically from evidence strength and service attribution",
+      "statement": "order-service is the most implicated component in the collected evidence.",
+      "suggested_tests": [],
+      "supporting_evidence": [
+       "E2",
+       "E6"
+      ],
+      "contradicting_evidence": [],
+      "suspected_root_cause_service": "order-service"
+     },
+     {
+      "category": "unknown",
+      "mechanism": "derived deterministically from evidence strength and service attribution",
+      "statement": "api-gateway is the most implicated component in the collected evidence.",
+      "suggested_tests": [],
+      "supporting_evidence": [
+       "E1"
+      ],
+      "contradicting_evidence": [],
+      "suspected_root_cause_service": "api-gateway"
+     }
+    ],
+    "observation": "Evidence implicates specific components.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "1ab02004-efea-46bd-bb10-b45ce04fea25",
+  "agent_run_id": "3fb00583-d31a-4fd2-b309-2538c74d48c5",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "seq": 2,
+  "phase": "hypothesize",
+  "node": "apply_hypotheses",
+  "kind": "hypothesis_update",
+  "at": "2026-09-15T11:45:54.021178Z",
+  "title": "3 new, 3 total; leading confidence 0.82",
+  "input": {
+   "action": "propose_hypotheses"
+  },
+  "output": {
+   "hypotheses": [
+    {
+     "score": {
+      "total": 0.8228,
+      "explanation": [
+       "4 supporting evidence items (strength 0.94)",
+       "temporal alignment 1.00",
+       "payment-service explains 3/3 symptomatic services"
+      ],
+      "validation_bonus": 0.0,
+      "evidence_strength": 0.9395,
+      "temporal_alignment": 1.0,
+      "dependency_alignment": 1.0,
+      "contradiction_penalty": 0.0,
+      "historical_similarity": 0.0
+     },
+     "status": "supported",
+     "category": "deployment_regression",
+     "statement": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+     "confidence": 0.8228,
+     "supporting": 4,
+     "contradicting": 0,
+     "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+     "root_cause_service": "payment-service"
+    },
+    {
+     "score": {
+      "total": 0.7816,
+      "explanation": [
+       "2 supporting evidence items (strength 0.85)",
+       "temporal alignment 1.00",
+       "order-service explains 3/3 symptomatic services"
+      ],
+      "validation_bonus": 0.0,
+      "evidence_strength": 0.848,
+      "temporal_alignment": 1.0,
+      "dependency_alignment": 1.0,
+      "contradiction_penalty": 0.0,
+      "historical_similarity": 0.0
+     },
+     "status": "supported",
+     "category": "unknown",
+     "statement": "order-service is the most implicated component in the collected evidence.",
+     "confidence": 0.7816,
+     "supporting": 2,
+     "contradicting": 0,
+     "hypothesis_id": "08dabb1d-1249-47db-8d00-4faf2b278fd6",
+     "root_cause_service": "order-service"
+    },
+    {
+     "score": {
+      "total": 0.5033,
+      "explanation": [
+       "1 supporting evidence items (strength 0.60)",
+       "temporal alignment 1.00",
+       "api-gateway explains 1/3 symptomatic services"
+      ],
+      "validation_bonus": 0.0,
+      "evidence_strength": 0.6,
+      "temporal_alignment": 1.0,
+      "dependency_alignment": 0.3333,
+      "contradiction_penalty": 0.0,
+      "historical_similarity": 0.0
+     },
+     "status": "proposed",
+     "category": "unknown",
+     "statement": "api-gateway is the most implicated component in the collected evidence.",
+     "confidence": 0.5033,
+     "supporting": 1,
+     "contradicting": 0,
+     "hypothesis_id": "5113a1d3-fb87-487f-937e-ff3124022a6f",
+     "root_cause_service": "api-gateway"
+    }
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ }
+]

@@ -1,0 +1,163 @@
+[
+ {
+  "id": "cdff0ce0-4606-4eff-8222-68f559307748",
+  "at": "2026-09-15T10:37:36.547413Z",
+  "event_type": "incident.created",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "flow_name": null,
+  "phase": null,
+  "tool_name": null,
+  "action": "create",
+  "decision": "created",
+  "reason": "api-gateway request_rate 115 -> 351 (+205%): traffic surge",
+  "trace_id": null,
+  "agent_run_id": null,
+  "tool_execution_id": null,
+  "data": {
+   "flow": "incident-investigation@1.1.0",
+   "severity": "sev4"
+  }
+ },
+ {
+  "id": "909fe842-7243-420b-8e26-dc7220220865",
+  "at": "2026-09-15T10:37:36.729454Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:eda4f659-4cf4-4808-bf01-d613f67f8885",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "flow_name": "incident-investigation",
+  "phase": "triage",
+  "tool_name": "get_health",
+  "action": "get_health",
+  "decision": "executed",
+  "reason": "api-gateway is healthy; all checks passing",
+  "trace_id": null,
+  "agent_run_id": "eda4f659-4cf4-4808-bf01-d613f67f8885",
+  "tool_execution_id": "5e243c6f-ca2f-4b1a-964b-23d8059116b7",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "get_health@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1121 is triaging",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "get_health is part of flow incident-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'triage' lists get_health",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev4 permits get_health",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:eda4f659-4cf4-4808-bf01-d613f67f8885 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 9613c9301468\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 0/30, iterations 0/26",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  }
+ },
+ {
+  "id": "1f9568c4-8498-4d11-a654-5fe0155b1464",
+  "at": "2026-09-15T10:38:42.133383Z",
+  "event_type": "incident.resolved",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "flow_name": null,
+  "phase": null,
+  "tool_name": null,
+  "action": "resolved",
+  "decision": "ok",
+  "reason": "no remediation required; metrics within baseline",
+  "trace_id": null,
+  "agent_run_id": null,
+  "tool_execution_id": null,
+  "data": {
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 1,
+    "llm_tokens": 0,
+    "tool_calls": 1,
+    "runtime_seconds": 0.052768999999999996,
+    "remediation_attempts": 0
+   }
+  }
+ }
+]

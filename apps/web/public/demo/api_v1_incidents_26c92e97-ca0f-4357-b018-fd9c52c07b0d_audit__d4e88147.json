@@ -1,0 +1,1780 @@
+[
+ {
+  "id": "6813e5d6-f0fe-436d-a001-b443f91b4879",
+  "at": "2026-09-15T10:43:23.792530Z",
+  "event_type": "incident.created",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": null,
+  "phase": null,
+  "tool_name": null,
+  "action": "create",
+  "decision": "created",
+  "reason": "api-gateway latency_p95_ms 237 -> 542 (+129%): p95 latency regression",
+  "trace_id": null,
+  "agent_run_id": null,
+  "tool_execution_id": null,
+  "data": {
+   "flow": "api-latency-investigation@1.2.0",
+   "severity": "sev3"
+  }
+ },
+ {
+  "id": "807729c2-92db-45c7-8ac6-818ff6e6fd5b",
+  "at": "2026-09-15T10:43:23.963506Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:fdc02b4f-8b8b-468e-bf3f-54699b3e9205",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "triage",
+  "tool_name": "get_health",
+  "action": "get_health",
+  "decision": "executed",
+  "reason": "api-gateway is healthy; all checks passing",
+  "trace_id": null,
+  "agent_run_id": "fdc02b4f-8b8b-468e-bf3f-54699b3e9205",
+  "tool_execution_id": "18babbbb-f77d-4abd-8701-7537cdb0a774",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "get_health@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is triaging",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "get_health is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'triage' lists get_health",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits get_health",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:fdc02b4f-8b8b-468e-bf3f-54699b3e9205 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key f4dba6a37f30\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 0/36, iterations 0/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  }
+ },
+ {
+  "id": "3006bb79-279c-4933-90c2-fa8541c3430a",
+  "at": "2026-09-15T10:43:24.004046Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:fdc02b4f-8b8b-468e-bf3f-54699b3e9205",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "triage",
+  "tool_name": "compare_baseline",
+  "action": "compare_baseline",
+  "decision": "executed",
+  "reason": "api-gateway latency_p95_ms: current 288 ms vs baseline 202 ms \u2192 +42% vs baseline",
+  "trace_id": null,
+  "agent_run_id": "fdc02b4f-8b8b-468e-bf3f-54699b3e9205",
+  "tool_execution_id": "65ad550e-8b30-4095-8e87-d3450fcd1236",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "compare_baseline@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is triaging",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "compare_baseline is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'triage' lists compare_baseline",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits compare_baseline",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:fdc02b4f-8b8b-468e-bf3f-54699b3e9205 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "2 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 07bf82b08c6f\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 1/36, iterations 1/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "metric": "latency_p95_ms",
+    "service": "api-gateway"
+   }
+  }
+ },
+ {
+  "id": "6dff7972-18b9-44b3-af9b-4e4e557066ea",
+  "at": "2026-09-15T10:43:24.047924Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:fdc02b4f-8b8b-468e-bf3f-54699b3e9205",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "triage",
+  "tool_name": "inspect_dependencies",
+  "action": "inspect_dependencies",
+  "decision": "executed",
+  "reason": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; all dependencies healthy; own error rate 0.0%, own latency 8ms",
+  "trace_id": null,
+  "agent_run_id": "fdc02b4f-8b8b-468e-bf3f-54699b3e9205",
+  "tool_execution_id": "f18e7dd0-12b6-49b3-95a9-be2c354ec731",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_dependencies@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is triaging",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_dependencies is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'triage' lists inspect_dependencies",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_dependencies",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:fdc02b4f-8b8b-468e-bf3f-54699b3e9205 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 21c8a3aa9688\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 2/36, iterations 2/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  }
+ },
+ {
+  "id": "d9aaba60-63c7-4651-9e7e-19750c546c4e",
+  "at": "2026-09-15T10:43:24.314861Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:d6f20022-ea40-4b8c-8161-041550a1320e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_redis",
+  "action": "inspect_redis",
+  "decision": "executed",
+  "reason": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+  "trace_id": null,
+  "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+  "tool_execution_id": "56461518-f7d1-499d-bbb5-246d174d7674",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_redis@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_redis is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_redis",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_redis",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:d6f20022-ea40-4b8c-8161-041550a1320e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 8f616b28a552\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 3/36, iterations 3/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "component": "redis"
+   }
+  }
+ },
+ {
+  "id": "74e4b964-f74c-4b45-a140-bdcda066ad86",
+  "at": "2026-09-15T10:43:24.347936Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:d6f20022-ea40-4b8c-8161-041550a1320e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_database",
+  "action": "inspect_database",
+  "decision": "executed",
+  "reason": "postgres: 11/100 connections (11% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+  "trace_id": null,
+  "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+  "tool_execution_id": "ef7bec7b-cf07-4f90-87d5-8942ac16fc94",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_database@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_database is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_database",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_database",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:d6f20022-ea40-4b8c-8161-041550a1320e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key b8d099d2d16c\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 4/36, iterations 4/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "component": "postgres"
+   }
+  }
+ },
+ {
+  "id": "0a788c3e-e9cb-4753-8f33-0a2f4fb16ff7",
+  "at": "2026-09-15T10:43:24.382967Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:d6f20022-ea40-4b8c-8161-041550a1320e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_dependencies",
+  "action": "inspect_dependencies",
+  "decision": "executed",
+  "reason": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; all dependencies healthy; own error rate 0.0%, own latency 8ms",
+  "trace_id": null,
+  "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+  "tool_execution_id": "2ae491bc-f4d0-40f5-9933-9017b06af7f2",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_dependencies@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_dependencies is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_dependencies",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_dependencies",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:d6f20022-ea40-4b8c-8161-041550a1320e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key e9e47b89621f\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 5/36, iterations 5/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  }
+ },
+ {
+  "id": "c775e287-ddb3-4e07-be01-b2534cf26f23",
+  "at": "2026-09-15T10:43:24.427754Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:d6f20022-ea40-4b8c-8161-041550a1320e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "query_traces",
+  "action": "query_traces",
+  "decision": "executed",
+  "reason": "9 traces sampled, 9 errored, avg 127ms; failure origin (deepest failing span): payment-service x9; slowest span most often in: order-service x7, user-service x1",
+  "trace_id": null,
+  "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+  "tool_execution_id": "2ec77648-5105-4ad4-b656-9b2aa450a3f7",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "query_traces@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "query_traces is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists query_traces",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits query_traces",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:d6f20022-ea40-4b8c-8161-041550a1320e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 6fbf7e5f4b2f\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 6/36, iterations 6/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "errors_only": true
+   }
+  }
+ },
+ {
+  "id": "8342ada2-79ce-4dc3-82f7-e8c00802f716",
+  "at": "2026-09-15T10:43:24.467533Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:d6f20022-ea40-4b8c-8161-041550a1320e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_deployment",
+  "action": "inspect_deployment",
+  "decision": "executed",
+  "reason": "payment-service runs 2.3.7 deployed 10 min ago (previous 2.4.0); change: rollback from 2.4.0; rollback available \u2014 this was a ROLLBACK to a version already run, not a new release \u2014 deployment precedes the incident window",
+  "trace_id": null,
+  "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+  "tool_execution_id": "efdf149c-a38d-4a83-985a-d1fc94f35fff",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_deployment@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_deployment is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:d6f20022-ea40-4b8c-8161-041550a1320e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 0b74ff245c58\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 7/36, iterations 7/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "payment-service"
+   }
+  }
+ },
+ {
+  "id": "c8c6d8df-8f1d-43c1-bf66-f3f84a5711fa",
+  "at": "2026-09-15T10:43:24.505233Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:d6f20022-ea40-4b8c-8161-041550a1320e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_deployment",
+  "action": "inspect_deployment",
+  "decision": "executed",
+  "reason": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+  "trace_id": null,
+  "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+  "tool_execution_id": "439c5c00-2953-491a-8987-2205b5fe65e6",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_deployment@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_deployment is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:d6f20022-ea40-4b8c-8161-041550a1320e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key a081b794e42c\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 8/36, iterations 8/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  }
+ },
+ {
+  "id": "90a52cf9-c68a-4393-9cf0-43b283ab7d35",
+  "at": "2026-09-15T10:43:24.547089Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:d6f20022-ea40-4b8c-8161-041550a1320e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_deployment",
+  "action": "inspect_deployment",
+  "decision": "executed",
+  "reason": "auth-service runs 2.8.0 deployed 24 h ago (previous 2.7.3); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+  "trace_id": null,
+  "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+  "tool_execution_id": "e5352df7-bb3b-438e-b5a6-a2d3f13b3cd0",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_deployment@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_deployment is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:d6f20022-ea40-4b8c-8161-041550a1320e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 79c715ba538f\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 9/36, iterations 9/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "auth-service"
+   }
+  }
+ },
+ {
+  "id": "01e8a3ac-46b9-4445-9631-912551a9830b",
+  "at": "2026-09-15T10:43:24.594359Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:d6f20022-ea40-4b8c-8161-041550a1320e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_deployment",
+  "action": "inspect_deployment",
+  "decision": "executed",
+  "reason": "user-service runs 1.14.2 deployed 24 h ago (previous 1.14.1); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+  "trace_id": null,
+  "agent_run_id": "d6f20022-ea40-4b8c-8161-041550a1320e",
+  "tool_execution_id": "b826ad62-6a1e-4dc0-a2cc-3b29b699a0e0",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_deployment@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_deployment is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:d6f20022-ea40-4b8c-8161-041550a1320e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 4e3a564c8745\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 10/36, iterations 10/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "user-service"
+   }
+  }
+ },
+ {
+  "id": "9ed5047c-5e78-47b6-b052-afc2ab95cd52",
+  "at": "2026-09-15T10:43:25.089519Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4664dcbc-9fe1-42f7-88d1-2c5806b2cbff",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "validate",
+  "tool_name": "run_process_diagnostic",
+  "action": "run_process_diagnostic",
+  "decision": "executed",
+  "reason": "payment-service process: up, version 2.3.7, uptime 151s, replicas 2.0/2, restarts 1, mem 55.3%, cpu 36.5%, open redis conns 2, open db conns 2",
+  "trace_id": null,
+  "agent_run_id": "4664dcbc-9fe1-42f7-88d1-2c5806b2cbff",
+  "tool_execution_id": "693dbc28-50ec-48ce-b73f-53cde764cce1",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "run_process_diagnostic@1 (diagnostic, risk low)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is validating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "run_process_diagnostic is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'validate' lists run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "diagnostic permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:4664dcbc-9fe1-42f7-88d1-2c5806b2cbff has role operator",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk low <= ceiling low",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-diagnostics'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key e55ac3df6206\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 11/36, iterations 12/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "payment-service"
+   }
+  }
+ },
+ {
+  "id": "cf94b973-9105-4f9c-9826-4674b0db4c2c",
+  "at": "2026-09-15T10:43:25.603500Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:b89eaf5d-0831-4b2d-aaa5-848f952213b3",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "validate",
+  "tool_name": "run_process_diagnostic",
+  "action": "run_process_diagnostic",
+  "decision": "executed",
+  "reason": "payment-service process: up, version 2.3.7, uptime 152s, replicas 2.0/2, restarts 1, mem 53.5%, cpu 35.9%, open redis conns 2, open db conns 2",
+  "trace_id": null,
+  "agent_run_id": "b89eaf5d-0831-4b2d-aaa5-848f952213b3",
+  "tool_execution_id": "cfb7e891-5bac-4e94-a044-cea2021840d6",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "run_process_diagnostic@1 (diagnostic, risk low)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is validating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "run_process_diagnostic is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'validate' lists run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "diagnostic permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:b89eaf5d-0831-4b2d-aaa5-848f952213b3 has role operator",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk low <= ceiling low",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-diagnostics'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key e577ebbc9929\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 12/36, iterations 16/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "payment-service"
+   }
+  }
+ },
+ {
+  "id": "8a072618-d612-4e05-a812-7a9b626ca274",
+  "at": "2026-09-15T10:44:11.013621Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:591e684f-23bd-45d4-8099-d4f0715be484",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_redis",
+  "action": "inspect_redis",
+  "decision": "executed",
+  "reason": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+  "trace_id": null,
+  "agent_run_id": "591e684f-23bd-45d4-8099-d4f0715be484",
+  "tool_execution_id": "52d24a5e-24ea-4c99-955b-744e8ab5a29c",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_redis@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_redis is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_redis",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_redis",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:591e684f-23bd-45d4-8099-d4f0715be484 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 71e60171346a\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 13/36, iterations 20/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "component": "redis"
+   }
+  }
+ },
+ {
+  "id": "3309e888-313b-4064-b610-cdbd4fee3e12",
+  "at": "2026-09-15T10:44:11.447366Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:a1392d82-2c4e-4a86-b292-baee718e2a56",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "validate",
+  "tool_name": "run_process_diagnostic",
+  "action": "run_process_diagnostic",
+  "decision": "executed",
+  "reason": "payment-service process: up, version 2.3.7, uptime 198s, replicas 2.0/2, restarts 1, mem 54.7%, cpu 34.1%, open redis conns 2, open db conns 2",
+  "trace_id": null,
+  "agent_run_id": "a1392d82-2c4e-4a86-b292-baee718e2a56",
+  "tool_execution_id": "f07a9c40-7d49-4161-95c0-d30538e92efa",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "run_process_diagnostic@1 (diagnostic, risk low)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is validating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "run_process_diagnostic is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'validate' lists run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "diagnostic permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:a1392d82-2c4e-4a86-b292-baee718e2a56 has role operator",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk low <= ceiling low",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-diagnostics'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 6069aa1b6e68\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 14/36, iterations 22/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "payment-service"
+   }
+  }
+ },
+ {
+  "id": "4d067a62-1d2c-4ca6-bd05-c86748449942",
+  "at": "2026-09-15T10:44:12.035674Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:d921e2a4-8101-4450-aa0f-21c8af2f3859",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "validate",
+  "tool_name": "run_process_diagnostic",
+  "action": "run_process_diagnostic",
+  "decision": "executed",
+  "reason": "payment-service process: up, version 2.3.7, uptime 198s, replicas 2.0/2, restarts 1, mem 54.7%, cpu 34.1%, open redis conns 2, open db conns 2",
+  "trace_id": null,
+  "agent_run_id": "d921e2a4-8101-4450-aa0f-21c8af2f3859",
+  "tool_execution_id": "a962ae3b-666e-428e-a920-5f7da1c21f84",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "run_process_diagnostic@1 (diagnostic, risk low)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is validating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "run_process_diagnostic is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'validate' lists run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "diagnostic permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:d921e2a4-8101-4450-aa0f-21c8af2f3859 has role operator",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk low <= ceiling low",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-diagnostics'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 4ab5efd71941\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 15/36, iterations 27/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "payment-service"
+   }
+  }
+ },
+ {
+  "id": "db418f08-60a1-4d79-b598-a515426dd70d",
+  "at": "2026-09-15T10:44:57.446634Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:ae2ed101-78ff-4210-bfa8-84a611971c8f",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_redis",
+  "action": "inspect_redis",
+  "decision": "executed",
+  "reason": "redis: 12/250 connections (5% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+  "trace_id": null,
+  "agent_run_id": "ae2ed101-78ff-4210-bfa8-84a611971c8f",
+  "tool_execution_id": "f91b80cf-6dd9-4f7f-ab72-8380a1a5d059",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_redis@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1124 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_redis is part of flow api-latency-investigation@1.2.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_redis",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev3 permits inspect_redis",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:ae2ed101-78ff-4210-bfa8-84a611971c8f has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key ea6499d8d3cc\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 16/36, iterations 31/32",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "component": "redis"
+   }
+  }
+ },
+ {
+  "id": "3d52b22e-4f5b-4e0f-9797-01235b3a2654",
+  "at": "2026-09-15T10:44:57.562635Z",
+  "event_type": "incident.escalated",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": null,
+  "phase": null,
+  "tool_name": null,
+  "action": "escalated",
+  "decision": "ok",
+  "reason": "execution budget exhausted: iterations 32 >= 32",
+  "trace_id": null,
+  "agent_run_id": null,
+  "tool_execution_id": null,
+  "data": {
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 32,
+    "llm_tokens": 0,
+    "tool_calls": 17,
+    "runtime_seconds": 1.1973569999999998,
+    "remediation_attempts": 0
+   }
+  }
+ }
+]

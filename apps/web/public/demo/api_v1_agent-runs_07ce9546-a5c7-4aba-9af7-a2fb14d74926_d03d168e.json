@@ -1,0 +1,38 @@
+{
+ "run": {
+  "created_at": "2026-09-15T10:32:15.665207Z",
+  "updated_at": "2026-09-15T10:32:15.665208Z",
+  "id": "07ce9546-a5c7-4aba-9af7-a2fb14d74926",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "flow_name": "api-latency-investigation",
+  "flow_version": "1.2.0",
+  "phase": "hypothesize",
+  "status": "completed",
+  "budget": {
+   "max_iterations": 32,
+   "max_tool_calls": 36,
+   "max_llm_calls": 26,
+   "max_llm_tokens": 220000,
+   "max_runtime_seconds": 900,
+   "max_remediation_attempts": 2
+  },
+  "usage": {
+   "iterations": 16,
+   "tool_calls": 11,
+   "llm_calls": 0,
+   "llm_tokens": 0,
+   "runtime_seconds": 1.002375,
+   "remediation_attempts": 0
+  },
+  "model": "deterministic",
+  "started_at": "2026-09-15T10:32:15.665194Z",
+  "finished_at": "2026-09-15T10:32:15.715584Z",
+  "termination_reason": "phase_complete",
+  "summary": "exit_conditions_met \u2192 validate",
+  "error": null,
+  "steps_count": 0,
+  "workflow_id": "incident-c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "attempt": 1
+ },
+ "steps": []
+}

@@ -1,0 +1,18 @@
+{
+ "component": "payment-service",
+ "time": "2026-09-15T11:50:43.126624+00:00",
+ "metrics": {
+  "request_rate": 48.95381287696446,
+  "error_rate": 0.3500742159783948,
+  "latency_p50_ms": 411.9673810916134,
+  "latency_p95_ms": 650.8158678072571,
+  "cpu_percent": 34.871738537660384,
+  "memory_percent": 39.57613528238822,
+  "db_pool_in_use": 2.0,
+  "db_pool_wait_ms": 0.0,
+  "redis_pool_in_use": 2.0,
+  "redis_pool_wait_ms": 0.0,
+  "replicas_ready": 2.0,
+  "up": 1.0
+ }
+}

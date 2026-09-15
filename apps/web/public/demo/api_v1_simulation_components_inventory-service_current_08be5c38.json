@@ -1,0 +1,18 @@
+{
+ "component": "inventory-service",
+ "time": "2026-09-15T11:50:43.126624+00:00",
+ "metrics": {
+  "request_rate": 97.90762575392891,
+  "error_rate": 0.0016364650878147905,
+  "latency_p50_ms": 20.046922064597887,
+  "latency_p95_ms": 32.539676660672626,
+  "cpu_percent": 30.389947483228532,
+  "memory_percent": 38.89811325914169,
+  "db_pool_in_use": 2.0,
+  "db_pool_wait_ms": 0.0,
+  "redis_pool_in_use": 2.0,
+  "redis_pool_wait_ms": 0.0,
+  "replicas_ready": 2.0,
+  "up": 1.0
+ }
+}

@@ -1,0 +1,5225 @@
+{
+ "incident": {
+  "created_at": "2026-09-15T10:36:26.078988Z",
+  "updated_at": "2026-09-15T10:37:20.485393Z",
+  "id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "tenant_id": "default",
+  "environment": "development",
+  "number": 1120,
+  "title": "Elevated API error rate",
+  "summary": "inventory-service error_rate 0.00139 -> 1 (+72061%): elevated error rate; order-service error_rate 0.0032 -> 1 (+31173%): elevated error rate; api-gateway error_rate 0.00512 -> 0.651 (+12614%): elevated error rate; inventory-service up 1 -> 0 (-100%): component unavailable",
+  "severity": "sev1",
+  "status": "resolved",
+  "flow_name": "error-rate-investigation",
+  "flow_version": "1.1.0",
+  "correlation_key": "api-gateway|inventory-service|order-service",
+  "affected_services": [
+   "api-gateway",
+   "inventory-service",
+   "order-service"
+  ],
+  "signals": [
+   {
+    "id": "02eacfd9-9756-4d9f-b7fc-84ee6a8e29e8",
+    "service": "api-gateway",
+    "metric": "error_rate",
+    "kind": "error_rate",
+    "observed_value": 0.6510301062760186,
+    "baseline_value": 0.005120723670137862,
+    "deviation_sigma": 343.9541650144949,
+    "detector": "error_rate:error_rate",
+    "detected_at": "2026-09-15T10:36:26.126624Z",
+    "window_seconds": 2,
+    "description": "api-gateway error_rate 0.00512 -> 0.651 (+12614%): elevated error rate"
+   },
+   {
+    "id": "382a185f-1d07-4cf5-8878-519ed2ef6d0f",
+    "service": "order-service",
+    "metric": "error_rate",
+    "kind": "error_rate",
+    "observed_value": 1.0,
+    "baseline_value": 0.0031976845476171393,
+    "deviation_sigma": 1058.0277477063353,
+    "detector": "error_rate:error_rate",
+    "detected_at": "2026-09-15T10:36:26.126624Z",
+    "window_seconds": 2,
+    "description": "order-service error_rate 0.0032 -> 1 (+31173%): elevated error rate"
+   },
+   {
+    "id": "211d2a6f-ab1b-4c69-942d-9d99003603ff",
+    "service": "inventory-service",
+    "metric": "error_rate",
+    "kind": "error_rate",
+    "observed_value": 1.0,
+    "baseline_value": 0.0013857889403088798,
+    "deviation_sigma": 1148.988607450218,
+    "detector": "error_rate:error_rate",
+    "detected_at": "2026-09-15T10:36:26.126624Z",
+    "window_seconds": 2,
+    "description": "inventory-service error_rate 0.00139 -> 1 (+72061%): elevated error rate"
+   },
+   {
+    "id": "7838b204-cd6c-484d-8b2a-50d5443178e5",
+    "service": "inventory-service",
+    "metric": "up",
+    "kind": "availability",
+    "observed_value": 0.0,
+    "baseline_value": 1.0,
+    "deviation_sigma": -20.0,
+    "detector": "up:availability",
+    "detected_at": "2026-09-15T10:36:26.126624Z",
+    "window_seconds": 2,
+    "description": "inventory-service up 1 -> 0 (-100%): component unavailable"
+   }
+  ],
+  "leading_hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+  "active_action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+  "workflow_id": "incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "detected_at": "2026-09-15T10:36:26.126624Z",
+  "acknowledged_at": "2026-09-15T10:36:26.139219Z",
+  "resolved_at": "2026-09-15T10:37:20.485393Z",
+  "closed_at": null,
+  "resolution_summary": "remediation verified: all 5 conditions held for 3 consecutive polls",
+  "root_cause_summary": "inventory-service is unavailable and its dependents fail as a result.",
+  "remediation_attempts": 1,
+  "version": 15
+ },
+ "hypotheses": [
+  {
+   "created_at": "2026-09-15T10:36:27.145882Z",
+   "updated_at": "2026-09-15T10:36:27.374435Z",
+   "id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "statement": "inventory-service is unavailable and its dependents fail as a result.",
+   "category": "dependency_failure",
+   "suspected_root_cause_service": "inventory-service",
+   "mechanism": "derived deterministically from evidence strength and service attribution",
+   "affected_services": [
+    "api-gateway",
+    "inventory-service",
+    "order-service"
+   ],
+   "status": "confirmed",
+   "confidence": 0.9728,
+   "score": {
+    "evidence_strength": 0.9397,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 1.0,
+    "historical_similarity": 0.0,
+    "contradiction_penalty": 0.0,
+    "validation_bonus": 0.15,
+    "total": 0.9728,
+    "explanation": [
+     "api-gateway fails because of inventory-service (90% contribution)",
+     "3 supporting evidence items (strength 0.94)",
+     "temporal alignment 1.00",
+     "inventory-service explains 3/3 symptomatic services",
+     "tests: 1 confirmed, 0 refuted"
+    ]
+   },
+   "supporting_evidence_ids": [
+    "3056ad35-c147-43ca-8766-2fe15eb99938",
+    "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+    "b128d51d-28ad-4435-895f-ce09a67cbdc4"
+   ],
+   "contradicting_evidence_ids": [],
+   "suggested_tests": [],
+   "tests": [
+    {
+     "id": "37a29d76-ac3c-4797-9949-22b69715f6f6",
+     "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+     "tool_execution_id": null,
+     "tool_name": "run_process_diagnostic",
+     "expectation": "result implicates inventory-service",
+     "outcome": "confirmed",
+     "detail": "deterministic judgement: diagnostic strongly implicates the suspected service",
+     "at": "2026-09-15T10:36:27.373417Z"
+    }
+   ],
+   "proposed_by": "deterministic",
+   "agent_run_id": "da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "version": 3
+  },
+  {
+   "created_at": "2026-09-15T10:36:27.147226Z",
+   "updated_at": "2026-09-15T10:36:27.153581Z",
+   "id": "1785f522-5745-4ba5-b697-c341714ec057",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "statement": "order-service is unavailable and its dependents fail as a result.",
+   "category": "dependency_failure",
+   "suspected_root_cause_service": "order-service",
+   "mechanism": "derived deterministically from evidence strength and service attribution",
+   "affected_services": [
+    "api-gateway",
+    "inventory-service",
+    "order-service"
+   ],
+   "status": "proposed",
+   "confidence": 0.4041,
+   "score": {
+    "evidence_strength": 0.898,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 1.0,
+    "historical_similarity": 0.0,
+    "contradiction_penalty": 0.8,
+    "validation_bonus": 0.0,
+    "total": 0.4041,
+    "explanation": [
+     "order-service's errors are inherited from inventory-service (100% contribution, own error rate 0.0%); it is a symptom, not the origin",
+     "2 supporting evidence items (strength 0.90)",
+     "temporal alignment 1.00",
+     "order-service explains 3/3 symptomatic services"
+    ]
+   },
+   "supporting_evidence_ids": [
+    "e72c5b65-3f49-4dec-8974-614474a4bfa1",
+    "deb7aaaa-c001-4454-bb14-5793c22abbeb"
+   ],
+   "contradicting_evidence_ids": [],
+   "suggested_tests": [],
+   "tests": [],
+   "proposed_by": "deterministic",
+   "agent_run_id": "da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "version": 2
+  },
+  {
+   "created_at": "2026-09-15T10:36:27.146679Z",
+   "updated_at": "2026-09-15T10:36:27.151334Z",
+   "id": "72ee2ce1-2855-4152-bf45-db3363e601d3",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "statement": "api-gateway is the most implicated component in the collected evidence.",
+   "category": "unknown",
+   "suspected_root_cause_service": "api-gateway",
+   "mechanism": "derived deterministically from evidence strength and service attribution",
+   "affected_services": [
+    "api-gateway",
+    "inventory-service",
+    "order-service"
+   ],
+   "status": "proposed",
+   "confidence": 0.1998,
+   "score": {
+    "evidence_strength": 0.85,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 0.3333,
+    "historical_similarity": 0.0,
+    "contradiction_penalty": 0.832,
+    "validation_bonus": 0.0,
+    "total": 0.1998,
+    "explanation": [
+     "api-gateway's errors are inherited from order-service (50% contribution, own error rate 0.0%); it is a symptom, not the origin",
+     "api-gateway's errors are inherited from inventory-service (90% contribution, own error rate 0.0%); it is a symptom, not the origin",
+     "1 supporting evidence items (strength 0.85)",
+     "temporal alignment 1.00",
+     "api-gateway explains 1/3 symptomatic services"
+    ]
+   },
+   "supporting_evidence_ids": [
+    "a5b7bc5a-3bde-41f8-a541-c30d7a4eb46f"
+   ],
+   "contradicting_evidence_ids": [],
+   "suggested_tests": [],
+   "tests": [],
+   "proposed_by": "deterministic",
+   "agent_run_id": "da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "version": 2
+  }
+ ],
+ "action_plans": [
+  {
+   "created_at": "2026-09-15T10:36:27.511994Z",
+   "updated_at": "2026-09-15T10:37:20.373123Z",
+   "id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+   "tool_name": "restart_service",
+   "tool_version": "1",
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "reason": "addresses dependency_failure on inventory-service",
+   "expected_effect": "symptomatic metrics return to baseline",
+   "risk": "medium",
+   "rollback": {
+    "available": false,
+    "tool_name": null,
+    "arguments": {},
+    "reason": "restart_service is not reversible; a failed verification escalates"
+   },
+   "verification": {
+    "conditions": [
+     {
+      "metric": "error_rate",
+      "service": "api-gateway",
+      "comparator": "lte",
+      "target": 0.03,
+      "max_ratio_to_baseline": null,
+      "description": "api-gateway error_rate lte 0.03"
+     },
+     {
+      "metric": "error_rate",
+      "service": "order-service",
+      "comparator": "lte",
+      "target": 0.03,
+      "max_ratio_to_baseline": null,
+      "description": "order-service error_rate lte 0.03"
+     },
+     {
+      "metric": "error_rate",
+      "service": "inventory-service",
+      "comparator": "lte",
+      "target": 0.03,
+      "max_ratio_to_baseline": null,
+      "description": "inventory-service error_rate lte 0.03"
+     },
+     {
+      "metric": "up",
+      "service": "inventory-service",
+      "comparator": "gte",
+      "target": 1.0,
+      "max_ratio_to_baseline": null,
+      "description": "inventory-service up gte 1"
+     },
+     {
+      "metric": "latency_p95_ms",
+      "service": "inventory-service",
+      "comparator": "lte",
+      "target": null,
+      "max_ratio_to_baseline": 1.5,
+      "description": "inventory-service latency_p95_ms within 1.5x of baseline"
+     }
+    ],
+    "stabilization_seconds": 30,
+    "timeout_seconds": 240,
+    "require_all": true
+   },
+   "timeout_seconds": 90,
+   "status": "verified",
+   "idempotency_key": "7123afc80dd8812817bc5f479d6789d2",
+   "proposed_by": "deterministic",
+   "agent_run_id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+   "approval_id": "00c9ce27-4587-4589-99b8-1b6a94964033",
+   "policy_decision": {
+    "effect": "require_approval",
+    "reason": "SEV1 incidents have humans in the loop for every change.",
+    "invariant": null,
+    "matched_rule": "approve-sev1-mutations",
+    "evaluated_rules": [
+     "deny-dangerous",
+     "allow-read-only",
+     "allow-diagnostics",
+     "approve-diagnostics-medium-risk",
+     "deny-high-risk-mutation-production",
+     "approve-rollback",
+     "approve-production-mutations",
+     "approve-sev1-mutations"
+    ]
+   },
+   "attempt": 1,
+   "verification_result": {
+    "status": "passed",
+    "checked_at": "2026-09-15T10:37:20.364546Z",
+    "condition_results": [
+     {
+      "ok": true,
+      "value": 0.005182081243413203,
+      "detail": "api-gateway.error_rate=0.00518 lte 0.03",
+      "metric": "error_rate",
+      "service": "api-gateway",
+      "baseline": 0.004976302247429489,
+      "description": "api-gateway error_rate lte 0.03",
+      "accumulation_share": null
+     },
+     {
+      "ok": true,
+      "value": 0.0027011177162443523,
+      "detail": "order-service.error_rate=0.0027 lte 0.03",
+      "metric": "error_rate",
+      "service": "order-service",
+      "baseline": 0.002832653973527574,
+      "description": "order-service error_rate lte 0.03",
+      "accumulation_share": null
+     },
+     {
+      "ok": true,
+      "value": 0.0010655906153039765,
+      "detail": "inventory-service.error_rate=0.00107 lte 0.03",
+      "metric": "error_rate",
+      "service": "inventory-service",
+      "baseline": 0.001175278293863384,
+      "description": "inventory-service error_rate lte 0.03",
+      "accumulation_share": null
+     },
+     {
+      "ok": true,
+      "value": 1.0,
+      "detail": "inventory-service.up=1 gte 1",
+      "metric": "up",
+      "service": "inventory-service",
+      "baseline": 1.0,
+      "description": "inventory-service up gte 1",
+      "accumulation_share": null
+     },
+     {
+      "ok": true,
+      "value": 32.27757021941398,
+      "detail": "inventory-service.latency_p95_ms=32.3 vs 1.5x baseline(32.1)=48.2",
+      "metric": "latency_p95_ms",
+      "service": "inventory-service",
+      "baseline": 32.12318060175157,
+      "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+      "accumulation_share": null
+     }
+    ],
+    "summary": "all 5 conditions held for 3 consecutive polls",
+    "before": {
+     "inventory-service.up": 0.6333333333333333,
+     "api-gateway.error_rate": 0.24244503849872606,
+     "order-service.error_rate": 0.3685391069010774,
+     "inventory-service.error_rate": 0.36744440574320447,
+     "inventory-service.latency_p95_ms": 20.35102803899891
+    },
+    "after": {
+     "inventory-service.up": 1.0,
+     "api-gateway.error_rate": 0.005182081243413203,
+     "order-service.error_rate": 0.0027011177162443523,
+     "inventory-service.error_rate": 0.0010655906153039765,
+     "inventory-service.latency_p95_ms": 32.27757021941398
+    }
+   }
+  }
+ ],
+ "approvals": [
+  {
+   "created_at": "2026-09-15T10:36:27.656798Z",
+   "updated_at": "2026-09-15T10:36:29.880577Z",
+   "id": "00c9ce27-4587-4589-99b8-1b6a94964033",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+   "status": "approved",
+   "title": "restart_service on inventory-service",
+   "summary": "addresses dependency_failure on inventory-service",
+   "risk": "medium",
+   "expected_impact": "symptomatic metrics return to baseline",
+   "rollback_summary": "restart_service is not reversible; a failed verification escalates",
+   "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+   "hypothesis_statement": "inventory-service is unavailable and its dependents fail as a result.",
+   "hypothesis_confidence": 0.9728,
+   "evidence_ids": [
+    "3056ad35-c147-43ca-8766-2fe15eb99938",
+    "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+    "b128d51d-28ad-4435-895f-ce09a67cbdc4"
+   ],
+   "requested_by": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "requested_at": "2026-09-15T10:36:27.644965Z",
+   "expires_at": "2026-09-15T10:51:27.644965Z",
+   "decided_at": "2026-09-15T10:36:29.880577Z",
+   "decided_by": "user:local-operator",
+   "decision_reason": "e2e harness",
+   "context": {
+    "policy": {
+     "effect": "require_approval",
+     "reason": "SEV1 incidents have humans in the loop for every change.",
+     "invariant": null,
+     "matched_rule": "approve-sev1-mutations",
+     "evaluated_rules": [
+      "deny-dangerous",
+      "allow-read-only",
+      "allow-diagnostics",
+      "approve-diagnostics-medium-risk",
+      "deny-high-risk-mutation-production",
+      "approve-rollback",
+      "approve-production-mutations",
+      "approve-sev1-mutations"
+     ]
+    },
+    "rollback": null,
+    "arguments": {
+     "service": "inventory-service"
+    },
+    "tool_name": "restart_service",
+    "verification": {
+     "conditions": [
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "api-gateway",
+       "comparator": "lte",
+       "description": "api-gateway error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "order-service",
+       "comparator": "lte",
+       "description": "order-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "inventory-service",
+       "comparator": "lte",
+       "description": "inventory-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "up",
+       "target": 1.0,
+       "service": "inventory-service",
+       "comparator": "gte",
+       "description": "inventory-service up gte 1",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "latency_p95_ms",
+       "target": null,
+       "service": "inventory-service",
+       "comparator": "lte",
+       "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+       "max_ratio_to_baseline": 1.5
+      }
+     ],
+     "require_all": true,
+     "timeout_seconds": 240,
+     "stabilization_seconds": 30
+    }
+   }
+  }
+ ],
+ "agent_runs": [
+  {
+   "created_at": "2026-09-15T10:36:26.212035Z",
+   "updated_at": "2026-09-15T10:36:26.212036Z",
+   "id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "triage",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 48,
+    "max_tool_calls": 54,
+    "max_llm_calls": 39,
+    "max_llm_tokens": 330000,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 3,
+    "tool_calls": 3,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.151167,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T10:36:26.212021Z",
+   "finished_at": "2026-09-15T10:36:26.410393Z",
+   "termination_reason": "phase_complete",
+   "summary": "exit_conditions_met \u2192 investigate",
+   "error": null,
+   "steps_count": 9,
+   "workflow_id": "incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "attempt": 1
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.536195Z",
+   "updated_at": "2026-09-15T10:36:26.536196Z",
+   "id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "investigate",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 48,
+    "max_tool_calls": 54,
+    "max_llm_calls": 39,
+    "max_llm_tokens": 330000,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 11,
+    "tool_calls": 11,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.5371319999999999,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T10:36:26.536181Z",
+   "finished_at": "2026-09-15T10:36:26.967753Z",
+   "termination_reason": "phase_complete",
+   "summary": "exhausted \u2192 hypothesize",
+   "error": null,
+   "steps_count": 24,
+   "workflow_id": "incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "attempt": 1
+  },
+  {
+   "created_at": "2026-09-15T10:36:27.099269Z",
+   "updated_at": "2026-09-15T10:36:27.099271Z",
+   "id": "da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "hypothesize",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 48,
+    "max_tool_calls": 54,
+    "max_llm_calls": 39,
+    "max_llm_tokens": 330000,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 12,
+    "tool_calls": 11,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.5946349999999999,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T10:36:27.099254Z",
+   "finished_at": "2026-09-15T10:36:27.203324Z",
+   "termination_reason": "phase_complete",
+   "summary": "exit_conditions_met \u2192 validate",
+   "error": null,
+   "steps_count": 2,
+   "workflow_id": "incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "attempt": 1
+  },
+  {
+   "created_at": "2026-09-15T10:36:27.320220Z",
+   "updated_at": "2026-09-15T10:36:27.320221Z",
+   "id": "8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "validate",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 48,
+    "max_tool_calls": 54,
+    "max_llm_calls": 39,
+    "max_llm_tokens": 330000,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 13,
+    "tool_calls": 12,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.6542769999999999,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T10:36:27.320210Z",
+   "finished_at": "2026-09-15T10:36:27.420256Z",
+   "termination_reason": "phase_complete",
+   "summary": "exit_conditions_met \u2192 remediate",
+   "error": null,
+   "steps_count": 3,
+   "workflow_id": "incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "attempt": 1
+  },
+  {
+   "created_at": "2026-09-15T10:36:27.464218Z",
+   "updated_at": "2026-09-15T10:36:27.464218Z",
+   "id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "flow_name": "error-rate-investigation",
+   "flow_version": "1.1.0",
+   "phase": "remediate",
+   "status": "completed",
+   "budget": {
+    "max_iterations": 48,
+    "max_tool_calls": 54,
+    "max_llm_calls": 39,
+    "max_llm_tokens": 330000,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "usage": {
+    "iterations": 13,
+    "tool_calls": 12,
+    "llm_calls": 0,
+    "llm_tokens": 0,
+    "runtime_seconds": 0.6568269999999999,
+    "remediation_attempts": 0
+   },
+   "model": "deterministic-planner",
+   "started_at": "2026-09-15T10:36:27.464211Z",
+   "finished_at": "2026-09-15T10:36:27.539055Z",
+   "termination_reason": "action_planned",
+   "summary": "planned restart_service on inventory-service",
+   "error": null,
+   "steps_count": 2,
+   "workflow_id": "incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "attempt": 1
+  }
+ ],
+ "evidence": {
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "evidence": [
+   {
+    "created_at": "2026-09-15T10:36:26.259259Z",
+    "updated_at": "2026-09-15T10:36:26.259260Z",
+    "id": "a5b7bc5a-3bde-41f8-a541-c30d7a4eb46f",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "health",
+    "source": "get_health",
+    "service": "api-gateway",
+    "title": "api-gateway health",
+    "summary": "api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+    "data": {
+     "state": "unhealthy",
+     "checks": {
+      "cpu_ok": true,
+      "pools_ok": true,
+      "memory_ok": true,
+      "latency_ok": true,
+      "process_up": true,
+      "error_rate_ok": false,
+      "dependencies_ok": false
+     },
+     "message": "failing: error_rate_ok, dependencies_ok",
+     "service": "api-gateway"
+    },
+    "strength": 0.85,
+    "observed_at": "2026-09-15T10:36:26.259230Z",
+    "tool_execution_id": "131a9955-61f9-42e4-93fc-b9635435bdb4",
+    "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+    "phase": "triage",
+    "tags": [
+     "unhealthy",
+     "error_rate_ok",
+     "dependencies_ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.309082Z",
+    "updated_at": "2026-09-15T10:36:26.309083Z",
+    "id": "e72c5b65-3f49-4dec-8974-614474a4bfa1",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "health",
+    "source": "get_health",
+    "service": "order-service",
+    "title": "order-service health",
+    "summary": "order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+    "data": {
+     "state": "unhealthy",
+     "checks": {
+      "cpu_ok": true,
+      "pools_ok": true,
+      "memory_ok": true,
+      "latency_ok": true,
+      "process_up": true,
+      "error_rate_ok": false,
+      "dependencies_ok": false
+     },
+     "message": "failing: error_rate_ok, dependencies_ok",
+     "service": "order-service"
+    },
+    "strength": 0.85,
+    "observed_at": "2026-09-15T10:36:26.309050Z",
+    "tool_execution_id": "be2582aa-693d-4808-85e1-b05aad90048e",
+    "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+    "phase": "triage",
+    "tags": [
+     "unhealthy",
+     "error_rate_ok",
+     "dependencies_ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.355072Z",
+    "updated_at": "2026-09-15T10:36:26.355073Z",
+    "id": "3056ad35-c147-43ca-8766-2fe15eb99938",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "health",
+    "source": "get_health",
+    "service": "inventory-service",
+    "title": "inventory-service health",
+    "summary": "inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+    "data": {
+     "state": "unhealthy",
+     "checks": {
+      "cpu_ok": true,
+      "pools_ok": true,
+      "memory_ok": true,
+      "latency_ok": true,
+      "process_up": false,
+      "error_rate_ok": false,
+      "dependencies_ok": true
+     },
+     "message": "failing: process_up, error_rate_ok",
+     "service": "inventory-service"
+    },
+    "strength": 0.85,
+    "observed_at": "2026-09-15T10:36:26.355037Z",
+    "tool_execution_id": "851357c0-d9a0-4543-a784-82050e079f3a",
+    "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+    "phase": "triage",
+    "tags": [
+     "unhealthy",
+     "process_up",
+     "error_rate_ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.583303Z",
+    "updated_at": "2026-09-15T10:36:26.583304Z",
+    "id": "c394b366-f032-4d17-842b-3a2736ecc74a",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "diagnostic",
+    "source": "inspect_redis",
+    "service": "redis",
+    "title": "redis connection analysis",
+    "summary": "redis: 10/250 connections (4% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+    "data": {
+     "at": "2026-09-15T10:36:27.126624+00:00",
+     "hit_rate": 0.97,
+     "available": true,
+     "component": "redis",
+     "saturation": 0.04,
+     "top_client": "order-service",
+     "max_clients": 250,
+     "ops_per_sec": 261,
+     "latency_p95_ms": 0.8,
+     "blocked_clients": 0,
+     "connected_clients": 10,
+     "leaked_by_service": {},
+     "clients_by_service": {
+      "auth-service": 2,
+      "user-service": 2,
+      "order-service": 3,
+      "payment-service": 2,
+      "inventory-service": 0,
+      "notification-service": 1
+     }
+    },
+    "strength": 0.2,
+    "observed_at": "2026-09-15T10:36:26.583260Z",
+    "tool_execution_id": "ddcd1cdb-fa2b-445f-ac12-b7c5b3e1458a",
+    "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+    "phase": "investigate",
+    "tags": [
+     "cache",
+     "ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.633642Z",
+    "updated_at": "2026-09-15T10:36:26.633643Z",
+    "id": "cd0152e1-d710-4107-8274-875d8f005b25",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "diagnostic",
+    "source": "inspect_database",
+    "service": "postgres",
+    "title": "postgres connection analysis",
+    "summary": "postgres: 9/100 connections (9% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+    "data": {
+     "at": "2026-09-15T10:36:27.126624+00:00",
+     "available": true,
+     "component": "postgres",
+     "lock_waits": 0.0,
+     "saturation": 0.09,
+     "top_client": "order-service",
+     "connections": 9,
+     "latency_p95_ms": 4.01,
+     "max_connections": 100,
+     "idle_in_transaction": 0,
+     "connections_by_client": {
+      "auth-service": 2,
+      "user-service": 2,
+      "order-service": 3,
+      "payment-service": 2,
+      "inventory-service": 0
+     },
+     "idle_in_transaction_by_client": {}
+    },
+    "strength": 0.2,
+    "observed_at": "2026-09-15T10:36:26.633608Z",
+    "tool_execution_id": "75124399-dfbd-49d9-a6a2-e2a3f9bc1e96",
+    "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+    "phase": "investigate",
+    "tags": [
+     "database",
+     "ok"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.682074Z",
+    "updated_at": "2026-09-15T10:36:26.682074Z",
+    "id": "deb7aaaa-c001-4454-bb14-5793c22abbeb",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "topology",
+    "source": "inspect_dependencies",
+    "service": "order-service",
+    "title": "api-gateway dependencies",
+    "summary": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (50% errors), inventory-service (down); own error rate 0.0%, own latency 8ms",
+    "data": {
+     "service": "api-gateway",
+     "dependents": [],
+     "dependencies": [
+      "auth-service",
+      "user-service",
+      "order-service",
+      "payment-service",
+      "inventory-service",
+      "notification-service"
+     ],
+     "contributions": [
+      {
+       "target": "order-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 3000.0,
+       "calls_per_request": 0.5,
+       "error_contribution": 0.5
+      },
+      {
+       "target": "inventory-service",
+       "critical": true,
+       "available": false,
+       "timeout_ms": 2000.0,
+       "calls_per_request": 0.3,
+       "error_contribution": 0.3
+      },
+      {
+       "target": "user-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 2000.0,
+       "calls_per_request": 0.6,
+       "error_contribution": 0.002
+      },
+      {
+       "target": "auth-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 1500.0,
+       "calls_per_request": 1.0,
+       "error_contribution": 0.001
+      },
+      {
+       "target": "payment-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 3000.0,
+       "calls_per_request": 0.2,
+       "error_contribution": 0.0
+      },
+      {
+       "target": "notification-service",
+       "critical": false,
+       "available": true,
+       "timeout_ms": 2000.0,
+       "calls_per_request": 0.1,
+       "error_contribution": 0.0
+      }
+     ],
+     "own_error_rate": 0.0,
+     "own_latency_ms": 8.1,
+     "downstream_closure": [
+      "auth-service",
+      "user-service",
+      "order-service",
+      "payment-service",
+      "inventory-service",
+      "notification-service",
+      "redis",
+      "postgres"
+     ]
+    },
+    "strength": 0.8,
+    "observed_at": "2026-09-15T10:36:26.682045Z",
+    "tool_execution_id": "91ad110a-3664-406c-991c-236ebda2ad9e",
+    "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+    "phase": "investigate",
+    "tags": [
+     "order-service",
+     "inventory-service"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.730449Z",
+    "updated_at": "2026-09-15T10:36:26.730451Z",
+    "id": "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "topology",
+    "source": "inspect_dependencies",
+    "service": "inventory-service",
+    "title": "order-service dependencies",
+    "summary": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own error rate 0.0%, own latency 21ms",
+    "data": {
+     "service": "order-service",
+     "dependents": [
+      "api-gateway"
+     ],
+     "dependencies": [
+      "postgres",
+      "redis",
+      "inventory-service",
+      "payment-service"
+     ],
+     "contributions": [
+      {
+       "target": "inventory-service",
+       "critical": true,
+       "available": false,
+       "timeout_ms": 2000.0,
+       "calls_per_request": 1.0,
+       "error_contribution": 1.0
+      },
+      {
+       "target": "payment-service",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 2500.0,
+       "calls_per_request": 0.4,
+       "error_contribution": 0.001
+      },
+      {
+       "target": "postgres",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 1500.0,
+       "calls_per_request": 1.0,
+       "error_contribution": 0.0
+      },
+      {
+       "target": "redis",
+       "critical": true,
+       "available": true,
+       "timeout_ms": 500.0,
+       "calls_per_request": 1.5,
+       "error_contribution": 0.0
+      }
+     ],
+     "own_error_rate": 0.0,
+     "own_latency_ms": 20.6,
+     "downstream_closure": [
+      "postgres",
+      "redis",
+      "inventory-service",
+      "payment-service"
+     ]
+    },
+    "strength": 0.8,
+    "observed_at": "2026-09-15T10:36:26.730400Z",
+    "tool_execution_id": "314dbee4-ca51-4e90-bc6f-2c905779bedb",
+    "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+    "phase": "investigate",
+    "tags": [
+     "inventory-service"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.777420Z",
+    "updated_at": "2026-09-15T10:36:26.777420Z",
+    "id": "b128d51d-28ad-4435-895f-ce09a67cbdc4",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "trace",
+    "source": "query_traces",
+    "service": "inventory-service",
+    "title": "trace analysis",
+    "summary": "12 traces sampled, 12 errored, avg 80ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x7, user-service x3",
+    "data": {
+     "count": 12,
+     "errored": 12,
+     "examples": [
+      {
+       "error": true,
+       "spans": [
+        {
+         "ms": 132,
+         "error": true,
+         "service": "api-gateway"
+        },
+        {
+         "ms": 37,
+         "error": false,
+         "service": "payment-service"
+        },
+        {
+         "ms": 74,
+         "error": true,
+         "service": "order-service"
+        },
+        {
+         "ms": 49,
+         "error": false,
+         "service": "payment-service"
+        },
+        {
+         "ms": 12,
+         "error": false,
+         "service": "auth-service"
+        },
+        {
+         "ms": 0,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 4,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 1,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 5,
+         "error": true,
+         "service": "inventory-service"
+        },
+        {
+         "ms": 2,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 1,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 3,
+         "error": false,
+         "service": "postgres"
+        }
+       ],
+       "trace_id": "972eb67faf614cab8d4652e5c1dd2854",
+       "duration_ms": 132
+      },
+      {
+       "error": true,
+       "spans": [
+        {
+         "ms": 87,
+         "error": true,
+         "service": "api-gateway"
+        },
+        {
+         "ms": 38,
+         "error": true,
+         "service": "order-service"
+        },
+        {
+         "ms": 20,
+         "error": false,
+         "service": "user-service"
+        },
+        {
+         "ms": 13,
+         "error": false,
+         "service": "auth-service"
+        },
+        {
+         "ms": 0,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 2,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 0,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 2,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 1,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 5,
+         "error": true,
+         "service": "inventory-service"
+        }
+       ],
+       "trace_id": "1d4992a42e4bf70a18aaf00131d8be21",
+       "duration_ms": 87
+      },
+      {
+       "error": true,
+       "spans": [
+        {
+         "ms": 96,
+         "error": true,
+         "service": "api-gateway"
+        },
+        {
+         "ms": 32,
+         "error": true,
+         "service": "order-service"
+        },
+        {
+         "ms": 39,
+         "error": false,
+         "service": "user-service"
+        },
+        {
+         "ms": 13,
+         "error": false,
+         "service": "auth-service"
+        },
+        {
+         "ms": 0,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 4,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 1,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 2,
+         "error": false,
+         "service": "postgres"
+        },
+        {
+         "ms": 0,
+         "error": false,
+         "service": "redis"
+        },
+        {
+         "ms": 5,
+         "error": true,
+         "service": "inventory-service"
+        },
+        {
+         "ms": 5,
+         "error": true,
+         "service": "inventory-service"
+        }
+       ],
+       "trace_id": "6dfd0e735150ca4fa487bd794a2ba8fd",
+       "duration_ms": 96
+      }
+     ],
+     "slowest_span": {
+      "user-service": 3,
+      "order-service": 7,
+      "payment-service": 2
+     },
+     "failure_origin": {
+      "inventory-service": 12
+     },
+     "avg_duration_ms": 79.72583333333334
+    },
+    "strength": 0.9,
+    "observed_at": "2026-09-15T10:36:26.777390Z",
+    "tool_execution_id": "bbd8cae0-5e01-4ee4-9a18-b0649ff7d958",
+    "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+    "phase": "investigate",
+    "tags": [
+     "inventory-service"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.822038Z",
+    "updated_at": "2026-09-15T10:36:26.822039Z",
+    "id": "aa98032b-5028-48b4-8605-ce6249fff1bc",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "deployment",
+    "source": "inspect_deployment",
+    "service": "inventory-service",
+    "title": "inventory-service deployment 1.9.3",
+    "summary": "inventory-service runs 1.9.3 deployed 24 h ago (previous 1.9.2); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "data": {
+     "recent": false,
+     "history": [
+      {
+       "summary": "baseline release",
+       "version": "1.9.3",
+       "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+      }
+     ],
+     "service": "inventory-service",
+     "age_minutes": 1445.42825595,
+     "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+     "is_rollback": false,
+     "current_version": "1.9.3",
+     "previous_version": "1.9.2",
+     "rollback_available": true
+    },
+    "strength": 0.15,
+    "observed_at": "2026-09-15T10:36:26.822010Z",
+    "tool_execution_id": "30c7efea-02c3-489b-9d47-355e6c34b9b5",
+    "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+    "phase": "investigate",
+    "tags": [
+     "stable"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.870506Z",
+    "updated_at": "2026-09-15T10:36:26.870506Z",
+    "id": "a4f628cd-afe0-409e-b5c4-6740dc3f5904",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "deployment",
+    "source": "inspect_deployment",
+    "service": "api-gateway",
+    "title": "api-gateway deployment 3.2.1",
+    "summary": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "data": {
+     "recent": false,
+     "history": [
+      {
+       "summary": "baseline release",
+       "version": "3.2.1",
+       "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+      }
+     ],
+     "service": "api-gateway",
+     "age_minutes": 1445.4290637333334,
+     "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+     "is_rollback": false,
+     "current_version": "3.2.1",
+     "previous_version": "3.2.0",
+     "rollback_available": true
+    },
+    "strength": 0.15,
+    "observed_at": "2026-09-15T10:36:26.870477Z",
+    "tool_execution_id": "5a8f6e51-0a62-47c9-b3f6-c97474b7575f",
+    "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+    "phase": "investigate",
+    "tags": [
+     "stable"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:26.915299Z",
+    "updated_at": "2026-09-15T10:36:26.915301Z",
+    "id": "d1961b3d-1098-4a70-950d-834227c51075",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "deployment",
+    "source": "inspect_deployment",
+    "service": "order-service",
+    "title": "order-service deployment 4.1.0",
+    "summary": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "data": {
+     "recent": false,
+     "history": [
+      {
+       "summary": "baseline release",
+       "version": "4.1.0",
+       "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+      }
+     ],
+     "service": "order-service",
+     "age_minutes": 1445.4298096833334,
+     "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+     "is_rollback": false,
+     "current_version": "4.1.0",
+     "previous_version": "4.0.9",
+     "rollback_available": true
+    },
+    "strength": 0.15,
+    "observed_at": "2026-09-15T10:36:26.915248Z",
+    "tool_execution_id": "e60227c7-ccaa-4671-9109-5fd96396e432",
+    "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+    "phase": "investigate",
+    "tags": [
+     "stable"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:27.362601Z",
+    "updated_at": "2026-09-15T10:36:27.362602Z",
+    "id": "a5fa40a4-b8ec-4650-af03-3cc7bc21bf61",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "diagnostic",
+    "source": "run_process_diagnostic",
+    "service": "inventory-service",
+    "title": "inventory-service process diagnostic",
+    "summary": "inventory-service process: DOWN (crashed), version 1.9.3, uptime 327s, replicas 2.0/2, restarts 0, mem 0.0%, cpu 0.0%, open redis conns 2, open db conns 2",
+    "data": {
+     "at": "2026-09-15T10:36:28.126624+00:00",
+     "up": false,
+     "crashed": true,
+     "service": "inventory-service",
+     "version": "1.9.3",
+     "replicas": 2,
+     "restarting": false,
+     "cpu_percent": 0.0,
+     "restart_count": 0,
+     "memory_percent": 0.0,
+     "replicas_ready": 2.0,
+     "uptime_seconds": 327,
+     "open_db_connections": 2,
+     "open_redis_connections": 2
+    },
+    "strength": 0.8,
+    "observed_at": "2026-09-15T10:36:27.362573Z",
+    "tool_execution_id": "cd76c08d-7b3d-46d0-bb97-1dea5f844ed6",
+    "agent_run_id": "8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+    "phase": "validate",
+    "tags": [
+     "abnormal"
+    ]
+   },
+   {
+    "created_at": "2026-09-15T10:36:30.086107Z",
+    "updated_at": "2026-09-15T10:36:30.086108Z",
+    "id": "5aa9731b-e337-4bde-8c5e-a6cc3b234ff5",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "kind": "action_result",
+    "source": "restart_service",
+    "service": "inventory-service",
+    "title": "restart inventory-service",
+    "summary": "restart of inventory-service restarting (eta 10s, version 1.9.3)",
+    "data": {
+     "at": "2026-09-15T10:36:30.126624+00:00",
+     "action": "restart",
+     "status": "restarting",
+     "target": "inventory-service",
+     "version": "1.9.3",
+     "eta_seconds": 10.0
+    },
+    "strength": 0.5,
+    "observed_at": "2026-09-15T10:36:30.086033Z",
+    "tool_execution_id": "5673d20b-7098-4d5c-9510-34175ed77ec8",
+    "agent_run_id": null,
+    "phase": "remediate",
+    "tags": [
+     "remediation",
+     "restart"
+    ]
+   }
+  ],
+  "relations": [
+   {
+    "id": "1bb9e4c3-1cb4-4ff4-98c5-3eda8bcc2360",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "e72c5b65-3f49-4dec-8974-614474a4bfa1",
+    "from_kind": "evidence",
+    "to_id": "order-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.314092Z",
+    "created_by": "get_health"
+   },
+   {
+    "id": "96c46fc0-1bbf-4248-8b87-cba548319102",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "c394b366-f032-4d17-842b-3a2736ecc74a",
+    "from_kind": "evidence",
+    "to_id": "redis",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.588463Z",
+    "created_by": "inspect_redis"
+   },
+   {
+    "id": "7c2eb135-d776-472f-8ba7-944dd719111d",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "deb7aaaa-c001-4454-bb14-5793c22abbeb",
+    "from_kind": "evidence",
+    "to_id": "order-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.686359Z",
+    "created_by": "inspect_dependencies"
+   },
+   {
+    "id": "8ea1c645-55ee-45f0-8a58-80fa5aa63540",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "b128d51d-28ad-4435-895f-ce09a67cbdc4",
+    "from_kind": "evidence",
+    "to_id": "inventory-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.781859Z",
+    "created_by": "query_traces"
+   },
+   {
+    "id": "0f022600-8f90-4714-bba1-4b25dfed62da",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "a4f628cd-afe0-409e-b5c4-6740dc3f5904",
+    "from_kind": "evidence",
+    "to_id": "api-gateway",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.874919Z",
+    "created_by": "inspect_deployment"
+   },
+   {
+    "id": "9c95c374-4228-451a-8f8b-c4be912f3e9f",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "3056ad35-c147-43ca-8766-2fe15eb99938",
+    "from_kind": "evidence",
+    "to_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.149040Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "025a1d4d-8692-489d-9cbb-efa7b5c9f731",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+    "from_kind": "evidence",
+    "to_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.149642Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "ab5679e3-81d7-432b-abce-dee97e0d55fc",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "b128d51d-28ad-4435-895f-ce09a67cbdc4",
+    "from_kind": "evidence",
+    "to_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.150224Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "878d23b2-45fb-4505-95a5-d00922752a3e",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "a5b7bc5a-3bde-41f8-a541-c30d7a4eb46f",
+    "from_kind": "evidence",
+    "to_id": "api-gateway",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.263445Z",
+    "created_by": "get_health"
+   },
+   {
+    "id": "9fbe5df7-1a0f-475d-8646-0e026acaf67d",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "3056ad35-c147-43ca-8766-2fe15eb99938",
+    "from_kind": "evidence",
+    "to_id": "inventory-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.360048Z",
+    "created_by": "get_health"
+   },
+   {
+    "id": "1f03bfd9-d2e4-469c-abb3-83f313bd4fe9",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "cd0152e1-d710-4107-8274-875d8f005b25",
+    "from_kind": "evidence",
+    "to_id": "postgres",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.638406Z",
+    "created_by": "inspect_database"
+   },
+   {
+    "id": "8e32bea2-bd04-475f-b3d9-a1f4e0322cd1",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+    "from_kind": "evidence",
+    "to_id": "inventory-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.736497Z",
+    "created_by": "inspect_dependencies"
+   },
+   {
+    "id": "9b7cb524-4280-43db-b034-af840209281c",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "aa98032b-5028-48b4-8605-ce6249fff1bc",
+    "from_kind": "evidence",
+    "to_id": "inventory-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.827202Z",
+    "created_by": "inspect_deployment"
+   },
+   {
+    "id": "929eef86-60cc-4321-8ce7-615d4beeac4d",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "d1961b3d-1098-4a70-950d-834227c51075",
+    "from_kind": "evidence",
+    "to_id": "order-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:26.920102Z",
+    "created_by": "inspect_deployment"
+   },
+   {
+    "id": "da0b3206-8363-44cd-a87b-9a5545259330",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "a5fa40a4-b8ec-4650-af03-3cc7bc21bf61",
+    "from_kind": "evidence",
+    "to_id": "inventory-service",
+    "to_kind": "service",
+    "kind": "observed_on",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.367219Z",
+    "created_by": "run_process_diagnostic"
+   },
+   {
+    "id": "91aca96a-b3da-4a47-ae4e-533088df48eb",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "from_kind": "hypothesis",
+    "to_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+    "to_kind": "action",
+    "kind": "resolved_by",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.515217Z",
+    "created_by": "workflow"
+   },
+   {
+    "id": "89feae97-e805-4d38-b7a3-aac0c879a377",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "from_kind": "hypothesis",
+    "to_id": "inventory-service",
+    "to_kind": "service",
+    "kind": "caused_by",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.150729Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "35e81e05-3f7a-4e52-8e38-f03cc33efb09",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "a5b7bc5a-3bde-41f8-a541-c30d7a4eb46f",
+    "from_kind": "evidence",
+    "to_id": "72ee2ce1-2855-4152-bf45-db3363e601d3",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.152460Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "ff7e3e27-9509-4c89-a691-4d5429e3008f",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "72ee2ce1-2855-4152-bf45-db3363e601d3",
+    "from_kind": "hypothesis",
+    "to_id": "api-gateway",
+    "to_kind": "service",
+    "kind": "caused_by",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.153001Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "9433b2a6-a696-4823-9ef4-faff408d157f",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "e72c5b65-3f49-4dec-8974-614474a4bfa1",
+    "from_kind": "evidence",
+    "to_id": "1785f522-5745-4ba5-b697-c341714ec057",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.154623Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "3a55b584-5c57-46e2-9630-ace6cf6a0c11",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "deb7aaaa-c001-4454-bb14-5793c22abbeb",
+    "from_kind": "evidence",
+    "to_id": "1785f522-5745-4ba5-b697-c341714ec057",
+    "to_kind": "hypothesis",
+    "kind": "supports",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.155098Z",
+    "created_by": "runtime"
+   },
+   {
+    "id": "4d8bb3a6-c14e-43cd-9ef0-fccf8d916ca7",
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "from_id": "1785f522-5745-4ba5-b697-c341714ec057",
+    "from_kind": "hypothesis",
+    "to_id": "order-service",
+    "to_kind": "service",
+    "kind": "caused_by",
+    "weight": 1.0,
+    "created_at": "2026-09-15T10:36:27.155574Z",
+    "created_by": "runtime"
+   }
+  ]
+ },
+ "tool_executions": [
+  {
+   "created_at": "2026-09-15T10:36:26.256817Z",
+   "updated_at": "2026-09-15T10:36:26.256818Z",
+   "id": "131a9955-61f9-42e4-93fc-b9635435bdb4",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "b8c34c1e-f03d-45e2-9506-10a81755d444",
+   "tool_name": "get_health",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "idempotency_key": "e8986700598fc4d3fb63db9fc962e120",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "b8c34c1e-f03d-45e2-9506-10a81755d444",
+    "tool_name": "get_health",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "get_health@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is triaging"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "get_health is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'triage' lists get_health"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits get_health"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key e8986700598f\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 0/54, iterations 0/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.256174Z"
+   },
+   "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "action_plan_id": null,
+   "phase": "triage",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.256174Z",
+   "finished_at": "2026-09-15T10:36:26.259230Z",
+   "duration_ms": 3.056,
+   "result": {
+    "state": "unhealthy",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": true,
+     "process_up": true,
+     "error_rate_ok": false,
+     "dependencies_ok": false
+    },
+    "message": "failing: error_rate_ok, dependencies_ok",
+    "service": "api-gateway"
+   },
+   "result_summary": "api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+   "error": null,
+   "evidence_ids": [
+    "a5b7bc5a-3bde-41f8-a541-c30d7a4eb46f"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.305308Z",
+   "updated_at": "2026-09-15T10:36:26.305311Z",
+   "id": "be2582aa-693d-4808-85e1-b05aad90048e",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "3dc32b96-4d3e-4ba6-96f3-d5978baa1288",
+   "tool_name": "get_health",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "order-service"
+   },
+   "idempotency_key": "b2b697d0a15e8cb8d05a576640a7e3b5",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "3dc32b96-4d3e-4ba6-96f3-d5978baa1288",
+    "tool_name": "get_health",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "get_health@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is triaging"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "get_health is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'triage' lists get_health"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits get_health"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key b2b697d0a15e\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 1/54, iterations 1/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.304327Z"
+   },
+   "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "action_plan_id": null,
+   "phase": "triage",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.304327Z",
+   "finished_at": "2026-09-15T10:36:26.309050Z",
+   "duration_ms": 4.723,
+   "result": {
+    "state": "unhealthy",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": true,
+     "process_up": true,
+     "error_rate_ok": false,
+     "dependencies_ok": false
+    },
+    "message": "failing: error_rate_ok, dependencies_ok",
+    "service": "order-service"
+   },
+   "result_summary": "order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+   "error": null,
+   "evidence_ids": [
+    "e72c5b65-3f49-4dec-8974-614474a4bfa1"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.352632Z",
+   "updated_at": "2026-09-15T10:36:26.352633Z",
+   "id": "851357c0-d9a0-4543-a784-82050e079f3a",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "c4f67d54-d025-4759-b52a-3f9a559c97b0",
+   "tool_name": "get_health",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "idempotency_key": "dd5b911b9120e543d6c1c43342a0ca9c",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "c4f67d54-d025-4759-b52a-3f9a559c97b0",
+    "tool_name": "get_health",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "get_health@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is triaging"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "get_health is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'triage' lists get_health"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits get_health"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key dd5b911b9120\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 2/54, iterations 2/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.352042Z"
+   },
+   "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "action_plan_id": null,
+   "phase": "triage",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.352042Z",
+   "finished_at": "2026-09-15T10:36:26.355037Z",
+   "duration_ms": 2.9949999999999997,
+   "result": {
+    "state": "unhealthy",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": true,
+     "process_up": false,
+     "error_rate_ok": false,
+     "dependencies_ok": true
+    },
+    "message": "failing: process_up, error_rate_ok",
+    "service": "inventory-service"
+   },
+   "result_summary": "inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+   "error": null,
+   "evidence_ids": [
+    "3056ad35-c147-43ca-8766-2fe15eb99938"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.578378Z",
+   "updated_at": "2026-09-15T10:36:26.578379Z",
+   "id": "ddcd1cdb-fa2b-445f-ac12-b7c5b3e1458a",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "3e6f861a-b283-421b-8d0b-55770de9f7cc",
+   "tool_name": "inspect_redis",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "component": "redis"
+   },
+   "idempotency_key": "c56d86f366f169cddafd0707708e4d26",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "3e6f861a-b283-421b-8d0b-55770de9f7cc",
+    "tool_name": "inspect_redis",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_redis@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_redis is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_redis"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits inspect_redis"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key c56d86f366f1\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 3/54, iterations 3/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.577637Z"
+   },
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.577637Z",
+   "finished_at": "2026-09-15T10:36:26.583260Z",
+   "duration_ms": 5.623,
+   "result": {
+    "at": "2026-09-15T10:36:27.126624+00:00",
+    "hit_rate": 0.97,
+    "available": true,
+    "component": "redis",
+    "saturation": 0.04,
+    "top_client": "order-service",
+    "max_clients": 250,
+    "ops_per_sec": 261,
+    "latency_p95_ms": 0.8,
+    "blocked_clients": 0,
+    "connected_clients": 10,
+    "leaked_by_service": {},
+    "clients_by_service": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 3,
+     "payment-service": 2,
+     "inventory-service": 0,
+     "notification-service": 1
+    }
+   },
+   "result_summary": "redis: 10/250 connections (4% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+   "error": null,
+   "evidence_ids": [
+    "c394b366-f032-4d17-842b-3a2736ecc74a"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.630833Z",
+   "updated_at": "2026-09-15T10:36:26.630834Z",
+   "id": "75124399-dfbd-49d9-a6a2-e2a3f9bc1e96",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "b42fad35-7245-4455-a6e5-a22dd48e08d7",
+   "tool_name": "inspect_database",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "component": "postgres"
+   },
+   "idempotency_key": "c6327287799d9e9e6f55d44f41af85df",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "b42fad35-7245-4455-a6e5-a22dd48e08d7",
+    "tool_name": "inspect_database",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_database@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_database is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_database"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits inspect_database"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key c6327287799d\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 4/54, iterations 4/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.630218Z"
+   },
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.630218Z",
+   "finished_at": "2026-09-15T10:36:26.633608Z",
+   "duration_ms": 3.3899999999999997,
+   "result": {
+    "at": "2026-09-15T10:36:27.126624+00:00",
+    "available": true,
+    "component": "postgres",
+    "lock_waits": 0.0,
+    "saturation": 0.09,
+    "top_client": "order-service",
+    "connections": 9,
+    "latency_p95_ms": 4.01,
+    "max_connections": 100,
+    "idle_in_transaction": 0,
+    "connections_by_client": {
+     "auth-service": 2,
+     "user-service": 2,
+     "order-service": 3,
+     "payment-service": 2,
+     "inventory-service": 0
+    },
+    "idle_in_transaction_by_client": {}
+   },
+   "result_summary": "postgres: 9/100 connections (9% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+   "error": null,
+   "evidence_ids": [
+    "cd0152e1-d710-4107-8274-875d8f005b25"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.678614Z",
+   "updated_at": "2026-09-15T10:36:26.678615Z",
+   "id": "91ad110a-3664-406c-991c-236ebda2ad9e",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "a7b4648f-3486-471e-9f23-21eb97642bb3",
+   "tool_name": "inspect_dependencies",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "idempotency_key": "3acbe24e05f6433eda3df9bc6563d1f4",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "a7b4648f-3486-471e-9f23-21eb97642bb3",
+    "tool_name": "inspect_dependencies",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_dependencies@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_dependencies is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_dependencies"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits inspect_dependencies"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 3acbe24e05f6\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 5/54, iterations 5/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.678060Z"
+   },
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.678060Z",
+   "finished_at": "2026-09-15T10:36:26.682045Z",
+   "duration_ms": 3.985,
+   "result": {
+    "service": "api-gateway",
+    "dependents": [],
+    "dependencies": [
+     "auth-service",
+     "user-service",
+     "order-service",
+     "payment-service",
+     "inventory-service",
+     "notification-service"
+    ],
+    "contributions": [
+     {
+      "target": "order-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 3000.0,
+      "calls_per_request": 0.5,
+      "error_contribution": 0.5
+     },
+     {
+      "target": "inventory-service",
+      "critical": true,
+      "available": false,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.3,
+      "error_contribution": 0.3
+     },
+     {
+      "target": "user-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.6,
+      "error_contribution": 0.002
+     },
+     {
+      "target": "auth-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 1500.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.001
+     },
+     {
+      "target": "payment-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 3000.0,
+      "calls_per_request": 0.2,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "notification-service",
+      "critical": false,
+      "available": true,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 0.1,
+      "error_contribution": 0.0
+     }
+    ],
+    "own_error_rate": 0.0,
+    "own_latency_ms": 8.1,
+    "downstream_closure": [
+     "auth-service",
+     "user-service",
+     "order-service",
+     "payment-service",
+     "inventory-service",
+     "notification-service",
+     "redis",
+     "postgres"
+    ]
+   },
+   "result_summary": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (50% errors), inventory-service (down); own error rate 0.0%, own latency 8ms",
+   "error": null,
+   "evidence_ids": [
+    "deb7aaaa-c001-4454-bb14-5793c22abbeb"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.725514Z",
+   "updated_at": "2026-09-15T10:36:26.725515Z",
+   "id": "314dbee4-ca51-4e90-bc6f-2c905779bedb",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "18bb825f-f9b5-4644-985f-fd34479ad5cd",
+   "tool_name": "inspect_dependencies",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "order-service"
+   },
+   "idempotency_key": "eb3294daebab237366e841e1eec6fb7a",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "18bb825f-f9b5-4644-985f-fd34479ad5cd",
+    "tool_name": "inspect_dependencies",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_dependencies@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_dependencies is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_dependencies"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits inspect_dependencies"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key eb3294daebab\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 6/54, iterations 6/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.724977Z"
+   },
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.724977Z",
+   "finished_at": "2026-09-15T10:36:26.730400Z",
+   "duration_ms": 5.423,
+   "result": {
+    "service": "order-service",
+    "dependents": [
+     "api-gateway"
+    ],
+    "dependencies": [
+     "postgres",
+     "redis",
+     "inventory-service",
+     "payment-service"
+    ],
+    "contributions": [
+     {
+      "target": "inventory-service",
+      "critical": true,
+      "available": false,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 1.0
+     },
+     {
+      "target": "payment-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2500.0,
+      "calls_per_request": 0.4,
+      "error_contribution": 0.001
+     },
+     {
+      "target": "postgres",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 1500.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "redis",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 500.0,
+      "calls_per_request": 1.5,
+      "error_contribution": 0.0
+     }
+    ],
+    "own_error_rate": 0.0,
+    "own_latency_ms": 20.6,
+    "downstream_closure": [
+     "postgres",
+     "redis",
+     "inventory-service",
+     "payment-service"
+    ]
+   },
+   "result_summary": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own error rate 0.0%, own latency 21ms",
+   "error": null,
+   "evidence_ids": [
+    "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.774460Z",
+   "updated_at": "2026-09-15T10:36:26.774462Z",
+   "id": "bbd8cae0-5e01-4ee4-9a18-b0649ff7d958",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "d7c5c377-c703-4f3e-bc3f-18683dbb190a",
+   "tool_name": "query_traces",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "errors_only": true
+   },
+   "idempotency_key": "e69a14128952ebb51159401eee86507b",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "d7c5c377-c703-4f3e-bc3f-18683dbb190a",
+    "tool_name": "query_traces",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "query_traces@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "query_traces is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists query_traces"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits query_traces"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key e69a14128952\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 7/54, iterations 7/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.773983Z"
+   },
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.773983Z",
+   "finished_at": "2026-09-15T10:36:26.777390Z",
+   "duration_ms": 3.407,
+   "result": {
+    "count": 12,
+    "errored": 12,
+    "examples": [
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 132,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 37,
+        "error": false,
+        "service": "payment-service"
+       },
+       {
+        "ms": 74,
+        "error": true,
+        "service": "order-service"
+       },
+       {
+        "ms": 49,
+        "error": false,
+        "service": "payment-service"
+       },
+       {
+        "ms": 12,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "inventory-service"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       }
+      ],
+      "trace_id": "972eb67faf614cab8d4652e5c1dd2854",
+      "duration_ms": 132
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 87,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 38,
+        "error": true,
+        "service": "order-service"
+       },
+       {
+        "ms": 20,
+        "error": false,
+        "service": "user-service"
+       },
+       {
+        "ms": 13,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "inventory-service"
+       }
+      ],
+      "trace_id": "1d4992a42e4bf70a18aaf00131d8be21",
+      "duration_ms": 87
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 96,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 32,
+        "error": true,
+        "service": "order-service"
+       },
+       {
+        "ms": 39,
+        "error": false,
+        "service": "user-service"
+       },
+       {
+        "ms": 13,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "inventory-service"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "inventory-service"
+       }
+      ],
+      "trace_id": "6dfd0e735150ca4fa487bd794a2ba8fd",
+      "duration_ms": 96
+     }
+    ],
+    "slowest_span": {
+     "user-service": 3,
+     "order-service": 7,
+     "payment-service": 2
+    },
+    "failure_origin": {
+     "inventory-service": 12
+    },
+    "avg_duration_ms": 79.72583333333334
+   },
+   "result_summary": "12 traces sampled, 12 errored, avg 80ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x7, user-service x3",
+   "error": null,
+   "evidence_ids": [
+    "b128d51d-28ad-4435-895f-ce09a67cbdc4"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.819494Z",
+   "updated_at": "2026-09-15T10:36:26.819495Z",
+   "id": "30c7efea-02c3-489b-9d47-355e6c34b9b5",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "590e27c8-fff7-4efa-be15-46d16151fd2d",
+   "tool_name": "inspect_deployment",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "idempotency_key": "fa2ebf29e58d46c1d58e5126f6b3277f",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "590e27c8-fff7-4efa-be15-46d16151fd2d",
+    "tool_name": "inspect_deployment",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_deployment@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_deployment is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_deployment"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits inspect_deployment"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key fa2ebf29e58d\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 8/54, iterations 8/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.818905Z"
+   },
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.818905Z",
+   "finished_at": "2026-09-15T10:36:26.822010Z",
+   "duration_ms": 3.105,
+   "result": {
+    "recent": false,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "1.9.3",
+      "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+     }
+    ],
+    "service": "inventory-service",
+    "age_minutes": 1445.42825595,
+    "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+    "is_rollback": false,
+    "current_version": "1.9.3",
+    "previous_version": "1.9.2",
+    "rollback_available": true
+   },
+   "result_summary": "inventory-service runs 1.9.3 deployed 24 h ago (previous 1.9.2); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "error": null,
+   "evidence_ids": [
+    "aa98032b-5028-48b4-8605-ce6249fff1bc"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.868538Z",
+   "updated_at": "2026-09-15T10:36:26.868539Z",
+   "id": "5a8f6e51-0a62-47c9-b3f6-c97474b7575f",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "9918535a-a48f-4451-a022-d92fb0951454",
+   "tool_name": "inspect_deployment",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "idempotency_key": "9401a6be7f83f1582ae41e696a2c529f",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "9918535a-a48f-4451-a022-d92fb0951454",
+    "tool_name": "inspect_deployment",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_deployment@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_deployment is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_deployment"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits inspect_deployment"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 9401a6be7f83\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 9/54, iterations 9/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.868083Z"
+   },
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.868083Z",
+   "finished_at": "2026-09-15T10:36:26.870477Z",
+   "duration_ms": 2.3939999999999997,
+   "result": {
+    "recent": false,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "3.2.1",
+      "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+     }
+    ],
+    "service": "api-gateway",
+    "age_minutes": 1445.4290637333334,
+    "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+    "is_rollback": false,
+    "current_version": "3.2.1",
+    "previous_version": "3.2.0",
+    "rollback_available": true
+   },
+   "result_summary": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "error": null,
+   "evidence_ids": [
+    "a4f628cd-afe0-409e-b5c4-6740dc3f5904"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.912925Z",
+   "updated_at": "2026-09-15T10:36:26.912926Z",
+   "id": "e60227c7-ccaa-4671-9109-5fd96396e432",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "2a72b9ea-8928-4a52-9463-767151402499",
+   "tool_name": "inspect_deployment",
+   "tool_version": "1",
+   "category": "read_only",
+   "arguments": {
+    "service": "order-service"
+   },
+   "idempotency_key": "ef2aaf3451b1a0e7def2f2c3f2d002d2",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "2a72b9ea-8928-4a52-9463-767151402499",
+    "tool_name": "inspect_deployment",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "inspect_deployment@1 (read_only, risk none)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is investigating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "inspect_deployment is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'investigate' lists inspect_deployment"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "read_only permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits inspect_deployment"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk none <= ceiling none"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-read-only'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key ef2aaf3451b1\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 10/54, iterations 10/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-read-only",
+    "decided_at": "2026-09-15T10:36:26.912436Z"
+   },
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "action_plan_id": null,
+   "phase": "investigate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:26.912436Z",
+   "finished_at": "2026-09-15T10:36:26.915248Z",
+   "duration_ms": 2.812,
+   "result": {
+    "recent": false,
+    "history": [
+     {
+      "summary": "baseline release",
+      "version": "4.1.0",
+      "deployed_at": "2026-09-14T10:31:01.126624+00:00"
+     }
+    ],
+    "service": "order-service",
+    "age_minutes": 1445.4298096833334,
+    "deployed_at": "2026-09-14T10:31:01.126624+00:00",
+    "is_rollback": false,
+    "current_version": "4.1.0",
+    "previous_version": "4.0.9",
+    "rollback_available": true
+   },
+   "result_summary": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "error": null,
+   "evidence_ids": [
+    "d1961b3d-1098-4a70-950d-834227c51075"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:27.360364Z",
+   "updated_at": "2026-09-15T10:36:27.360365Z",
+   "id": "cd76c08d-7b3d-46d0-bb97-1dea5f844ed6",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "18acc36b-07b9-4ebe-8313-746ff7130828",
+   "tool_name": "run_process_diagnostic",
+   "tool_version": "1",
+   "category": "diagnostic",
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "idempotency_key": "8a635e6645797c4a1f6268e0cb8c2cba",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "18acc36b-07b9-4ebe-8313-746ff7130828",
+    "tool_name": "run_process_diagnostic",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "run_process_diagnostic@1 (diagnostic, risk low)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is validating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "run_process_diagnostic is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "phase 'validate' lists run_process_diagnostic"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "diagnostic permitted inside the agent loop"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits run_process_diagnostic"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d has role operator"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk low <= ceiling low"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "allowed by rule 'allow-diagnostics'"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 8a635e664579\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 11/54, iterations 12/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "allow-diagnostics",
+    "decided_at": "2026-09-15T10:36:27.359788Z"
+   },
+   "agent_run_id": "8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "action_plan_id": null,
+   "phase": "validate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:27.359788Z",
+   "finished_at": "2026-09-15T10:36:27.362573Z",
+   "duration_ms": 2.785,
+   "result": {
+    "at": "2026-09-15T10:36:28.126624+00:00",
+    "up": false,
+    "crashed": true,
+    "service": "inventory-service",
+    "version": "1.9.3",
+    "replicas": 2,
+    "restarting": false,
+    "cpu_percent": 0.0,
+    "restart_count": 0,
+    "memory_percent": 0.0,
+    "replicas_ready": 2.0,
+    "uptime_seconds": 327,
+    "open_db_connections": 2,
+    "open_redis_connections": 2
+   },
+   "result_summary": "inventory-service process: DOWN (crashed), version 1.9.3, uptime 327s, replicas 2.0/2, restarts 0, mem 0.0%, cpu 0.0%, open redis conns 2, open db conns 2",
+   "error": null,
+   "evidence_ids": [
+    "a5fa40a4-b8ec-4650-af03-3cc7bc21bf61"
+   ],
+   "trace_id": null
+  },
+  {
+   "created_at": "2026-09-15T10:36:30.076053Z",
+   "updated_at": "2026-09-15T10:36:30.076056Z",
+   "id": "5673d20b-7098-4d5c-9510-34175ed77ec8",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "request_id": "3188b4cc-0d32-49d4-9ea1-85e214f2bce3",
+   "tool_name": "restart_service",
+   "tool_version": "1",
+   "category": "mutating",
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "idempotency_key": "985b1b70bff980b48f3cff0cf1b7fc0d",
+   "status": "succeeded",
+   "authorization": {
+    "request_id": "3188b4cc-0d32-49d4-9ea1-85e214f2bce3",
+    "tool_name": "restart_service",
+    "effect": "allow",
+    "allowed": true,
+    "checks": [
+     {
+      "name": "tool_registered",
+      "passed": true,
+      "detail": "restart_service@1 (mutating, risk medium)"
+     },
+     {
+      "name": "tool_enabled",
+      "passed": true,
+      "detail": "enabled"
+     },
+     {
+      "name": "incident_active",
+      "passed": true,
+      "detail": "incident INC-1120 is remediating"
+     },
+     {
+      "name": "flow_allows",
+      "passed": true,
+      "detail": "restart_service is part of flow error-rate-investigation@1.1.0"
+     },
+     {
+      "name": "phase_allows",
+      "passed": true,
+      "detail": "workflow execution outside the agent loop"
+     },
+     {
+      "name": "category_permitted",
+      "passed": true,
+      "detail": "mutating permitted via workflow"
+     },
+     {
+      "name": "environment_allows",
+      "passed": true,
+      "detail": "permitted in development"
+     },
+     {
+      "name": "severity_allows",
+      "passed": true,
+      "detail": "incident severity sev1 permits restart_service"
+     },
+     {
+      "name": "actor_permitted",
+      "passed": true,
+      "detail": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d has role operator"
+     },
+     {
+      "name": "risk_within_ceiling",
+      "passed": true,
+      "detail": "risk medium <= ceiling high"
+     },
+     {
+      "name": "policy_effect",
+      "passed": true,
+      "detail": "approval required by rule 'approve-sev1-mutations'; granted: user:local-operator (00c9ce27-4587-4589-99b8-1b6a94964033)"
+     },
+     {
+      "name": "arguments_valid",
+      "passed": true,
+      "detail": "1 argument(s) validated"
+     },
+     {
+      "name": "idempotency",
+      "passed": true,
+      "detail": "key 985b1b70bff9\u2026 is new"
+     },
+     {
+      "name": "budget_available",
+      "passed": true,
+      "detail": "tool_calls 0/54, iterations 0/48"
+     }
+    ],
+    "denial_code": null,
+    "reason": "all checks passed",
+    "matched_policy": "approve-sev1-mutations",
+    "decided_at": "2026-09-15T10:36:30.074851Z"
+   },
+   "agent_run_id": null,
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+   "phase": "remediate",
+   "attempt": 1,
+   "started_at": "2026-09-15T10:36:30.074851Z",
+   "finished_at": "2026-09-15T10:36:30.086033Z",
+   "duration_ms": 11.181999999999999,
+   "result": {
+    "at": "2026-09-15T10:36:30.126624+00:00",
+    "action": "restart",
+    "status": "restarting",
+    "target": "inventory-service",
+    "version": "1.9.3",
+    "eta_seconds": 10.0
+   },
+   "result_summary": "restart of inventory-service restarting (eta 10s, version 1.9.3)",
+   "error": null,
+   "evidence_ids": [
+    "5aa9731b-e337-4bde-8c5e-a6cc3b234ff5"
+   ],
+   "trace_id": null
+  }
+ ],
+ "recent_events": [
+  {
+   "id": "1eac4fb6-d6a9-4ee1-b553-a3f203af1dbd",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 29,
+   "type": "agent.step",
+   "at": "2026-09-15T10:36:26.717393Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "b2314969-ae2e-465e-a13c-a84239e30743",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "21b31d73-6df6-47a2-a59e-c02e77913b66",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 30,
+   "type": "tool.executed",
+   "at": "2026-09-15T10:36:26.738846Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_dependencies: order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own ",
+   "payload": {
+    "tool": "inspect_dependencies",
+    "status": "succeeded",
+    "summary": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own error rate 0.0%, own latency 21ms",
+    "arguments": {
+     "service": "order-service"
+    },
+    "duration_ms": 5.423,
+    "evidence_ids": [
+     "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef"
+    ],
+    "tool_execution_id": "314dbee4-ca51-4e90-bc6f-2c905779bedb"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "16e5aa95-afac-4d76-9af2-62583928a3cf",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 31,
+   "type": "evidence.collected",
+   "at": "2026-09-15T10:36:26.740891Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_dependencies",
+   "payload": {
+    "evidence": [
+     {
+      "id": "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+      "kind": "topology",
+      "title": "order-service dependencies",
+      "service": "inventory-service",
+      "strength": 0.8
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "bc27f282-a0e3-439c-8922-556ac12773bc",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 32,
+   "type": "agent.step",
+   "at": "2026-09-15T10:36:26.767537Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "9f9c2d47-a2fb-4371-aaec-388539c01a98",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "672edce7-61fa-4d5c-a281-b5d06c38961f",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 33,
+   "type": "tool.executed",
+   "at": "2026-09-15T10:36:26.783968Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "query_traces: 12 traces sampled, 12 errored, avg 80ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x7, user-servic",
+   "payload": {
+    "tool": "query_traces",
+    "status": "succeeded",
+    "summary": "12 traces sampled, 12 errored, avg 80ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x7, user-service x3",
+    "arguments": {
+     "errors_only": true
+    },
+    "duration_ms": 3.407,
+    "evidence_ids": [
+     "b128d51d-28ad-4435-895f-ce09a67cbdc4"
+    ],
+    "tool_execution_id": "bbd8cae0-5e01-4ee4-9a18-b0649ff7d958"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "20e5e46c-7291-4b15-a5f2-f8b2cfd282dc",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 34,
+   "type": "evidence.collected",
+   "at": "2026-09-15T10:36:26.785640Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from query_traces",
+   "payload": {
+    "evidence": [
+     {
+      "id": "b128d51d-28ad-4435-895f-ce09a67cbdc4",
+      "kind": "trace",
+      "title": "trace analysis",
+      "service": "inventory-service",
+      "strength": 0.9
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "ae91f698-c985-4d64-bde6-ac8f8110c9dd",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 35,
+   "type": "agent.step",
+   "at": "2026-09-15T10:36:26.811750Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "3e75015f-3631-43d2-b8cb-6e99c99e3051",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "e5457a97-6129-48bb-99b0-3f7952271753",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 36,
+   "type": "tool.executed",
+   "at": "2026-09-15T10:36:26.830066Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_deployment: inventory-service runs 1.9.3 deployed 24 h ago (previous 1.9.2); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is sta",
+   "payload": {
+    "tool": "inspect_deployment",
+    "status": "succeeded",
+    "summary": "inventory-service runs 1.9.3 deployed 24 h ago (previous 1.9.2); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "arguments": {
+     "service": "inventory-service"
+    },
+    "duration_ms": 3.105,
+    "evidence_ids": [
+     "aa98032b-5028-48b4-8605-ce6249fff1bc"
+    ],
+    "tool_execution_id": "30c7efea-02c3-489b-9d47-355e6c34b9b5"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "9b14aa51-dad1-443f-9951-691b2812fbec",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 37,
+   "type": "evidence.collected",
+   "at": "2026-09-15T10:36:26.832009Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_deployment",
+   "payload": {
+    "evidence": [
+     {
+      "id": "aa98032b-5028-48b4-8605-ce6249fff1bc",
+      "kind": "deployment",
+      "title": "inventory-service deployment 1.9.3",
+      "service": "inventory-service",
+      "strength": 0.15
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "0f7ed62c-a763-4ca5-850c-f51f11b3a393",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 38,
+   "type": "agent.step",
+   "at": "2026-09-15T10:36:26.861356Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "ddd40b0a-f618-445f-92c8-b531bca255c5",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "bae13bce-9305-4559-83ae-0a680ecb5164",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 39,
+   "type": "tool.executed",
+   "at": "2026-09-15T10:36:26.877276Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_deployment: api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "payload": {
+    "tool": "inspect_deployment",
+    "status": "succeeded",
+    "summary": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "arguments": {
+     "service": "api-gateway"
+    },
+    "duration_ms": 2.3939999999999997,
+    "evidence_ids": [
+     "a4f628cd-afe0-409e-b5c4-6740dc3f5904"
+    ],
+    "tool_execution_id": "5a8f6e51-0a62-47c9-b3f6-c97474b7575f"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "344a393c-a7fc-44b2-bac2-954a1c75ecbf",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 40,
+   "type": "evidence.collected",
+   "at": "2026-09-15T10:36:26.878825Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_deployment",
+   "payload": {
+    "evidence": [
+     {
+      "id": "a4f628cd-afe0-409e-b5c4-6740dc3f5904",
+      "kind": "deployment",
+      "title": "api-gateway deployment 3.2.1",
+      "service": "api-gateway",
+      "strength": 0.15
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "4c8c1280-3528-4973-b92c-1d7d511abb28",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 41,
+   "type": "agent.step",
+   "at": "2026-09-15T10:36:26.905635Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "7bb5290d-c230-494e-a033-2a98353d0178",
+    "rationale": "deterministic planner",
+    "observation": "Collecting evidence along the dependency chain."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "62069e8a-cc32-4752-9836-784ad080cf92",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 42,
+   "type": "tool.executed",
+   "at": "2026-09-15T10:36:26.922256Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "inspect_deployment: order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "payload": {
+    "tool": "inspect_deployment",
+    "status": "succeeded",
+    "summary": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+    "arguments": {
+     "service": "order-service"
+    },
+    "duration_ms": 2.812,
+    "evidence_ids": [
+     "d1961b3d-1098-4a70-950d-834227c51075"
+    ],
+    "tool_execution_id": "e60227c7-ccaa-4671-9109-5fd96396e432"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "f983fa5c-36c9-479b-aa7a-21ee25bb036d",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 43,
+   "type": "evidence.collected",
+   "at": "2026-09-15T10:36:26.923794Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from inspect_deployment",
+   "payload": {
+    "evidence": [
+     {
+      "id": "d1961b3d-1098-4a70-950d-834227c51075",
+      "kind": "deployment",
+      "title": "order-service deployment 4.1.0",
+      "service": "order-service",
+      "strength": 0.15
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "67d92b56-5b90-429f-8170-dfe3380b20c9",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 44,
+   "type": "flow.phase_exited",
+   "at": "2026-09-15T10:36:26.944110Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Phase 'investigate' complete (exhausted) \u2192 'hypothesize'",
+   "payload": {
+    "facts": {
+     "iterations": 8,
+     "action_planned": false,
+     "evidence_count": 11,
+     "top_confidence": 0.0,
+     "hypotheses_count": 0,
+     "no_action_required": false,
+     "hypothesis_validated": false
+    },
+    "phase": "investigate",
+    "trigger": "exhausted",
+    "next_phase": "hypothesize"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "12f91f14-c598-4b70-8452-25a291a6c33f",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 45,
+   "type": "agent.run_finished",
+   "at": "2026-09-15T10:36:26.970009Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent finished phase 'investigate': phase_complete",
+   "payload": {
+    "phase": "investigate",
+    "steps": 24,
+    "usage": {
+     "llm_calls": 0,
+     "iterations": 11,
+     "llm_tokens": 0,
+     "tool_calls": 11,
+     "runtime_seconds": 0.5371319999999999,
+     "remediation_attempts": 0
+    },
+    "summary": "exhausted \u2192 hypothesize",
+    "decision": "transition",
+    "next_phase": "hypothesize",
+    "termination": "phase_complete",
+    "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "c8ab4f58-1242-4dce-aca7-79db388369e0",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 46,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T10:36:27.041373Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "investigating \u2192 hypothesis_formed: entering phase 'hypothesize'",
+   "payload": {
+    "to": "hypothesis_formed",
+    "from": "investigating",
+    "reason": "entering phase 'hypothesize'"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "b58a9066-f0d7-42b4-b024-0cdc8482bcc7",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 47,
+   "type": "agent.run_started",
+   "at": "2026-09-15T10:36:27.100981Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent started phase 'hypothesize'",
+   "payload": {
+    "flow": "error-rate-investigation@1.1.0",
+    "phase": "hypothesize",
+    "budget": {
+     "max_llm_calls": 39,
+     "max_iterations": 48,
+     "max_llm_tokens": 330000,
+     "max_tool_calls": 54,
+     "max_runtime_seconds": 1350,
+     "max_remediation_attempts": 2
+    },
+    "agent_run_id": "da590dd1-b973-4624-b8ed-64eea7c0cbe6"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "cba70995-924f-4382-9a6c-1b30b62a5229",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 48,
+   "type": "agent.step",
+   "at": "2026-09-15T10:36:27.138133Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[hypothesize] propose_hypotheses: Evidence implicates specific components.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "propose_hypotheses",
+    "tokens": 0,
+    "step_id": "1f38f4f4-ba03-4055-b6d6-56558ec63fed",
+    "rationale": "deterministic planner derived hypotheses from evidence strength",
+    "observation": "Evidence implicates specific components."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "a2946b34-072f-4585-a85c-d1191afaaafc",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 49,
+   "type": "hypothesis.created",
+   "at": "2026-09-15T10:36:27.156867Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Hypothesis: inventory-service is unavailable and its dependents fail as a result. (confidence 82%)",
+   "payload": {
+    "score": {
+     "total": 0.8228,
+     "explanation": [
+      "api-gateway fails because of inventory-service (90% contribution)",
+      "3 supporting evidence items (strength 0.94)",
+      "temporal alignment 1.00",
+      "inventory-service explains 3/3 symptomatic services"
+     ],
+     "validation_bonus": 0.0,
+     "evidence_strength": 0.9397,
+     "temporal_alignment": 1.0,
+     "dependency_alignment": 1.0,
+     "contradiction_penalty": 0.0,
+     "historical_similarity": 0.0
+    },
+    "status": "supported",
+    "category": "dependency_failure",
+    "statement": "inventory-service is unavailable and its dependents fail as a result.",
+    "confidence": 0.8228,
+    "supporting": 3,
+    "contradicting": 0,
+    "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "root_cause_service": "inventory-service"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "4de86884-9267-4a53-8ff7-39b8be057257",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 50,
+   "type": "hypothesis.created",
+   "at": "2026-09-15T10:36:27.158440Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Hypothesis: api-gateway is the most implicated component in the collected evidence. (confidence 20%)",
+   "payload": {
+    "score": {
+     "total": 0.1998,
+     "explanation": [
+      "api-gateway's errors are inherited from order-service (50% contribution, own error rate 0.0%); it is a symptom, not the origin",
+      "api-gateway's errors are inherited from inventory-service (90% contribution, own error rate 0.0%); it is a symptom, not the origin",
+      "1 supporting evidence items (strength 0.85)",
+      "temporal alignment 1.00",
+      "api-gateway explains 1/3 symptomatic services"
+     ],
+     "validation_bonus": 0.0,
+     "evidence_strength": 0.85,
+     "temporal_alignment": 1.0,
+     "dependency_alignment": 0.3333,
+     "contradiction_penalty": 0.832,
+     "historical_similarity": 0.0
+    },
+    "status": "proposed",
+    "category": "unknown",
+    "statement": "api-gateway is the most implicated component in the collected evidence.",
+    "confidence": 0.1998,
+    "supporting": 1,
+    "contradicting": 0,
+    "hypothesis_id": "72ee2ce1-2855-4152-bf45-db3363e601d3",
+    "root_cause_service": "api-gateway"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "9c930a96-b1ea-4867-92c7-92d5cb2bcebb",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 51,
+   "type": "hypothesis.created",
+   "at": "2026-09-15T10:36:27.159966Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Hypothesis: order-service is unavailable and its dependents fail as a result. (confidence 40%)",
+   "payload": {
+    "score": {
+     "total": 0.4041,
+     "explanation": [
+      "order-service's errors are inherited from inventory-service (100% contribution, own error rate 0.0%); it is a symptom, not the origin",
+      "2 supporting evidence items (strength 0.90)",
+      "temporal alignment 1.00",
+      "order-service explains 3/3 symptomatic services"
+     ],
+     "validation_bonus": 0.0,
+     "evidence_strength": 0.898,
+     "temporal_alignment": 1.0,
+     "dependency_alignment": 1.0,
+     "contradiction_penalty": 0.8,
+     "historical_similarity": 0.0
+    },
+    "status": "proposed",
+    "category": "dependency_failure",
+    "statement": "order-service is unavailable and its dependents fail as a result.",
+    "confidence": 0.4041,
+    "supporting": 2,
+    "contradicting": 0,
+    "hypothesis_id": "1785f522-5745-4ba5-b697-c341714ec057",
+    "root_cause_service": "order-service"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "1b57b0fe-719c-4e44-9b18-b91f2e3f04e3",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 52,
+   "type": "flow.phase_exited",
+   "at": "2026-09-15T10:36:27.183911Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Phase 'hypothesize' complete (exit_conditions_met) \u2192 'validate'",
+   "payload": {
+    "facts": {
+     "iterations": 1,
+     "action_planned": false,
+     "evidence_count": 11,
+     "top_confidence": 0.8228,
+     "hypotheses_count": 3,
+     "no_action_required": false,
+     "hypothesis_validated": false
+    },
+    "phase": "hypothesize",
+    "trigger": "exit_conditions_met",
+    "next_phase": "validate"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "63b513d7-4a20-4e71-ba32-132545eeb271",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 53,
+   "type": "agent.run_finished",
+   "at": "2026-09-15T10:36:27.204623Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent finished phase 'hypothesize': phase_complete",
+   "payload": {
+    "phase": "hypothesize",
+    "steps": 2,
+    "usage": {
+     "llm_calls": 0,
+     "iterations": 12,
+     "llm_tokens": 0,
+     "tool_calls": 11,
+     "runtime_seconds": 0.5946349999999999,
+     "remediation_attempts": 0
+    },
+    "summary": "exit_conditions_met \u2192 validate",
+    "decision": "transition",
+    "next_phase": "validate",
+    "termination": "phase_complete",
+    "agent_run_id": "da590dd1-b973-4624-b8ed-64eea7c0cbe6"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "5f1aa836-43bc-4382-9605-c710f35eb4a1",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 54,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T10:36:27.267043Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "hypothesis_formed \u2192 validating: entering phase 'validate'",
+   "payload": {
+    "to": "validating",
+    "from": "hypothesis_formed",
+    "reason": "entering phase 'validate'"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "4e02cb69-833c-4518-8219-660eded4603a",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 55,
+   "type": "agent.run_started",
+   "at": "2026-09-15T10:36:27.321156Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent started phase 'validate'",
+   "payload": {
+    "flow": "error-rate-investigation@1.1.0",
+    "phase": "validate",
+    "budget": {
+     "max_llm_calls": 39,
+     "max_iterations": 48,
+     "max_llm_tokens": 330000,
+     "max_tool_calls": 54,
+     "max_runtime_seconds": 1350,
+     "max_remediation_attempts": 2
+    },
+    "agent_run_id": "8a503b9f-76cd-4ffd-b825-4db9d868e91d"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "59ca9e58-dd04-45b7-9a1d-8dfe6b178339",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 56,
+   "type": "agent.step",
+   "at": "2026-09-15T10:36:27.352018Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[validate] call_tool: Testing H1: inventory-service is unavailable and its dependents fail as a result.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "call_tool",
+    "tokens": 0,
+    "step_id": "aabf3149-0354-4985-97de-504e74bf824d",
+    "rationale": "deterministic planner",
+    "observation": "Testing H1: inventory-service is unavailable and its dependents fail as a result."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "1641bd54-12e8-4631-8a5b-90f016d5e2fc",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 57,
+   "type": "tool.executed",
+   "at": "2026-09-15T10:36:27.369069Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "run_process_diagnostic: inventory-service process: DOWN (crashed), version 1.9.3, uptime 327s, replicas 2.0/2, restarts 0, mem 0.0%, cpu 0.0%, open redis conns 2, open db conns 2",
+   "payload": {
+    "tool": "run_process_diagnostic",
+    "status": "succeeded",
+    "summary": "inventory-service process: DOWN (crashed), version 1.9.3, uptime 327s, replicas 2.0/2, restarts 0, mem 0.0%, cpu 0.0%, open redis conns 2, open db conns 2",
+    "arguments": {
+     "service": "inventory-service"
+    },
+    "duration_ms": 2.785,
+    "evidence_ids": [
+     "a5fa40a4-b8ec-4650-af03-3cc7bc21bf61"
+    ],
+    "tool_execution_id": "cd76c08d-7b3d-46d0-bb97-1dea5f844ed6"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "530a2a7d-af05-463b-913f-e68d016ee870",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 58,
+   "type": "evidence.collected",
+   "at": "2026-09-15T10:36:27.370867Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "1 evidence item(s) from run_process_diagnostic",
+   "payload": {
+    "evidence": [
+     {
+      "id": "a5fa40a4-b8ec-4650-af03-3cc7bc21bf61",
+      "kind": "diagnostic",
+      "title": "inventory-service process diagnostic",
+      "service": "inventory-service",
+      "strength": 0.8
+     }
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "744f02f4-a3d7-43a4-b356-87911aa1fbe3",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 59,
+   "type": "hypothesis.validated",
+   "at": "2026-09-15T10:36:27.375228Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Test confirmed: inventory-service is unavailable and its dependents fail as a result. (confidence 97%)",
+   "payload": {
+    "test": {
+     "at": "2026-09-15T10:36:27.373417Z",
+     "id": "37a29d76-ac3c-4797-9949-22b69715f6f6",
+     "detail": "deterministic judgement: diagnostic strongly implicates the suspected service",
+     "outcome": "confirmed",
+     "tool_name": "run_process_diagnostic",
+     "expectation": "result implicates inventory-service",
+     "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+     "tool_execution_id": null
+    },
+    "score": {
+     "total": 0.9728,
+     "explanation": [
+      "api-gateway fails because of inventory-service (90% contribution)",
+      "3 supporting evidence items (strength 0.94)",
+      "temporal alignment 1.00",
+      "inventory-service explains 3/3 symptomatic services",
+      "tests: 1 confirmed, 0 refuted"
+     ],
+     "validation_bonus": 0.15,
+     "evidence_strength": 0.9397,
+     "temporal_alignment": 1.0,
+     "dependency_alignment": 1.0,
+     "contradiction_penalty": 0.0,
+     "historical_similarity": 0.0
+    },
+    "status": "confirmed",
+    "category": "dependency_failure",
+    "statement": "inventory-service is unavailable and its dependents fail as a result.",
+    "confidence": 0.9728,
+    "supporting": 3,
+    "contradicting": 0,
+    "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "root_cause_service": "inventory-service"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "c90c26cc-59f6-4c2b-818c-a613800bd7ea",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 60,
+   "type": "flow.phase_exited",
+   "at": "2026-09-15T10:36:27.402469Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Phase 'validate' complete (exit_conditions_met) \u2192 'remediate'",
+   "payload": {
+    "facts": {
+     "iterations": 1,
+     "action_planned": false,
+     "evidence_count": 12,
+     "top_confidence": 0.9728,
+     "hypotheses_count": 3,
+     "no_action_required": false,
+     "hypothesis_validated": true
+    },
+    "phase": "validate",
+    "trigger": "exit_conditions_met",
+    "next_phase": "remediate"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "99be5414-39b0-4108-91e7-774b1f749861",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 61,
+   "type": "agent.run_finished",
+   "at": "2026-09-15T10:36:27.421616Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent finished phase 'validate': phase_complete",
+   "payload": {
+    "phase": "validate",
+    "steps": 3,
+    "usage": {
+     "llm_calls": 0,
+     "iterations": 13,
+     "llm_tokens": 0,
+     "tool_calls": 12,
+     "runtime_seconds": 0.6542769999999999,
+     "remediation_attempts": 0
+    },
+    "summary": "exit_conditions_met \u2192 remediate",
+    "decision": "transition",
+    "next_phase": "remediate",
+    "termination": "phase_complete",
+    "agent_run_id": "8a503b9f-76cd-4ffd-b825-4db9d868e91d"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "382b3be3-ede5-435f-ba93-6b327d85fa60",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 62,
+   "type": "agent.run_started",
+   "at": "2026-09-15T10:36:27.464987Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent started phase 'remediate'",
+   "payload": {
+    "flow": "error-rate-investigation@1.1.0",
+    "phase": "remediate",
+    "budget": {
+     "max_llm_calls": 39,
+     "max_iterations": 48,
+     "max_llm_tokens": 330000,
+     "max_tool_calls": 54,
+     "max_runtime_seconds": 1350,
+     "max_remediation_attempts": 2
+    },
+    "agent_run_id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "28a161fb-2b64-440e-a3f8-817e171351d2",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 63,
+   "type": "agent.step",
+   "at": "2026-09-15T10:36:27.493951Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "[remediate] plan_remediation: Planning remediation for H1.",
+   "payload": {
+    "kind": "fallback",
+    "model": "deterministic-planner",
+    "action": "plan_remediation",
+    "tokens": 0,
+    "step_id": "8ca19040-140c-43a3-be82-643634a9a6e7",
+    "rationale": "deterministic planner category playbook",
+    "observation": "Planning remediation for H1."
+   },
+   "trace_id": null
+  },
+  {
+   "id": "5498206c-ce1b-453b-97aa-9b2b9a589517",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 64,
+   "type": "remediation.proposed",
+   "at": "2026-09-15T10:36:27.517967Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Remediation proposed: restart_service on inventory-service",
+   "payload": {
+    "risk": "medium",
+    "tool": "restart_service",
+    "reason": "addresses dependency_failure on inventory-service",
+    "rollback": {
+     "reason": "restart_service is not reversible; a failed verification escalates",
+     "arguments": {},
+     "available": false,
+     "tool_name": null
+    },
+    "arguments": {
+     "service": "inventory-service"
+    },
+    "confidence": 0.9728,
+    "hypothesis": "inventory-service is unavailable and its dependents fail as a result.",
+    "verification": {
+     "conditions": [
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "api-gateway",
+       "comparator": "lte",
+       "description": "api-gateway error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "order-service",
+       "comparator": "lte",
+       "description": "order-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "inventory-service",
+       "comparator": "lte",
+       "description": "inventory-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "up",
+       "target": 1.0,
+       "service": "inventory-service",
+       "comparator": "gte",
+       "description": "inventory-service up gte 1",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "latency_p95_ms",
+       "target": null,
+       "service": "inventory-service",
+       "comparator": "lte",
+       "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+       "max_ratio_to_baseline": 1.5
+      }
+     ],
+     "require_all": true,
+     "timeout_seconds": 240,
+     "stabilization_seconds": 30
+    },
+    "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+    "expected_effect": "symptomatic metrics return to baseline"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "7d15237f-c0be-4cbe-a6ec-550b1fa1473f",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 65,
+   "type": "agent.run_finished",
+   "at": "2026-09-15T10:36:27.540396Z",
+   "actor": {
+    "kind": "agent",
+    "id": "agent:c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+    "display_name": "Aegis agent",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Agent finished phase 'remediate': action_planned",
+   "payload": {
+    "phase": "remediate",
+    "steps": 2,
+    "usage": {
+     "llm_calls": 0,
+     "iterations": 13,
+     "llm_tokens": 0,
+     "tool_calls": 12,
+     "runtime_seconds": 0.6568269999999999,
+     "remediation_attempts": 0
+    },
+    "summary": "planned restart_service on inventory-service",
+    "decision": "action_planned",
+    "next_phase": null,
+    "termination": "action_planned",
+    "agent_run_id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "641bf8b0-997b-496c-9820-ed8f2479b4bb",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 66,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T10:36:27.584047Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "validating \u2192 remediation_planned: remediation planned",
+   "payload": {
+    "to": "remediation_planned",
+    "from": "validating",
+    "reason": "remediation planned"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "02124a67-315b-46ec-b7d1-d18e36eef2a4",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 67,
+   "type": "policy.decided",
+   "at": "2026-09-15T10:36:27.649149Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Policy: require approval for restart_service (approve-sev1-mutations)",
+   "payload": {
+    "effect": "require_approval",
+    "reason": "SEV1 incidents have humans in the loop for every change.",
+    "invariant": null,
+    "matched_rule": "approve-sev1-mutations",
+    "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+    "evaluated_rules": [
+     "deny-dangerous",
+     "allow-read-only",
+     "allow-diagnostics",
+     "approve-diagnostics-medium-risk",
+     "deny-high-risk-mutation-production",
+     "approve-rollback",
+     "approve-production-mutations",
+     "approve-sev1-mutations"
+    ]
+   },
+   "trace_id": null
+  },
+  {
+   "id": "8579015c-8df8-4364-a153-dc318f8ca64d",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 68,
+   "type": "approval.requested",
+   "at": "2026-09-15T10:36:27.659531Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Approval required: restart_service on inventory-service (risk medium)",
+   "payload": {
+    "risk": "medium",
+    "confidence": 0.9728,
+    "expires_at": "2026-09-15T10:51:27.644965+00:00",
+    "hypothesis": "inventory-service is unavailable and its dependents fail as a result.",
+    "approval_id": "00c9ce27-4587-4589-99b8-1b6a94964033",
+    "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "5a89eac6-4aff-4dc5-8f57-5088b7c23d18",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 69,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T10:36:27.725286Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "remediation_planned \u2192 awaiting_approval: awaiting human approval",
+   "payload": {
+    "to": "awaiting_approval",
+    "from": "remediation_planned",
+    "reason": "awaiting human approval"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "9d23ea6b-aa4c-4ffa-a8f3-00b975c67cff",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 70,
+   "type": "approval.decided",
+   "at": "2026-09-15T10:36:29.883517Z",
+   "actor": {
+    "kind": "human",
+    "id": "user:local-operator",
+    "display_name": "Local operator",
+    "roles": [
+     "admin"
+    ]
+   },
+   "title": "Remediation approved by Local operator",
+   "payload": {
+    "reason": "e2e harness",
+    "approved": true,
+    "approval_id": "00c9ce27-4587-4589-99b8-1b6a94964033",
+    "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "e036824a-4c81-4a37-b831-2654bea8dddb",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 71,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T10:36:29.945741Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "awaiting_approval \u2192 remediating: executing remediation",
+   "payload": {
+    "to": "remediating",
+    "from": "awaiting_approval",
+    "reason": "executing remediation"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "1c247a17-943d-42b5-9a12-908ff35c1068",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 72,
+   "type": "remediation.started",
+   "at": "2026-09-15T10:36:30.071241Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Executing restart_service {'service': 'inventory-service'}",
+   "payload": {
+    "tool": "restart_service",
+    "arguments": {
+     "service": "inventory-service"
+    },
+    "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "073f72c4-2165-4732-a249-2dc7ee181626",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 73,
+   "type": "remediation.completed",
+   "at": "2026-09-15T10:36:30.093794Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "restart_service: restart of inventory-service restarting (eta 10s, version 1.9.3)",
+   "payload": {
+    "error": null,
+    "result": {
+     "at": "2026-09-15T10:36:30.126624+00:00",
+     "action": "restart",
+     "status": "restarting",
+     "target": "inventory-service",
+     "version": "1.9.3",
+     "eta_seconds": 10.0
+    },
+    "status": "succeeded",
+    "denial_code": null,
+    "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+    "tool_execution_id": "5673d20b-7098-4d5c-9510-34175ed77ec8"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "e47bca29-f565-4d80-911f-292a5a0ceb4a",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 74,
+   "type": "incident.status_changed",
+   "at": "2026-09-15T10:36:30.156536Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "remediating \u2192 verifying: verifying remediation",
+   "payload": {
+    "to": "verifying",
+    "from": "remediating",
+    "reason": "verifying remediation"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "379a04e5-6bf3-4fc1-82f8-441103bc62e0",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 75,
+   "type": "verification.started",
+   "at": "2026-09-15T10:36:30.223836Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Verifying 5 condition(s) over 30s stabilization",
+   "payload": {
+    "conditions": [
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "api-gateway",
+      "comparator": "lte",
+      "description": "api-gateway error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "order-service",
+      "comparator": "lte",
+      "description": "order-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "inventory-service",
+      "comparator": "lte",
+      "description": "inventory-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "up",
+      "target": 1.0,
+      "service": "inventory-service",
+      "comparator": "gte",
+      "description": "inventory-service up gte 1",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "latency_p95_ms",
+      "target": null,
+      "service": "inventory-service",
+      "comparator": "lte",
+      "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+      "max_ratio_to_baseline": 1.5
+     }
+    ],
+    "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "a6efcc7b-78e7-47b3-8d40-59e587cd49e0",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 76,
+   "type": "verification.passed",
+   "at": "2026-09-15T10:37:20.382371Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Verification passed: all 5 conditions held for 3 consecutive polls",
+   "payload": {
+    "after": {
+     "inventory-service.up": 1.0,
+     "api-gateway.error_rate": 0.005182081243413203,
+     "order-service.error_rate": 0.0027011177162443523,
+     "inventory-service.error_rate": 0.0010655906153039765,
+     "inventory-service.latency_p95_ms": 32.27757021941398
+    },
+    "before": {
+     "inventory-service.up": 0.6333333333333333,
+     "api-gateway.error_rate": 0.24244503849872606,
+     "order-service.error_rate": 0.3685391069010774,
+     "inventory-service.error_rate": 0.36744440574320447,
+     "inventory-service.latency_p95_ms": 20.35102803899891
+    },
+    "status": "passed",
+    "changes": [
+     "api-gateway.error_rate: 0.242 \u2192 0.00518 (-98%)",
+     "order-service.error_rate: 0.369 \u2192 0.0027 (-99%)",
+     "inventory-service.error_rate: 0.367 \u2192 0.00107 (-100%)",
+     "inventory-service.up: 0.633 \u2192 1 (+58%)",
+     "inventory-service.latency_p95_ms: 20.4 \u2192 32.3 (+59%)"
+    ],
+    "summary": "all 5 conditions held for 3 consecutive polls",
+    "conditions": [
+     {
+      "ok": true,
+      "value": 0.005182081243413203,
+      "detail": "api-gateway.error_rate=0.00518 lte 0.03",
+      "metric": "error_rate",
+      "service": "api-gateway",
+      "baseline": 0.004976302247429489,
+      "description": "api-gateway error_rate lte 0.03",
+      "accumulation_share": null
+     },
+     {
+      "ok": true,
+      "value": 0.0027011177162443523,
+      "detail": "order-service.error_rate=0.0027 lte 0.03",
+      "metric": "error_rate",
+      "service": "order-service",
+      "baseline": 0.002832653973527574,
+      "description": "order-service error_rate lte 0.03",
+      "accumulation_share": null
+     },
+     {
+      "ok": true,
+      "value": 0.0010655906153039765,
+      "detail": "inventory-service.error_rate=0.00107 lte 0.03",
+      "metric": "error_rate",
+      "service": "inventory-service",
+      "baseline": 0.001175278293863384,
+      "description": "inventory-service error_rate lte 0.03",
+      "accumulation_share": null
+     },
+     {
+      "ok": true,
+      "value": 1.0,
+      "detail": "inventory-service.up=1 gte 1",
+      "metric": "up",
+      "service": "inventory-service",
+      "baseline": 1.0,
+      "description": "inventory-service up gte 1",
+      "accumulation_share": null
+     },
+     {
+      "ok": true,
+      "value": 32.27757021941398,
+      "detail": "inventory-service.latency_p95_ms=32.3 vs 1.5x baseline(32.1)=48.2",
+      "metric": "latency_p95_ms",
+      "service": "inventory-service",
+      "baseline": 32.12318060175157,
+      "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+      "accumulation_share": null
+     }
+    ],
+    "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+   },
+   "trace_id": null
+  },
+  {
+   "id": "c4d23727-3dc7-45c4-847a-6050c26454aa",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 77,
+   "type": "incident.resolved",
+   "at": "2026-09-15T10:37:20.498055Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Incident resolved: remediation verified: all 5 conditions held for 3 consecutive polls",
+   "payload": {
+    "to": "resolved",
+    "from": "verifying",
+    "usage": {
+     "llm_calls": 0,
+     "iterations": 13,
+     "llm_tokens": 0,
+     "tool_calls": 12,
+     "runtime_seconds": 0.6568269999999999,
+     "remediation_attempts": 0
+    },
+    "summary": "remediation verified: all 5 conditions held for 3 consecutive polls",
+    "duration_seconds": 54.358769
+   },
+   "trace_id": null
+  },
+  {
+   "id": "46c74a32-4670-4523-a86e-15b7f4204e24",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "seq": 78,
+   "type": "memory.stored",
+   "at": "2026-09-15T10:37:20.542602Z",
+   "actor": {
+    "kind": "workflow",
+    "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "display_name": "Incident workflow",
+    "roles": [
+     "operator"
+    ]
+   },
+   "title": "Incident memory stored: inventory-service is unavailable and its dependents fail as a result.",
+   "payload": {
+    "lessons": [],
+    "outcome": "resolved",
+    "memory_id": "2b0b16f4-858a-4c94-b4ce-54ee1c202d94",
+    "root_cause_service": "inventory-service"
+   },
+   "trace_id": null
+  }
+ ]
+}

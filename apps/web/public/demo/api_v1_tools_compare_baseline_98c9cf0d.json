@@ -1,0 +1,67 @@
+{
+ "name": "compare_baseline",
+ "version": "1",
+ "description": "Compare the current value of a metric with its healthy baseline.",
+ "category": "read_only",
+ "risk": "none",
+ "idempotent": true,
+ "timeout_seconds": 10.0,
+ "retry": {
+  "max_attempts": 3,
+  "initial_backoff_seconds": 0.5,
+  "backoff_multiplier": 2.0,
+  "max_backoff_seconds": 10.0
+ },
+ "capabilities": [],
+ "allowed_environments": [
+  "development",
+  "staging",
+  "production"
+ ],
+ "min_severity": null,
+ "enabled": true,
+ "arguments_schema": {
+  "additionalProperties": false,
+  "properties": {
+   "service": {
+    "title": "Service",
+    "type": "string"
+   },
+   "metric": {
+    "title": "Metric",
+    "type": "string"
+   }
+  },
+  "required": [
+   "service",
+   "metric"
+  ],
+  "title": "CompareBaselineArgs",
+  "type": "object"
+ },
+ "produces_evidence": true,
+ "verification_metrics": [],
+ "used_in": {
+  "api-latency-investigation@1.2.0": [
+   "triage",
+   "investigate",
+   "hypothesize",
+   "validate",
+   "remediate"
+  ],
+  "error-rate-investigation@1.1.0": [
+   "triage",
+   "investigate",
+   "hypothesize",
+   "validate",
+   "remediate"
+  ],
+  "incident-investigation@1.1.0": [
+   "triage",
+   "investigate",
+   "hypothesize",
+   "validate",
+   "remediate"
+  ]
+ }
+}

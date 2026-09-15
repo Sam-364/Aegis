@@ -1,0 +1,2463 @@
+[
+ {
+  "id": "045bc394-d2c1-4021-8ef8-bc993d3f8bf3",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 1,
+  "type": "incident.detected",
+  "at": "2026-09-15T10:36:26.080814Z",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Anomaly detected: Elevated API error rate",
+  "payload": {
+   "signals": [
+    {
+     "id": "02eacfd9-9756-4d9f-b7fc-84ee6a8e29e8",
+     "kind": "error_rate",
+     "metric": "error_rate",
+     "service": "api-gateway",
+     "detector": "error_rate:error_rate",
+     "description": "api-gateway error_rate 0.00512 -> 0.651 (+12614%): elevated error rate",
+     "detected_at": "2026-09-15T10:36:26.126624Z",
+     "baseline_value": 0.005120723670137862,
+     "observed_value": 0.6510301062760186,
+     "window_seconds": 2,
+     "deviation_sigma": 343.9541650144949
+    },
+    {
+     "id": "382a185f-1d07-4cf5-8878-519ed2ef6d0f",
+     "kind": "error_rate",
+     "metric": "error_rate",
+     "service": "order-service",
+     "detector": "error_rate:error_rate",
+     "description": "order-service error_rate 0.0032 -> 1 (+31173%): elevated error rate",
+     "detected_at": "2026-09-15T10:36:26.126624Z",
+     "baseline_value": 0.0031976845476171393,
+     "observed_value": 1.0,
+     "window_seconds": 2,
+     "deviation_sigma": 1058.0277477063353
+    },
+    {
+     "id": "211d2a6f-ab1b-4c69-942d-9d99003603ff",
+     "kind": "error_rate",
+     "metric": "error_rate",
+     "service": "inventory-service",
+     "detector": "error_rate:error_rate",
+     "description": "inventory-service error_rate 0.00139 -> 1 (+72061%): elevated error rate",
+     "detected_at": "2026-09-15T10:36:26.126624Z",
+     "baseline_value": 0.0013857889403088798,
+     "observed_value": 1.0,
+     "window_seconds": 2,
+     "deviation_sigma": 1148.988607450218
+    },
+    {
+     "id": "7838b204-cd6c-484d-8b2a-50d5443178e5",
+     "kind": "availability",
+     "metric": "up",
+     "service": "inventory-service",
+     "detector": "up:availability",
+     "description": "inventory-service up 1 -> 0 (-100%): component unavailable",
+     "detected_at": "2026-09-15T10:36:26.126624Z",
+     "baseline_value": 1.0,
+     "observed_value": 0.0,
+     "window_seconds": 2,
+     "deviation_sigma": -20.0
+    }
+   ],
+   "severity": "sev1",
+   "affected_services": [
+    "api-gateway",
+    "inventory-service",
+    "order-service"
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "3ab5aba6-7358-4ca6-ba06-6d092ff54a6b",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 2,
+  "type": "incident.created",
+  "at": "2026-09-15T10:36:26.082387Z",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "INC-1120 created (SEV1)",
+  "payload": {
+   "incident": {
+    "id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "flow": "error-rate-investigation",
+    "title": "Elevated API error rate",
+    "number": 1120,
+    "status": "detected",
+    "severity": "sev1",
+    "affected_services": [
+     "api-gateway",
+     "inventory-service",
+     "order-service"
+    ]
+   }
+  },
+  "trace_id": null
+ },
+ {
+  "id": "9a53ae2c-c5cd-41ac-a214-27d23295d972",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 3,
+  "type": "flow.selected",
+  "at": "2026-09-15T10:36:26.083683Z",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Flow selected: error-rate-investigation@1.1.0",
+  "payload": {
+   "flow": "error-rate-investigation",
+   "phases": [
+    "triage",
+    "investigate",
+    "hypothesize",
+    "validate",
+    "remediate",
+    "verify",
+    "escalate"
+   ],
+   "version": "1.1.0"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "41c7dd59-d796-40f1-b2d5-a3ee4122c3c1",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 4,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:36:26.139291Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Triage started",
+  "payload": {
+   "to": "triaging",
+   "from": "detected"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "51f2a98b-1c17-400c-916e-96096b9f41de",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 5,
+  "type": "flow.phase_entered",
+  "at": "2026-09-15T10:36:26.145528Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Entering phase 'triage' of error-rate-investigation@1.1.0",
+  "payload": {
+   "flow": "error-rate-investigation@1.1.0",
+   "phase": "triage",
+   "budget": {
+    "max_llm_calls": 39,
+    "max_iterations": 48,
+    "max_llm_tokens": 330000,
+    "max_tool_calls": 54,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   }
+  },
+  "trace_id": null
+ },
+ {
+  "id": "7cb73faa-574d-4538-a1f3-51ce64f11b7d",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 6,
+  "type": "agent.run_started",
+  "at": "2026-09-15T10:36:26.213533Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent started phase 'triage'",
+  "payload": {
+   "flow": "error-rate-investigation@1.1.0",
+   "phase": "triage",
+   "budget": {
+    "max_llm_calls": 39,
+    "max_iterations": 48,
+    "max_llm_tokens": 330000,
+    "max_tool_calls": 54,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "dd4bf769-ab04-4c54-af41-d67a05c9c8af",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 7,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.249131Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[triage] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "35937232-f25b-4dcd-824d-f5926b172015",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "e70cef0b-379a-44b8-bebf-ff89daa4c65f",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 8,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.265568Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "get_health: api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+  "payload": {
+   "tool": "get_health",
+   "status": "succeeded",
+   "summary": "api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "duration_ms": 3.056,
+   "evidence_ids": [
+    "a5b7bc5a-3bde-41f8-a541-c30d7a4eb46f"
+   ],
+   "tool_execution_id": "131a9955-61f9-42e4-93fc-b9635435bdb4"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "f77c5e6c-9620-4e00-8065-a2b26eb63a9f",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 9,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.267428Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from get_health",
+  "payload": {
+   "evidence": [
+    {
+     "id": "a5b7bc5a-3bde-41f8-a541-c30d7a4eb46f",
+     "kind": "health",
+     "title": "api-gateway health",
+     "service": "api-gateway",
+     "strength": 0.85
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "2773654e-a297-4a36-b775-e26f27a35571",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 10,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.296442Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[triage] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "bf582955-ce38-4e00-939f-f5554b330f63",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "6061c777-d477-438c-9442-3a3b7f8420c6",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 11,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.316321Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "get_health: order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+  "payload": {
+   "tool": "get_health",
+   "status": "succeeded",
+   "summary": "order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+   "arguments": {
+    "service": "order-service"
+   },
+   "duration_ms": 4.723,
+   "evidence_ids": [
+    "e72c5b65-3f49-4dec-8974-614474a4bfa1"
+   ],
+   "tool_execution_id": "be2582aa-693d-4808-85e1-b05aad90048e"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "15d2e9db-ec51-4e27-8c91-1938bd721965",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 12,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.317924Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from get_health",
+  "payload": {
+   "evidence": [
+    {
+     "id": "e72c5b65-3f49-4dec-8974-614474a4bfa1",
+     "kind": "health",
+     "title": "order-service health",
+     "service": "order-service",
+     "strength": 0.85
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "f3139be4-619a-4e65-83ee-f68fc80a0465",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 13,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.345335Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[triage] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "9494afb9-4a01-4395-a245-77e1a8077e01",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "9af5a16a-1d50-49ef-8d4c-664e9a6f0554",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 14,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.362396Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "get_health: inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+  "payload": {
+   "tool": "get_health",
+   "status": "succeeded",
+   "summary": "inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "duration_ms": 2.9949999999999997,
+   "evidence_ids": [
+    "3056ad35-c147-43ca-8766-2fe15eb99938"
+   ],
+   "tool_execution_id": "851357c0-d9a0-4543-a784-82050e079f3a"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "70ab5221-318a-4b37-b88f-51b7b900d270",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 15,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.364406Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from get_health",
+  "payload": {
+   "evidence": [
+    {
+     "id": "3056ad35-c147-43ca-8766-2fe15eb99938",
+     "kind": "health",
+     "title": "inventory-service health",
+     "service": "inventory-service",
+     "strength": 0.85
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "743eff65-f38c-440b-ba48-c35098dd3004",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 16,
+  "type": "flow.phase_exited",
+  "at": "2026-09-15T10:36:26.387204Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Phase 'triage' complete (exit_conditions_met) \u2192 'investigate'",
+  "payload": {
+   "facts": {
+    "iterations": 3,
+    "action_planned": false,
+    "evidence_count": 3,
+    "top_confidence": 0.0,
+    "hypotheses_count": 0,
+    "no_action_required": false,
+    "hypothesis_validated": false
+   },
+   "phase": "triage",
+   "trigger": "exit_conditions_met",
+   "next_phase": "investigate"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "edae4546-562e-4ea9-aaa4-1e39130308d6",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 17,
+  "type": "agent.run_finished",
+  "at": "2026-09-15T10:36:26.413424Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent finished phase 'triage': phase_complete",
+  "payload": {
+   "phase": "triage",
+   "steps": 9,
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 3,
+    "llm_tokens": 0,
+    "tool_calls": 3,
+    "runtime_seconds": 0.151167,
+    "remediation_attempts": 0
+   },
+   "summary": "exit_conditions_met \u2192 investigate",
+   "decision": "transition",
+   "next_phase": "investigate",
+   "termination": "phase_complete",
+   "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "deebb565-ef7f-436f-8480-a8d9be4191b2",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 18,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:36:26.479893Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "triaging \u2192 investigating: entering phase 'investigate'",
+  "payload": {
+   "to": "investigating",
+   "from": "triaging",
+   "reason": "entering phase 'investigate'"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "ff3883a0-0153-4016-a2a5-591aa99bd742",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 19,
+  "type": "agent.run_started",
+  "at": "2026-09-15T10:36:26.537520Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent started phase 'investigate'",
+  "payload": {
+   "flow": "error-rate-investigation@1.1.0",
+   "phase": "investigate",
+   "budget": {
+    "max_llm_calls": 39,
+    "max_iterations": 48,
+    "max_llm_tokens": 330000,
+    "max_tool_calls": 54,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "91300ba9-f7ca-4fa8-92f6-2b51fea9bb15",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 20,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.569221Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "37b8236d-527e-41d0-9ff0-c1d0eaec2513",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "52c7ea11-0aaf-43b9-95c9-ecbda558a832",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 21,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.590413Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "inspect_redis: redis: 10/250 connections (4% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clien",
+  "payload": {
+   "tool": "inspect_redis",
+   "status": "succeeded",
+   "summary": "redis: 10/250 connections (4% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+   "arguments": {
+    "component": "redis"
+   },
+   "duration_ms": 5.623,
+   "evidence_ids": [
+    "c394b366-f032-4d17-842b-3a2736ecc74a"
+   ],
+   "tool_execution_id": "ddcd1cdb-fa2b-445f-ac12-b7c5b3e1458a"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "ad8eeb88-ab54-4e6f-a82f-84099e3e8b5b",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 22,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.592005Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from inspect_redis",
+  "payload": {
+   "evidence": [
+    {
+     "id": "c394b366-f032-4d17-842b-3a2736ecc74a",
+     "kind": "diagnostic",
+     "title": "redis connection analysis",
+     "service": "redis",
+     "strength": 0.2
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "422185e6-8309-4d36-a670-49eb9e0fd3e5",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 23,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.619280Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "d6488cfa-28bf-4690-9cf7-74c703f6b9ee",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "07e04574-3586-4c8f-8800-2e6946ec6d6e",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 24,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.640543Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "inspect_database: postgres: 9/100 connections (9% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+  "payload": {
+   "tool": "inspect_database",
+   "status": "succeeded",
+   "summary": "postgres: 9/100 connections (9% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+   "arguments": {
+    "component": "postgres"
+   },
+   "duration_ms": 3.3899999999999997,
+   "evidence_ids": [
+    "cd0152e1-d710-4107-8274-875d8f005b25"
+   ],
+   "tool_execution_id": "75124399-dfbd-49d9-a6a2-e2a3f9bc1e96"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "c1b3f927-2072-4bfd-b758-1c5248b05a5d",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 25,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.642272Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from inspect_database",
+  "payload": {
+   "evidence": [
+    {
+     "id": "cd0152e1-d710-4107-8274-875d8f005b25",
+     "kind": "diagnostic",
+     "title": "postgres connection analysis",
+     "service": "postgres",
+     "strength": 0.2
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "7fe75d40-6ff2-4187-8863-0fd984e2e386",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 26,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.668387Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "9283437b-7719-4f37-b665-ced3e7512238",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "38c2a3fd-4613-4d23-8f6c-5acb50c206a6",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 27,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.688378Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "inspect_dependencies: api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy de",
+  "payload": {
+   "tool": "inspect_dependencies",
+   "status": "succeeded",
+   "summary": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (50% errors), inventory-service (down); own error rate 0.0%, own latency 8ms",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "duration_ms": 3.985,
+   "evidence_ids": [
+    "deb7aaaa-c001-4454-bb14-5793c22abbeb"
+   ],
+   "tool_execution_id": "91ad110a-3664-406c-991c-236ebda2ad9e"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "8a706552-1c96-43c2-9407-a842dd14eb7c",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 28,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.690019Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from inspect_dependencies",
+  "payload": {
+   "evidence": [
+    {
+     "id": "deb7aaaa-c001-4454-bb14-5793c22abbeb",
+     "kind": "topology",
+     "title": "api-gateway dependencies",
+     "service": "order-service",
+     "strength": 0.8
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "1eac4fb6-d6a9-4ee1-b553-a3f203af1dbd",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 29,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.717393Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "b2314969-ae2e-465e-a13c-a84239e30743",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "21b31d73-6df6-47a2-a59e-c02e77913b66",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 30,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.738846Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "inspect_dependencies: order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own ",
+  "payload": {
+   "tool": "inspect_dependencies",
+   "status": "succeeded",
+   "summary": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own error rate 0.0%, own latency 21ms",
+   "arguments": {
+    "service": "order-service"
+   },
+   "duration_ms": 5.423,
+   "evidence_ids": [
+    "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef"
+   ],
+   "tool_execution_id": "314dbee4-ca51-4e90-bc6f-2c905779bedb"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "16e5aa95-afac-4d76-9af2-62583928a3cf",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 31,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.740891Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from inspect_dependencies",
+  "payload": {
+   "evidence": [
+    {
+     "id": "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+     "kind": "topology",
+     "title": "order-service dependencies",
+     "service": "inventory-service",
+     "strength": 0.8
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "bc27f282-a0e3-439c-8922-556ac12773bc",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 32,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.767537Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "9f9c2d47-a2fb-4371-aaec-388539c01a98",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "672edce7-61fa-4d5c-a281-b5d06c38961f",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 33,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.783968Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "query_traces: 12 traces sampled, 12 errored, avg 80ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x7, user-servic",
+  "payload": {
+   "tool": "query_traces",
+   "status": "succeeded",
+   "summary": "12 traces sampled, 12 errored, avg 80ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x7, user-service x3",
+   "arguments": {
+    "errors_only": true
+   },
+   "duration_ms": 3.407,
+   "evidence_ids": [
+    "b128d51d-28ad-4435-895f-ce09a67cbdc4"
+   ],
+   "tool_execution_id": "bbd8cae0-5e01-4ee4-9a18-b0649ff7d958"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "20e5e46c-7291-4b15-a5f2-f8b2cfd282dc",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 34,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.785640Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from query_traces",
+  "payload": {
+   "evidence": [
+    {
+     "id": "b128d51d-28ad-4435-895f-ce09a67cbdc4",
+     "kind": "trace",
+     "title": "trace analysis",
+     "service": "inventory-service",
+     "strength": 0.9
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "ae91f698-c985-4d64-bde6-ac8f8110c9dd",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 35,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.811750Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "3e75015f-3631-43d2-b8cb-6e99c99e3051",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "e5457a97-6129-48bb-99b0-3f7952271753",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 36,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.830066Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "inspect_deployment: inventory-service runs 1.9.3 deployed 24 h ago (previous 1.9.2); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is sta",
+  "payload": {
+   "tool": "inspect_deployment",
+   "status": "succeeded",
+   "summary": "inventory-service runs 1.9.3 deployed 24 h ago (previous 1.9.2); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "duration_ms": 3.105,
+   "evidence_ids": [
+    "aa98032b-5028-48b4-8605-ce6249fff1bc"
+   ],
+   "tool_execution_id": "30c7efea-02c3-489b-9d47-355e6c34b9b5"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "9b14aa51-dad1-443f-9951-691b2812fbec",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 37,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.832009Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from inspect_deployment",
+  "payload": {
+   "evidence": [
+    {
+     "id": "aa98032b-5028-48b4-8605-ce6249fff1bc",
+     "kind": "deployment",
+     "title": "inventory-service deployment 1.9.3",
+     "service": "inventory-service",
+     "strength": 0.15
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "0f7ed62c-a763-4ca5-850c-f51f11b3a393",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 38,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.861356Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "ddd40b0a-f618-445f-92c8-b531bca255c5",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "bae13bce-9305-4559-83ae-0a680ecb5164",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 39,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.877276Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "inspect_deployment: api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+  "payload": {
+   "tool": "inspect_deployment",
+   "status": "succeeded",
+   "summary": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "duration_ms": 2.3939999999999997,
+   "evidence_ids": [
+    "a4f628cd-afe0-409e-b5c4-6740dc3f5904"
+   ],
+   "tool_execution_id": "5a8f6e51-0a62-47c9-b3f6-c97474b7575f"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "344a393c-a7fc-44b2-bac2-954a1c75ecbf",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 40,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.878825Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from inspect_deployment",
+  "payload": {
+   "evidence": [
+    {
+     "id": "a4f628cd-afe0-409e-b5c4-6740dc3f5904",
+     "kind": "deployment",
+     "title": "api-gateway deployment 3.2.1",
+     "service": "api-gateway",
+     "strength": 0.15
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "4c8c1280-3528-4973-b92c-1d7d511abb28",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 41,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:26.905635Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[investigate] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "7bb5290d-c230-494e-a033-2a98353d0178",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "62069e8a-cc32-4752-9836-784ad080cf92",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 42,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:26.922256Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "inspect_deployment: order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+  "payload": {
+   "tool": "inspect_deployment",
+   "status": "succeeded",
+   "summary": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+   "arguments": {
+    "service": "order-service"
+   },
+   "duration_ms": 2.812,
+   "evidence_ids": [
+    "d1961b3d-1098-4a70-950d-834227c51075"
+   ],
+   "tool_execution_id": "e60227c7-ccaa-4671-9109-5fd96396e432"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "f983fa5c-36c9-479b-aa7a-21ee25bb036d",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 43,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:26.923794Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from inspect_deployment",
+  "payload": {
+   "evidence": [
+    {
+     "id": "d1961b3d-1098-4a70-950d-834227c51075",
+     "kind": "deployment",
+     "title": "order-service deployment 4.1.0",
+     "service": "order-service",
+     "strength": 0.15
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "67d92b56-5b90-429f-8170-dfe3380b20c9",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 44,
+  "type": "flow.phase_exited",
+  "at": "2026-09-15T10:36:26.944110Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Phase 'investigate' complete (exhausted) \u2192 'hypothesize'",
+  "payload": {
+   "facts": {
+    "iterations": 8,
+    "action_planned": false,
+    "evidence_count": 11,
+    "top_confidence": 0.0,
+    "hypotheses_count": 0,
+    "no_action_required": false,
+    "hypothesis_validated": false
+   },
+   "phase": "investigate",
+   "trigger": "exhausted",
+   "next_phase": "hypothesize"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "12f91f14-c598-4b70-8452-25a291a6c33f",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 45,
+  "type": "agent.run_finished",
+  "at": "2026-09-15T10:36:26.970009Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent finished phase 'investigate': phase_complete",
+  "payload": {
+   "phase": "investigate",
+   "steps": 24,
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 11,
+    "llm_tokens": 0,
+    "tool_calls": 11,
+    "runtime_seconds": 0.5371319999999999,
+    "remediation_attempts": 0
+   },
+   "summary": "exhausted \u2192 hypothesize",
+   "decision": "transition",
+   "next_phase": "hypothesize",
+   "termination": "phase_complete",
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "c8ab4f58-1242-4dce-aca7-79db388369e0",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 46,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:36:27.041373Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "investigating \u2192 hypothesis_formed: entering phase 'hypothesize'",
+  "payload": {
+   "to": "hypothesis_formed",
+   "from": "investigating",
+   "reason": "entering phase 'hypothesize'"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "b58a9066-f0d7-42b4-b024-0cdc8482bcc7",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 47,
+  "type": "agent.run_started",
+  "at": "2026-09-15T10:36:27.100981Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent started phase 'hypothesize'",
+  "payload": {
+   "flow": "error-rate-investigation@1.1.0",
+   "phase": "hypothesize",
+   "budget": {
+    "max_llm_calls": 39,
+    "max_iterations": 48,
+    "max_llm_tokens": 330000,
+    "max_tool_calls": 54,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "agent_run_id": "da590dd1-b973-4624-b8ed-64eea7c0cbe6"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "cba70995-924f-4382-9a6c-1b30b62a5229",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 48,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:27.138133Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[hypothesize] propose_hypotheses: Evidence implicates specific components.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "propose_hypotheses",
+   "tokens": 0,
+   "step_id": "1f38f4f4-ba03-4055-b6d6-56558ec63fed",
+   "rationale": "deterministic planner derived hypotheses from evidence strength",
+   "observation": "Evidence implicates specific components."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "a2946b34-072f-4585-a85c-d1191afaaafc",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 49,
+  "type": "hypothesis.created",
+  "at": "2026-09-15T10:36:27.156867Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Hypothesis: inventory-service is unavailable and its dependents fail as a result. (confidence 82%)",
+  "payload": {
+   "score": {
+    "total": 0.8228,
+    "explanation": [
+     "api-gateway fails because of inventory-service (90% contribution)",
+     "3 supporting evidence items (strength 0.94)",
+     "temporal alignment 1.00",
+     "inventory-service explains 3/3 symptomatic services"
+    ],
+    "validation_bonus": 0.0,
+    "evidence_strength": 0.9397,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 1.0,
+    "contradiction_penalty": 0.0,
+    "historical_similarity": 0.0
+   },
+   "status": "supported",
+   "category": "dependency_failure",
+   "statement": "inventory-service is unavailable and its dependents fail as a result.",
+   "confidence": 0.8228,
+   "supporting": 3,
+   "contradicting": 0,
+   "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+   "root_cause_service": "inventory-service"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "4de86884-9267-4a53-8ff7-39b8be057257",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 50,
+  "type": "hypothesis.created",
+  "at": "2026-09-15T10:36:27.158440Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Hypothesis: api-gateway is the most implicated component in the collected evidence. (confidence 20%)",
+  "payload": {
+   "score": {
+    "total": 0.1998,
+    "explanation": [
+     "api-gateway's errors are inherited from order-service (50% contribution, own error rate 0.0%); it is a symptom, not the origin",
+     "api-gateway's errors are inherited from inventory-service (90% contribution, own error rate 0.0%); it is a symptom, not the origin",
+     "1 supporting evidence items (strength 0.85)",
+     "temporal alignment 1.00",
+     "api-gateway explains 1/3 symptomatic services"
+    ],
+    "validation_bonus": 0.0,
+    "evidence_strength": 0.85,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 0.3333,
+    "contradiction_penalty": 0.832,
+    "historical_similarity": 0.0
+   },
+   "status": "proposed",
+   "category": "unknown",
+   "statement": "api-gateway is the most implicated component in the collected evidence.",
+   "confidence": 0.1998,
+   "supporting": 1,
+   "contradicting": 0,
+   "hypothesis_id": "72ee2ce1-2855-4152-bf45-db3363e601d3",
+   "root_cause_service": "api-gateway"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "9c930a96-b1ea-4867-92c7-92d5cb2bcebb",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 51,
+  "type": "hypothesis.created",
+  "at": "2026-09-15T10:36:27.159966Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Hypothesis: order-service is unavailable and its dependents fail as a result. (confidence 40%)",
+  "payload": {
+   "score": {
+    "total": 0.4041,
+    "explanation": [
+     "order-service's errors are inherited from inventory-service (100% contribution, own error rate 0.0%); it is a symptom, not the origin",
+     "2 supporting evidence items (strength 0.90)",
+     "temporal alignment 1.00",
+     "order-service explains 3/3 symptomatic services"
+    ],
+    "validation_bonus": 0.0,
+    "evidence_strength": 0.898,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 1.0,
+    "contradiction_penalty": 0.8,
+    "historical_similarity": 0.0
+   },
+   "status": "proposed",
+   "category": "dependency_failure",
+   "statement": "order-service is unavailable and its dependents fail as a result.",
+   "confidence": 0.4041,
+   "supporting": 2,
+   "contradicting": 0,
+   "hypothesis_id": "1785f522-5745-4ba5-b697-c341714ec057",
+   "root_cause_service": "order-service"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "1b57b0fe-719c-4e44-9b18-b91f2e3f04e3",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 52,
+  "type": "flow.phase_exited",
+  "at": "2026-09-15T10:36:27.183911Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Phase 'hypothesize' complete (exit_conditions_met) \u2192 'validate'",
+  "payload": {
+   "facts": {
+    "iterations": 1,
+    "action_planned": false,
+    "evidence_count": 11,
+    "top_confidence": 0.8228,
+    "hypotheses_count": 3,
+    "no_action_required": false,
+    "hypothesis_validated": false
+   },
+   "phase": "hypothesize",
+   "trigger": "exit_conditions_met",
+   "next_phase": "validate"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "63b513d7-4a20-4e71-ba32-132545eeb271",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 53,
+  "type": "agent.run_finished",
+  "at": "2026-09-15T10:36:27.204623Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent finished phase 'hypothesize': phase_complete",
+  "payload": {
+   "phase": "hypothesize",
+   "steps": 2,
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 12,
+    "llm_tokens": 0,
+    "tool_calls": 11,
+    "runtime_seconds": 0.5946349999999999,
+    "remediation_attempts": 0
+   },
+   "summary": "exit_conditions_met \u2192 validate",
+   "decision": "transition",
+   "next_phase": "validate",
+   "termination": "phase_complete",
+   "agent_run_id": "da590dd1-b973-4624-b8ed-64eea7c0cbe6"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "5f1aa836-43bc-4382-9605-c710f35eb4a1",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 54,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:36:27.267043Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "hypothesis_formed \u2192 validating: entering phase 'validate'",
+  "payload": {
+   "to": "validating",
+   "from": "hypothesis_formed",
+   "reason": "entering phase 'validate'"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "4e02cb69-833c-4518-8219-660eded4603a",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 55,
+  "type": "agent.run_started",
+  "at": "2026-09-15T10:36:27.321156Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent started phase 'validate'",
+  "payload": {
+   "flow": "error-rate-investigation@1.1.0",
+   "phase": "validate",
+   "budget": {
+    "max_llm_calls": 39,
+    "max_iterations": 48,
+    "max_llm_tokens": 330000,
+    "max_tool_calls": 54,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "agent_run_id": "8a503b9f-76cd-4ffd-b825-4db9d868e91d"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "59ca9e58-dd04-45b7-9a1d-8dfe6b178339",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 56,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:27.352018Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[validate] call_tool: Testing H1: inventory-service is unavailable and its dependents fail as a result.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "aabf3149-0354-4985-97de-504e74bf824d",
+   "rationale": "deterministic planner",
+   "observation": "Testing H1: inventory-service is unavailable and its dependents fail as a result."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "1641bd54-12e8-4631-8a5b-90f016d5e2fc",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 57,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:36:27.369069Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "run_process_diagnostic: inventory-service process: DOWN (crashed), version 1.9.3, uptime 327s, replicas 2.0/2, restarts 0, mem 0.0%, cpu 0.0%, open redis conns 2, open db conns 2",
+  "payload": {
+   "tool": "run_process_diagnostic",
+   "status": "succeeded",
+   "summary": "inventory-service process: DOWN (crashed), version 1.9.3, uptime 327s, replicas 2.0/2, restarts 0, mem 0.0%, cpu 0.0%, open redis conns 2, open db conns 2",
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "duration_ms": 2.785,
+   "evidence_ids": [
+    "a5fa40a4-b8ec-4650-af03-3cc7bc21bf61"
+   ],
+   "tool_execution_id": "cd76c08d-7b3d-46d0-bb97-1dea5f844ed6"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "530a2a7d-af05-463b-913f-e68d016ee870",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 58,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:36:27.370867Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from run_process_diagnostic",
+  "payload": {
+   "evidence": [
+    {
+     "id": "a5fa40a4-b8ec-4650-af03-3cc7bc21bf61",
+     "kind": "diagnostic",
+     "title": "inventory-service process diagnostic",
+     "service": "inventory-service",
+     "strength": 0.8
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "744f02f4-a3d7-43a4-b356-87911aa1fbe3",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 59,
+  "type": "hypothesis.validated",
+  "at": "2026-09-15T10:36:27.375228Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Test confirmed: inventory-service is unavailable and its dependents fail as a result. (confidence 97%)",
+  "payload": {
+   "test": {
+    "at": "2026-09-15T10:36:27.373417Z",
+    "id": "37a29d76-ac3c-4797-9949-22b69715f6f6",
+    "detail": "deterministic judgement: diagnostic strongly implicates the suspected service",
+    "outcome": "confirmed",
+    "tool_name": "run_process_diagnostic",
+    "expectation": "result implicates inventory-service",
+    "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "tool_execution_id": null
+   },
+   "score": {
+    "total": 0.9728,
+    "explanation": [
+     "api-gateway fails because of inventory-service (90% contribution)",
+     "3 supporting evidence items (strength 0.94)",
+     "temporal alignment 1.00",
+     "inventory-service explains 3/3 symptomatic services",
+     "tests: 1 confirmed, 0 refuted"
+    ],
+    "validation_bonus": 0.15,
+    "evidence_strength": 0.9397,
+    "temporal_alignment": 1.0,
+    "dependency_alignment": 1.0,
+    "contradiction_penalty": 0.0,
+    "historical_similarity": 0.0
+   },
+   "status": "confirmed",
+   "category": "dependency_failure",
+   "statement": "inventory-service is unavailable and its dependents fail as a result.",
+   "confidence": 0.9728,
+   "supporting": 3,
+   "contradicting": 0,
+   "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+   "root_cause_service": "inventory-service"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "c90c26cc-59f6-4c2b-818c-a613800bd7ea",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 60,
+  "type": "flow.phase_exited",
+  "at": "2026-09-15T10:36:27.402469Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Phase 'validate' complete (exit_conditions_met) \u2192 'remediate'",
+  "payload": {
+   "facts": {
+    "iterations": 1,
+    "action_planned": false,
+    "evidence_count": 12,
+    "top_confidence": 0.9728,
+    "hypotheses_count": 3,
+    "no_action_required": false,
+    "hypothesis_validated": true
+   },
+   "phase": "validate",
+   "trigger": "exit_conditions_met",
+   "next_phase": "remediate"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "99be5414-39b0-4108-91e7-774b1f749861",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 61,
+  "type": "agent.run_finished",
+  "at": "2026-09-15T10:36:27.421616Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent finished phase 'validate': phase_complete",
+  "payload": {
+   "phase": "validate",
+   "steps": 3,
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 13,
+    "llm_tokens": 0,
+    "tool_calls": 12,
+    "runtime_seconds": 0.6542769999999999,
+    "remediation_attempts": 0
+   },
+   "summary": "exit_conditions_met \u2192 remediate",
+   "decision": "transition",
+   "next_phase": "remediate",
+   "termination": "phase_complete",
+   "agent_run_id": "8a503b9f-76cd-4ffd-b825-4db9d868e91d"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "382b3be3-ede5-435f-ba93-6b327d85fa60",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 62,
+  "type": "agent.run_started",
+  "at": "2026-09-15T10:36:27.464987Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent started phase 'remediate'",
+  "payload": {
+   "flow": "error-rate-investigation@1.1.0",
+   "phase": "remediate",
+   "budget": {
+    "max_llm_calls": 39,
+    "max_iterations": 48,
+    "max_llm_tokens": 330000,
+    "max_tool_calls": 54,
+    "max_runtime_seconds": 1350,
+    "max_remediation_attempts": 2
+   },
+   "agent_run_id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "28a161fb-2b64-440e-a3f8-817e171351d2",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 63,
+  "type": "agent.step",
+  "at": "2026-09-15T10:36:27.493951Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[remediate] plan_remediation: Planning remediation for H1.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "plan_remediation",
+   "tokens": 0,
+   "step_id": "8ca19040-140c-43a3-be82-643634a9a6e7",
+   "rationale": "deterministic planner category playbook",
+   "observation": "Planning remediation for H1."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "5498206c-ce1b-453b-97aa-9b2b9a589517",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 64,
+  "type": "remediation.proposed",
+  "at": "2026-09-15T10:36:27.517967Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Remediation proposed: restart_service on inventory-service",
+  "payload": {
+   "risk": "medium",
+   "tool": "restart_service",
+   "reason": "addresses dependency_failure on inventory-service",
+   "rollback": {
+    "reason": "restart_service is not reversible; a failed verification escalates",
+    "arguments": {},
+    "available": false,
+    "tool_name": null
+   },
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "confidence": 0.9728,
+   "hypothesis": "inventory-service is unavailable and its dependents fail as a result.",
+   "verification": {
+    "conditions": [
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "api-gateway",
+      "comparator": "lte",
+      "description": "api-gateway error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "order-service",
+      "comparator": "lte",
+      "description": "order-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "inventory-service",
+      "comparator": "lte",
+      "description": "inventory-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "up",
+      "target": 1.0,
+      "service": "inventory-service",
+      "comparator": "gte",
+      "description": "inventory-service up gte 1",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "latency_p95_ms",
+      "target": null,
+      "service": "inventory-service",
+      "comparator": "lte",
+      "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+      "max_ratio_to_baseline": 1.5
+     }
+    ],
+    "require_all": true,
+    "timeout_seconds": 240,
+    "stabilization_seconds": 30
+   },
+   "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+   "expected_effect": "symptomatic metrics return to baseline"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "7d15237f-c0be-4cbe-a6ec-550b1fa1473f",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 65,
+  "type": "agent.run_finished",
+  "at": "2026-09-15T10:36:27.540396Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent finished phase 'remediate': action_planned",
+  "payload": {
+   "phase": "remediate",
+   "steps": 2,
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 13,
+    "llm_tokens": 0,
+    "tool_calls": 12,
+    "runtime_seconds": 0.6568269999999999,
+    "remediation_attempts": 0
+   },
+   "summary": "planned restart_service on inventory-service",
+   "decision": "action_planned",
+   "next_phase": null,
+   "termination": "action_planned",
+   "agent_run_id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "641bf8b0-997b-496c-9820-ed8f2479b4bb",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 66,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:36:27.584047Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "validating \u2192 remediation_planned: remediation planned",
+  "payload": {
+   "to": "remediation_planned",
+   "from": "validating",
+   "reason": "remediation planned"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "02124a67-315b-46ec-b7d1-d18e36eef2a4",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 67,
+  "type": "policy.decided",
+  "at": "2026-09-15T10:36:27.649149Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Policy: require approval for restart_service (approve-sev1-mutations)",
+  "payload": {
+   "effect": "require_approval",
+   "reason": "SEV1 incidents have humans in the loop for every change.",
+   "invariant": null,
+   "matched_rule": "approve-sev1-mutations",
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+   "evaluated_rules": [
+    "deny-dangerous",
+    "allow-read-only",
+    "allow-diagnostics",
+    "approve-diagnostics-medium-risk",
+    "deny-high-risk-mutation-production",
+    "approve-rollback",
+    "approve-production-mutations",
+    "approve-sev1-mutations"
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "8579015c-8df8-4364-a153-dc318f8ca64d",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 68,
+  "type": "approval.requested",
+  "at": "2026-09-15T10:36:27.659531Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Approval required: restart_service on inventory-service (risk medium)",
+  "payload": {
+   "risk": "medium",
+   "confidence": 0.9728,
+   "expires_at": "2026-09-15T10:51:27.644965+00:00",
+   "hypothesis": "inventory-service is unavailable and its dependents fail as a result.",
+   "approval_id": "00c9ce27-4587-4589-99b8-1b6a94964033",
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "5a89eac6-4aff-4dc5-8f57-5088b7c23d18",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 69,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:36:27.725286Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "remediation_planned \u2192 awaiting_approval: awaiting human approval",
+  "payload": {
+   "to": "awaiting_approval",
+   "from": "remediation_planned",
+   "reason": "awaiting human approval"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "9d23ea6b-aa4c-4ffa-a8f3-00b975c67cff",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 70,
+  "type": "approval.decided",
+  "at": "2026-09-15T10:36:29.883517Z",
+  "actor": {
+   "kind": "human",
+   "id": "user:local-operator",
+   "display_name": "Local operator",
+   "roles": [
+    "admin"
+   ]
+  },
+  "title": "Remediation approved by Local operator",
+  "payload": {
+   "reason": "e2e harness",
+   "approved": true,
+   "approval_id": "00c9ce27-4587-4589-99b8-1b6a94964033",
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "e036824a-4c81-4a37-b831-2654bea8dddb",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 71,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:36:29.945741Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "awaiting_approval \u2192 remediating: executing remediation",
+  "payload": {
+   "to": "remediating",
+   "from": "awaiting_approval",
+   "reason": "executing remediation"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "1c247a17-943d-42b5-9a12-908ff35c1068",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 72,
+  "type": "remediation.started",
+  "at": "2026-09-15T10:36:30.071241Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Executing restart_service {'service': 'inventory-service'}",
+  "payload": {
+   "tool": "restart_service",
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "073f72c4-2165-4732-a249-2dc7ee181626",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 73,
+  "type": "remediation.completed",
+  "at": "2026-09-15T10:36:30.093794Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "restart_service: restart of inventory-service restarting (eta 10s, version 1.9.3)",
+  "payload": {
+   "error": null,
+   "result": {
+    "at": "2026-09-15T10:36:30.126624+00:00",
+    "action": "restart",
+    "status": "restarting",
+    "target": "inventory-service",
+    "version": "1.9.3",
+    "eta_seconds": 10.0
+   },
+   "status": "succeeded",
+   "denial_code": null,
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+   "tool_execution_id": "5673d20b-7098-4d5c-9510-34175ed77ec8"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "e47bca29-f565-4d80-911f-292a5a0ceb4a",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 74,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:36:30.156536Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "remediating \u2192 verifying: verifying remediation",
+  "payload": {
+   "to": "verifying",
+   "from": "remediating",
+   "reason": "verifying remediation"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "379a04e5-6bf3-4fc1-82f8-441103bc62e0",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 75,
+  "type": "verification.started",
+  "at": "2026-09-15T10:36:30.223836Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Verifying 5 condition(s) over 30s stabilization",
+  "payload": {
+   "conditions": [
+    {
+     "metric": "error_rate",
+     "target": 0.03,
+     "service": "api-gateway",
+     "comparator": "lte",
+     "description": "api-gateway error_rate lte 0.03",
+     "max_ratio_to_baseline": null
+    },
+    {
+     "metric": "error_rate",
+     "target": 0.03,
+     "service": "order-service",
+     "comparator": "lte",
+     "description": "order-service error_rate lte 0.03",
+     "max_ratio_to_baseline": null
+    },
+    {
+     "metric": "error_rate",
+     "target": 0.03,
+     "service": "inventory-service",
+     "comparator": "lte",
+     "description": "inventory-service error_rate lte 0.03",
+     "max_ratio_to_baseline": null
+    },
+    {
+     "metric": "up",
+     "target": 1.0,
+     "service": "inventory-service",
+     "comparator": "gte",
+     "description": "inventory-service up gte 1",
+     "max_ratio_to_baseline": null
+    },
+    {
+     "metric": "latency_p95_ms",
+     "target": null,
+     "service": "inventory-service",
+     "comparator": "lte",
+     "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+     "max_ratio_to_baseline": 1.5
+    }
+   ],
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "a6efcc7b-78e7-47b3-8d40-59e587cd49e0",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 76,
+  "type": "verification.passed",
+  "at": "2026-09-15T10:37:20.382371Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Verification passed: all 5 conditions held for 3 consecutive polls",
+  "payload": {
+   "after": {
+    "inventory-service.up": 1.0,
+    "api-gateway.error_rate": 0.005182081243413203,
+    "order-service.error_rate": 0.0027011177162443523,
+    "inventory-service.error_rate": 0.0010655906153039765,
+    "inventory-service.latency_p95_ms": 32.27757021941398
+   },
+   "before": {
+    "inventory-service.up": 0.6333333333333333,
+    "api-gateway.error_rate": 0.24244503849872606,
+    "order-service.error_rate": 0.3685391069010774,
+    "inventory-service.error_rate": 0.36744440574320447,
+    "inventory-service.latency_p95_ms": 20.35102803899891
+   },
+   "status": "passed",
+   "changes": [
+    "api-gateway.error_rate: 0.242 \u2192 0.00518 (-98%)",
+    "order-service.error_rate: 0.369 \u2192 0.0027 (-99%)",
+    "inventory-service.error_rate: 0.367 \u2192 0.00107 (-100%)",
+    "inventory-service.up: 0.633 \u2192 1 (+58%)",
+    "inventory-service.latency_p95_ms: 20.4 \u2192 32.3 (+59%)"
+   ],
+   "summary": "all 5 conditions held for 3 consecutive polls",
+   "conditions": [
+    {
+     "ok": true,
+     "value": 0.005182081243413203,
+     "detail": "api-gateway.error_rate=0.00518 lte 0.03",
+     "metric": "error_rate",
+     "service": "api-gateway",
+     "baseline": 0.004976302247429489,
+     "description": "api-gateway error_rate lte 0.03",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 0.0027011177162443523,
+     "detail": "order-service.error_rate=0.0027 lte 0.03",
+     "metric": "error_rate",
+     "service": "order-service",
+     "baseline": 0.002832653973527574,
+     "description": "order-service error_rate lte 0.03",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 0.0010655906153039765,
+     "detail": "inventory-service.error_rate=0.00107 lte 0.03",
+     "metric": "error_rate",
+     "service": "inventory-service",
+     "baseline": 0.001175278293863384,
+     "description": "inventory-service error_rate lte 0.03",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 1.0,
+     "detail": "inventory-service.up=1 gte 1",
+     "metric": "up",
+     "service": "inventory-service",
+     "baseline": 1.0,
+     "description": "inventory-service up gte 1",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 32.27757021941398,
+     "detail": "inventory-service.latency_p95_ms=32.3 vs 1.5x baseline(32.1)=48.2",
+     "metric": "latency_p95_ms",
+     "service": "inventory-service",
+     "baseline": 32.12318060175157,
+     "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+     "accumulation_share": null
+    }
+   ],
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "c4d23727-3dc7-45c4-847a-6050c26454aa",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 77,
+  "type": "incident.resolved",
+  "at": "2026-09-15T10:37:20.498055Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Incident resolved: remediation verified: all 5 conditions held for 3 consecutive polls",
+  "payload": {
+   "to": "resolved",
+   "from": "verifying",
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 13,
+    "llm_tokens": 0,
+    "tool_calls": 12,
+    "runtime_seconds": 0.6568269999999999,
+    "remediation_attempts": 0
+   },
+   "summary": "remediation verified: all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 54.358769
+  },
+  "trace_id": null
+ },
+ {
+  "id": "46c74a32-4670-4523-a86e-15b7f4204e24",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 78,
+  "type": "memory.stored",
+  "at": "2026-09-15T10:37:20.542602Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Incident memory stored: inventory-service is unavailable and its dependents fail as a result.",
+  "payload": {
+   "lessons": [],
+   "outcome": "resolved",
+   "memory_id": "2b0b16f4-858a-4c94-b4ce-54ee1c202d94",
+   "root_cause_service": "inventory-service"
+  },
+  "trace_id": null
+ }
+]

@@ -1,0 +1,144 @@
+[
+ {
+  "id": "6cee78d3-2b1b-46a9-aa4c-6f0a0416ab87",
+  "agent_run_id": "88335516-c719-470e-a493-3eb12c539680",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 1,
+  "phase": "remediate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:32:16.204642Z",
+  "title": "plan_remediation: Planning remediation for H1.",
+  "input": {
+   "phase": "remediate",
+   "evidence": 17,
+   "iteration": 0,
+   "hypotheses": 1
+  },
+  "output": {
+   "proposal": {
+    "action": "plan_remediation",
+    "rationale": "deterministic planner category playbook",
+    "tool_call": null,
+    "hypotheses": [],
+    "observation": "Planning remediation for H1.",
+    "remediation": {
+     "reason": "addresses resource_exhaustion on order-service",
+     "tool_name": "restart_service",
+     "arguments_json": "{\"service\": \"order-service\"}",
+     "expected_effect": "symptomatic metrics return to baseline",
+     "target_hypothesis": "H1",
+     "rollback_tool_name": null,
+     "rollback_arguments_json": "{}"
+    },
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "b8820f2d-b443-48a2-953f-e832dbd1cabf",
+  "agent_run_id": "88335516-c719-470e-a493-3eb12c539680",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "seq": 2,
+  "phase": "remediate",
+  "node": "plan_remediation",
+  "kind": "remediation_plan",
+  "at": "2026-09-15T10:32:16.244822Z",
+  "title": "Proposed restart_service({\"service\": \"order-service\"}) for H1",
+  "input": {
+   "remediation": {
+    "reason": "addresses resource_exhaustion on order-service",
+    "tool_name": "restart_service",
+    "arguments_json": "{\"service\": \"order-service\"}",
+    "expected_effect": "symptomatic metrics return to baseline",
+    "target_hypothesis": "H1",
+    "rollback_tool_name": null,
+    "rollback_arguments_json": "{}"
+   }
+  },
+  "output": {
+   "action_plan": {
+    "id": "3d085c86-5e28-4cd3-b447-60acbe7ab841",
+    "risk": "medium",
+    "reason": "addresses resource_exhaustion on order-service",
+    "status": "proposed",
+    "attempt": 1,
+    "rollback": {
+     "reason": "restart_service is not reversible; a failed verification escalates",
+     "arguments": {},
+     "available": false,
+     "tool_name": null
+    },
+    "arguments": {
+     "service": "order-service"
+    },
+    "tool_name": "restart_service",
+    "created_at": "2026-09-15T10:32:16.232931Z",
+    "updated_at": "2026-09-15T10:32:16.232954Z",
+    "approval_id": null,
+    "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+    "proposed_by": "deterministic",
+    "agent_run_id": "88335516-c719-470e-a493-3eb12c539680",
+    "tool_version": "1",
+    "verification": {
+     "conditions": [
+      {
+       "metric": "connections",
+       "target": null,
+       "service": "redis",
+       "comparator": "lte",
+       "description": "redis connections within 1.6x of baseline",
+       "max_ratio_to_baseline": 1.6
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "order-service",
+       "comparator": "lte",
+       "description": "order-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "latency_p95_ms",
+       "target": null,
+       "service": "order-service",
+       "comparator": "lte",
+       "description": "order-service latency_p95_ms within 1.5x of baseline",
+       "max_ratio_to_baseline": 1.5
+      },
+      {
+       "metric": "up",
+       "target": 1.0,
+       "service": "order-service",
+       "comparator": "gte",
+       "description": "order-service up gte 1",
+       "max_ratio_to_baseline": null
+      }
+     ],
+     "require_all": true,
+     "timeout_seconds": 240,
+     "stabilization_seconds": 30
+    },
+    "hypothesis_id": "b8a7f97c-2c94-479e-a6d3-8f48aec64bb8",
+    "expected_effect": "symptomatic metrics return to baseline",
+    "idempotency_key": "5c996c21041e1cc3e0e410f91da2b8ec",
+    "policy_decision": null,
+    "timeout_seconds": 90,
+    "verification_result": null
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ }
+]

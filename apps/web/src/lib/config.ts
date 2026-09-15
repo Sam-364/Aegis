@@ -11,6 +11,11 @@ export const config = {
   grafanaUrl: trimSlash(process.env.NEXT_PUBLIC_GRAFANA_URL ?? "http://localhost:3000"),
   prometheusUrl: trimSlash(process.env.NEXT_PUBLIC_PROMETHEUS_URL ?? "http://localhost:9090"),
   temporalNamespace: process.env.NEXT_PUBLIC_TEMPORAL_NAMESPACE ?? "default",
+  /**
+   * Replay a recorded stack instead of calling one (see `src/lib/demo.ts`). Deliberately explicit:
+   * a console pointed at a real control plane must never quietly fall back to a recording.
+   */
+  demo: process.env.NEXT_PUBLIC_AEGIS_DEMO === "1",
 } as const;
 
 export function temporalWorkflowUrl(workflowId: string): string {

@@ -1,0 +1,1167 @@
+[
+ {
+  "name": "clear_cache",
+  "version": "1",
+  "description": "Flush a cache. Briefly increases load on backing stores.",
+  "category": "mutating",
+  "risk": "low",
+  "idempotent": true,
+  "timeout_seconds": 30.0,
+  "retry": {
+   "max_attempts": 1,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "component": {
+     "default": "redis",
+     "title": "Component",
+     "type": "string"
+    },
+    "reason": {
+     "default": "",
+     "maxLength": 300,
+     "title": "Reason",
+     "type": "string"
+    }
+   },
+   "title": "ClearCacheArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": [
+   "hit_rate"
+  ]
+ },
+ {
+  "name": "compare_baseline",
+  "version": "1",
+  "description": "Compare the current value of a metric with its healthy baseline.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    },
+    "metric": {
+     "title": "Metric",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service",
+    "metric"
+   ],
+   "title": "CompareBaselineArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "delete_data",
+  "version": "1",
+  "description": "Delete data. Never executable.",
+  "category": "dangerous",
+  "risk": "critical",
+  "idempotent": false,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 1,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "target": {
+     "title": "Target",
+     "type": "string"
+    }
+   },
+   "required": [
+    "target"
+   ],
+   "title": "TargetArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "drop_database",
+  "version": "1",
+  "description": "Drop a database. Never executable.",
+  "category": "dangerous",
+  "risk": "critical",
+  "idempotent": false,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 1,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "target": {
+     "title": "Target",
+     "type": "string"
+    }
+   },
+   "required": [
+    "target"
+   ],
+   "title": "TargetArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "get_health",
+  "version": "1",
+  "description": "Health checks of a service or infrastructure component.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "ServiceArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "get_logs",
+  "version": "1",
+  "description": "Recent log lines for a service, grouped by message pattern.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    },
+    "level": {
+     "default": "WARN",
+     "description": "minimum level: INFO, WARN or ERROR",
+     "title": "Level",
+     "type": "string"
+    },
+    "window_seconds": {
+     "default": 300,
+     "maximum": 1800,
+     "minimum": 30,
+     "title": "Window Seconds",
+     "type": "integer"
+    },
+    "limit": {
+     "default": 40,
+     "maximum": 200,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "LogsArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "get_metrics",
+  "version": "1",
+  "description": "Time series for one metric of one component over a window, with baseline comparison.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "description": "service or infrastructure component name",
+     "title": "Service",
+     "type": "string"
+    },
+    "metric": {
+     "description": "metric name, e.g. latency_p95_ms, error_rate, connections",
+     "title": "Metric",
+     "type": "string"
+    },
+    "window_seconds": {
+     "default": 300,
+     "description": "lookback window",
+     "maximum": 1800,
+     "minimum": 30,
+     "title": "Window Seconds",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "service",
+    "metric"
+   ],
+   "title": "ServiceMetricArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "inspect_database",
+  "version": "1",
+  "description": "Database connection usage by client, idle-in-transaction sessions, saturation and latency.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "component": {
+     "default": "postgres",
+     "title": "Component",
+     "type": "string"
+    }
+   },
+   "title": "ComponentArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "inspect_dependencies",
+  "version": "1",
+  "description": "Dependency graph around a service and which dependencies contribute errors or latency right now.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "ServiceArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "inspect_deployment",
+  "version": "1",
+  "description": "Deployment history of a service: current version, when it changed, whether rollback is available.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "ServiceArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "inspect_redis",
+  "version": "1",
+  "description": "Cache client connections by service, saturation, blocked clients, hit rate.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "component": {
+     "default": "redis",
+     "title": "Component",
+     "type": "string"
+    }
+   },
+   "title": "CacheArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "inspect_service",
+  "version": "1",
+  "description": "Health, resource usage, process state and open connections of one service.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "ServiceArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "query_traces",
+  "version": "1",
+  "description": "Sampled distributed traces: which span fails first and where time is spent.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "anyOf": [
+      {
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "description": "only traces touching this service",
+     "title": "Service"
+    },
+    "errors_only": {
+     "default": true,
+     "title": "Errors Only",
+     "type": "boolean"
+    },
+    "window_seconds": {
+     "default": 300,
+     "maximum": 1800,
+     "minimum": 30,
+     "title": "Window Seconds",
+     "type": "integer"
+    },
+    "limit": {
+     "default": 12,
+     "maximum": 50,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    }
+   },
+   "title": "TracesArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "reproduce_issue",
+  "version": "1",
+  "description": "Issue several synthetic requests against a service and report the failure rate, latency and the failing upstream if any.",
+  "category": "diagnostic",
+  "risk": "low",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    },
+    "endpoint": {
+     "default": "/",
+     "pattern": "^/[A-Za-z0-9_\\-/]*$",
+     "title": "Endpoint",
+     "type": "string"
+    },
+    "samples": {
+     "default": 8,
+     "description": "number of synthetic requests",
+     "maximum": 20,
+     "minimum": 1,
+     "title": "Samples",
+     "type": "integer"
+    },
+    "expectation": {
+     "default": "",
+     "title": "Expectation",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "ReproduceArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "restart_service",
+  "version": "1",
+  "description": "Rolling restart of a service. Clears leaked connections and memory; does not fix code regressions.",
+  "category": "mutating",
+  "risk": "medium",
+  "idempotent": true,
+  "timeout_seconds": 30.0,
+  "retry": {
+   "max_attempts": 1,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "description": "service (or infrastructure component) to restart",
+     "title": "Service",
+     "type": "string"
+    },
+    "reason": {
+     "default": "",
+     "maxLength": 300,
+     "title": "Reason",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "RestartArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": [
+   "error_rate",
+   "latency_p95_ms",
+   "up"
+  ]
+ },
+ {
+  "name": "rollback_deployment",
+  "version": "1",
+  "description": "Roll a service back to its previous (or a named) version.",
+  "category": "mutating",
+  "risk": "medium",
+  "idempotent": true,
+  "timeout_seconds": 30.0,
+  "retry": {
+   "max_attempts": 1,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    },
+    "to_version": {
+     "anyOf": [
+      {
+       "pattern": "^[A-Za-z0-9._\\-]{1,40}$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "To Version"
+    },
+    "reason": {
+     "default": "",
+     "maxLength": 300,
+     "title": "Reason",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "RollbackArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": [
+   "error_rate",
+   "latency_p95_ms"
+  ]
+ },
+ {
+  "name": "rotate_connection_pool",
+  "version": "1",
+  "description": "Recycle a service's connection pool towards one infrastructure component, releasing held connections without a full restart.",
+  "category": "mutating",
+  "risk": "low",
+  "idempotent": true,
+  "timeout_seconds": 30.0,
+  "retry": {
+   "max_attempts": 1,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    },
+    "target": {
+     "description": "infrastructure component the pool connects to",
+     "title": "Target",
+     "type": "string"
+    },
+    "reason": {
+     "default": "",
+     "maxLength": 300,
+     "title": "Reason",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service",
+    "target"
+   ],
+   "title": "RotatePoolArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": [
+   "connections",
+   "latency_p95_ms"
+  ]
+ },
+ {
+  "name": "run_cache_diagnostic",
+  "version": "1",
+  "description": "Active cache check: clients by service, leaked connections, blocked clients.",
+  "category": "diagnostic",
+  "risk": "low",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "component": {
+     "default": "redis",
+     "title": "Component",
+     "type": "string"
+    },
+    "expectation": {
+     "default": "",
+     "title": "Expectation",
+     "type": "string"
+    }
+   },
+   "title": "CacheArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "run_connectivity_test",
+  "version": "1",
+  "description": "Probe one dependency edge: reachability, latency, timeouts, injected network latency.",
+  "category": "diagnostic",
+  "risk": "low",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "source": {
+     "description": "calling service",
+     "title": "Source",
+     "type": "string"
+    },
+    "target": {
+     "description": "dependency being called",
+     "title": "Target",
+     "type": "string"
+    }
+   },
+   "required": [
+    "source",
+    "target"
+   ],
+   "title": "ConnectivityArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "run_database_diagnostic",
+  "version": "1",
+  "description": "Active database check: connection slots by client, idle-in-transaction sessions, lock waits.",
+  "category": "diagnostic",
+  "risk": "low",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "component": {
+     "default": "postgres",
+     "title": "Component",
+     "type": "string"
+    },
+    "expectation": {
+     "default": "",
+     "description": "what the hypothesis predicts this shows",
+     "title": "Expectation",
+     "type": "string"
+    }
+   },
+   "title": "ComponentArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "run_load_projection",
+  "version": "1",
+  "description": "Project latency and replica headroom under a traffic multiplier (computation only, no load is generated).",
+  "category": "diagnostic",
+  "risk": "low",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    },
+    "factor": {
+     "default": 1.5,
+     "description": "traffic multiplier to project",
+     "maximum": 5.0,
+     "minimum": 1.0,
+     "title": "Factor",
+     "type": "number"
+    },
+    "expectation": {
+     "default": "",
+     "title": "Expectation",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "LoadProjectionArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "run_process_diagnostic",
+  "version": "1",
+  "description": "Process-level check: uptime, restarts, replicas ready, memory/cpu, open connections held by the process.",
+  "category": "diagnostic",
+  "risk": "low",
+  "idempotent": true,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    },
+    "expectation": {
+     "default": "",
+     "title": "Expectation",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service"
+   ],
+   "title": "ServiceArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "scale_service",
+  "version": "1",
+  "description": "Change the replica count of a service.",
+  "category": "mutating",
+  "risk": "low",
+  "idempotent": true,
+  "timeout_seconds": 30.0,
+  "retry": {
+   "max_attempts": 1,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "service": {
+     "title": "Service",
+     "type": "string"
+    },
+    "replicas": {
+     "maximum": 10,
+     "minimum": 1,
+     "title": "Replicas",
+     "type": "integer"
+    },
+    "reason": {
+     "default": "",
+     "maxLength": 300,
+     "title": "Reason",
+     "type": "string"
+    }
+   },
+   "required": [
+    "service",
+    "replicas"
+   ],
+   "title": "ScaleArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": [
+   "latency_p95_ms",
+   "cpu_percent"
+  ]
+ },
+ {
+  "name": "search_incident_memory",
+  "version": "1",
+  "description": "Find similar past incidents (root cause, remediation, outcome). Memory is evidence, not truth.",
+  "category": "read_only",
+  "risk": "none",
+  "idempotent": true,
+  "timeout_seconds": 20.0,
+  "retry": {
+   "max_attempts": 3,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "query": {
+     "description": "free-text description of the symptoms",
+     "title": "Query",
+     "type": "string"
+    },
+    "limit": {
+     "default": 3,
+     "maximum": 10,
+     "minimum": 1,
+     "title": "Limit",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "query"
+   ],
+   "title": "MemorySearchArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ },
+ {
+  "name": "terminate_instance",
+  "version": "1",
+  "description": "Terminate an instance. Never executable.",
+  "category": "dangerous",
+  "risk": "critical",
+  "idempotent": false,
+  "timeout_seconds": 10.0,
+  "retry": {
+   "max_attempts": 1,
+   "initial_backoff_seconds": 0.5,
+   "backoff_multiplier": 2.0,
+   "max_backoff_seconds": 10.0
+  },
+  "capabilities": [],
+  "allowed_environments": [
+   "development",
+   "staging",
+   "production"
+  ],
+  "min_severity": null,
+  "enabled": true,
+  "arguments_schema": {
+   "additionalProperties": false,
+   "properties": {
+    "target": {
+     "title": "Target",
+     "type": "string"
+    }
+   },
+   "required": [
+    "target"
+   ],
+   "title": "TargetArgs",
+   "type": "object"
+  },
+  "produces_evidence": true,
+  "verification_metrics": []
+ }
+]

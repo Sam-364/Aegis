@@ -1,0 +1,1428 @@
+[
+ {
+  "id": "42a22e1e-0361-4124-80a6-c3815ca983e3",
+  "at": "2026-09-15T10:36:26.084792Z",
+  "event_type": "incident.created",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": null,
+  "phase": null,
+  "tool_name": null,
+  "action": "create",
+  "decision": "created",
+  "reason": "inventory-service error_rate 0.00139 -> 1 (+72061%): elevated error rate; order-service error_rate 0.0032 -> 1 (+31173%): elevated error rate; api-gateway error_rate 0.00512 -> 0.651 (+12614%): elevated error rate; inventory-service up 1 -> 0 (-100%): component unavailable",
+  "trace_id": null,
+  "agent_run_id": null,
+  "tool_execution_id": null,
+  "data": {
+   "flow": "error-rate-investigation@1.1.0",
+   "severity": "sev1"
+  }
+ },
+ {
+  "id": "87eca9fb-69d4-4953-940f-61429a8b4eb9",
+  "at": "2026-09-15T10:36:26.260454Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "triage",
+  "tool_name": "get_health",
+  "action": "get_health",
+  "decision": "executed",
+  "reason": "api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+  "trace_id": null,
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "tool_execution_id": "131a9955-61f9-42e4-93fc-b9635435bdb4",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "get_health@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is triaging",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "get_health is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'triage' lists get_health",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits get_health",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key e8986700598f\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 0/54, iterations 0/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  }
+ },
+ {
+  "id": "f5aef410-37a8-48ef-ad81-fe3a2bfddfee",
+  "at": "2026-09-15T10:36:26.310675Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "triage",
+  "tool_name": "get_health",
+  "action": "get_health",
+  "decision": "executed",
+  "reason": "order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+  "trace_id": null,
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "tool_execution_id": "be2582aa-693d-4808-85e1-b05aad90048e",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "get_health@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is triaging",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "get_health is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'triage' lists get_health",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits get_health",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key b2b697d0a15e\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 1/54, iterations 1/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "order-service"
+   }
+  }
+ },
+ {
+  "id": "b74d9841-0084-47ff-9eaf-a74ab109612d",
+  "at": "2026-09-15T10:36:26.356377Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "triage",
+  "tool_name": "get_health",
+  "action": "get_health",
+  "decision": "executed",
+  "reason": "inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+  "trace_id": null,
+  "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+  "tool_execution_id": "851357c0-d9a0-4543-a784-82050e079f3a",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "get_health@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is triaging",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "get_health is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'triage' lists get_health",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits get_health",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:4295ce09-f584-4b23-a348-d9393f3ee09e has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key dd5b911b9120\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 2/54, iterations 2/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "inventory-service"
+   }
+  }
+ },
+ {
+  "id": "0b259775-8939-48ce-9efb-46619958b47a",
+  "at": "2026-09-15T10:36:26.585286Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_redis",
+  "action": "inspect_redis",
+  "decision": "executed",
+  "reason": "redis: 10/250 connections (4% saturation), p95 0.8ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2; hit rate 97%, blocked clients 0",
+  "trace_id": null,
+  "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+  "tool_execution_id": "ddcd1cdb-fa2b-445f-ac12-b7c5b3e1458a",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_redis@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_redis is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_redis",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits inspect_redis",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key c56d86f366f1\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 3/54, iterations 3/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "component": "redis"
+   }
+  }
+ },
+ {
+  "id": "69274977-4c4e-48f6-88d4-42c62fd99018",
+  "at": "2026-09-15T10:36:26.634958Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_database",
+  "action": "inspect_database",
+  "decision": "executed",
+  "reason": "postgres: 9/100 connections (9% saturation), p95 4.0ms; by client: order-service 3, auth-service 2, user-service 2, payment-service 2",
+  "trace_id": null,
+  "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+  "tool_execution_id": "75124399-dfbd-49d9-a6a2-e2a3f9bc1e96",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_database@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_database is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_database",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits inspect_database",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key c6327287799d\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 4/54, iterations 4/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "component": "postgres"
+   }
+  }
+ },
+ {
+  "id": "362ca454-7709-4ca7-86ef-e83ac3c0c1f3",
+  "at": "2026-09-15T10:36:26.683244Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_dependencies",
+  "action": "inspect_dependencies",
+  "decision": "executed",
+  "reason": "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (50% errors), inventory-service (down); own error rate 0.0%, own latency 8ms",
+  "trace_id": null,
+  "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+  "tool_execution_id": "91ad110a-3664-406c-991c-236ebda2ad9e",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_dependencies@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_dependencies is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_dependencies",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits inspect_dependencies",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 3acbe24e05f6\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 5/54, iterations 5/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  }
+ },
+ {
+  "id": "70dd7c07-4c7b-4a23-a681-45a62143f418",
+  "at": "2026-09-15T10:36:26.732106Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_dependencies",
+  "action": "inspect_dependencies",
+  "decision": "executed",
+  "reason": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own error rate 0.0%, own latency 21ms",
+  "trace_id": null,
+  "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+  "tool_execution_id": "314dbee4-ca51-4e90-bc6f-2c905779bedb",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_dependencies@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_dependencies is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_dependencies",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits inspect_dependencies",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key eb3294daebab\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 6/54, iterations 6/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "order-service"
+   }
+  }
+ },
+ {
+  "id": "44b1d5e5-9058-4d24-a950-c417dc6fac90",
+  "at": "2026-09-15T10:36:26.778650Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "investigate",
+  "tool_name": "query_traces",
+  "action": "query_traces",
+  "decision": "executed",
+  "reason": "12 traces sampled, 12 errored, avg 80ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x7, user-service x3",
+  "trace_id": null,
+  "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+  "tool_execution_id": "bbd8cae0-5e01-4ee4-9a18-b0649ff7d958",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "query_traces@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "query_traces is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists query_traces",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits query_traces",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key e69a14128952\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 7/54, iterations 7/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "errors_only": true
+   }
+  }
+ },
+ {
+  "id": "b7e3da5b-015b-436f-872a-82afdb076b34",
+  "at": "2026-09-15T10:36:26.823208Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_deployment",
+  "action": "inspect_deployment",
+  "decision": "executed",
+  "reason": "inventory-service runs 1.9.3 deployed 24 h ago (previous 1.9.2); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+  "trace_id": null,
+  "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+  "tool_execution_id": "30c7efea-02c3-489b-9d47-355e6c34b9b5",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_deployment@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_deployment is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key fa2ebf29e58d\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 8/54, iterations 8/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "inventory-service"
+   }
+  }
+ },
+ {
+  "id": "820c863c-b1c9-4141-ace4-3083805fc290",
+  "at": "2026-09-15T10:36:26.871609Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_deployment",
+  "action": "inspect_deployment",
+  "decision": "executed",
+  "reason": "api-gateway runs 3.2.1 deployed 24 h ago (previous 3.2.0); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+  "trace_id": null,
+  "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+  "tool_execution_id": "5a8f6e51-0a62-47c9-b3f6-c97474b7575f",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_deployment@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_deployment is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 9401a6be7f83\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 9/54, iterations 9/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "api-gateway"
+   }
+  }
+ },
+ {
+  "id": "7428e976-d155-42b1-a555-3c49c7c22b5d",
+  "at": "2026-09-15T10:36:26.916868Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:252740f3-0d85-4309-9441-4a69bfb41119",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "investigate",
+  "tool_name": "inspect_deployment",
+  "action": "inspect_deployment",
+  "decision": "executed",
+  "reason": "order-service runs 4.1.0 deployed 24 h ago (previous 4.0.9); change: baseline release; rollback available \u2014 NO deployment in the last 60 min; version is stable",
+  "trace_id": null,
+  "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+  "tool_execution_id": "e60227c7-ccaa-4671-9109-5fd96396e432",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "inspect_deployment@1 (read_only, risk none)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is investigating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "inspect_deployment is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'investigate' lists inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "read_only permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits inspect_deployment",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:252740f3-0d85-4309-9441-4a69bfb41119 has role viewer",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk none <= ceiling none",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-read-only'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key ef2aaf3451b1\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 10/54, iterations 10/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "order-service"
+   }
+  }
+ },
+ {
+  "id": "91fed589-9e45-4225-9356-717657a9a736",
+  "at": "2026-09-15T10:36:27.363632Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "validate",
+  "tool_name": "run_process_diagnostic",
+  "action": "run_process_diagnostic",
+  "decision": "executed",
+  "reason": "inventory-service process: DOWN (crashed), version 1.9.3, uptime 327s, replicas 2.0/2, restarts 0, mem 0.0%, cpu 0.0%, open redis conns 2, open db conns 2",
+  "trace_id": null,
+  "agent_run_id": "8a503b9f-76cd-4ffd-b825-4db9d868e91d",
+  "tool_execution_id": "cd76c08d-7b3d-46d0-bb97-1dea5f844ed6",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "run_process_diagnostic@1 (diagnostic, risk low)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is validating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "run_process_diagnostic is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "phase 'validate' lists run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "diagnostic permitted inside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits run_process_diagnostic",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "agent:8a503b9f-76cd-4ffd-b825-4db9d868e91d has role operator",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk low <= ceiling low",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "allowed by rule 'allow-diagnostics'",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 8a635e664579\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 11/54, iterations 12/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "inventory-service"
+   }
+  }
+ },
+ {
+  "id": "10cbe8c4-6b88-4e77-bd88-886fbdab4d84",
+  "at": "2026-09-15T10:36:27.654061Z",
+  "event_type": "policy.decided",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": null,
+  "phase": null,
+  "tool_name": "restart_service",
+  "action": "restart_service",
+  "decision": "require_approval",
+  "reason": "SEV1 incidents have humans in the loop for every change.",
+  "trace_id": null,
+  "agent_run_id": null,
+  "tool_execution_id": null,
+  "data": {
+   "rule": "approve-sev1-mutations",
+   "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4"
+  }
+ },
+ {
+  "id": "65e79bdc-87fc-42e2-a63d-3aa9af37fa31",
+  "at": "2026-09-15T10:36:29.885980Z",
+  "event_type": "approval.decided",
+  "actor": {
+   "kind": "human",
+   "id": "user:local-operator",
+   "display_name": "Local operator",
+   "roles": [
+    "admin"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": null,
+  "phase": null,
+  "tool_name": null,
+  "action": "restart_service on inventory-service",
+  "decision": "approved",
+  "reason": "e2e harness",
+  "trace_id": null,
+  "agent_run_id": null,
+  "tool_execution_id": null,
+  "data": {
+   "approval_id": "00c9ce27-4587-4589-99b8-1b6a94964033"
+  }
+ },
+ {
+  "id": "9c12aa98-96fd-4ef3-b40f-012ecc1be2d3",
+  "at": "2026-09-15T10:36:30.088528Z",
+  "event_type": "tool.executed",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": "error-rate-investigation",
+  "phase": "remediate",
+  "tool_name": "restart_service",
+  "action": "restart_service",
+  "decision": "executed",
+  "reason": "restart of inventory-service restarting (eta 10s, version 1.9.3)",
+  "trace_id": null,
+  "agent_run_id": null,
+  "tool_execution_id": "5673d20b-7098-4d5c-9510-34175ed77ec8",
+  "data": {
+   "checks": [
+    {
+     "name": "tool_registered",
+     "detail": "restart_service@1 (mutating, risk medium)",
+     "passed": true
+    },
+    {
+     "name": "tool_enabled",
+     "detail": "enabled",
+     "passed": true
+    },
+    {
+     "name": "incident_active",
+     "detail": "incident INC-1120 is remediating",
+     "passed": true
+    },
+    {
+     "name": "flow_allows",
+     "detail": "restart_service is part of flow error-rate-investigation@1.1.0",
+     "passed": true
+    },
+    {
+     "name": "phase_allows",
+     "detail": "workflow execution outside the agent loop",
+     "passed": true
+    },
+    {
+     "name": "category_permitted",
+     "detail": "mutating permitted via workflow",
+     "passed": true
+    },
+    {
+     "name": "environment_allows",
+     "detail": "permitted in development",
+     "passed": true
+    },
+    {
+     "name": "severity_allows",
+     "detail": "incident severity sev1 permits restart_service",
+     "passed": true
+    },
+    {
+     "name": "actor_permitted",
+     "detail": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d has role operator",
+     "passed": true
+    },
+    {
+     "name": "risk_within_ceiling",
+     "detail": "risk medium <= ceiling high",
+     "passed": true
+    },
+    {
+     "name": "policy_effect",
+     "detail": "approval required by rule 'approve-sev1-mutations'; granted: user:local-operator (00c9ce27-4587-4589-99b8-1b6a94964033)",
+     "passed": true
+    },
+    {
+     "name": "arguments_valid",
+     "detail": "1 argument(s) validated",
+     "passed": true
+    },
+    {
+     "name": "idempotency",
+     "detail": "key 985b1b70bff9\u2026 is new",
+     "passed": true
+    },
+    {
+     "name": "budget_available",
+     "detail": "tool_calls 0/54, iterations 0/48",
+     "passed": true
+    }
+   ],
+   "status": "succeeded",
+   "arguments": {
+    "service": "inventory-service"
+   }
+  }
+ },
+ {
+  "id": "bc0d5ff4-548e-4d4c-84c8-161494737e08",
+  "at": "2026-09-15T10:37:20.506701Z",
+  "event_type": "incident.resolved",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "flow_name": null,
+  "phase": null,
+  "tool_name": null,
+  "action": "resolved",
+  "decision": "ok",
+  "reason": "remediation verified: all 5 conditions held for 3 consecutive polls",
+  "trace_id": null,
+  "agent_run_id": null,
+  "tool_execution_id": null,
+  "data": {
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 13,
+    "llm_tokens": 0,
+    "tool_calls": 12,
+    "runtime_seconds": 0.6568269999999999,
+    "remediation_attempts": 0
+   }
+  }
+ }
+]

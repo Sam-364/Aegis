@@ -1,0 +1,61 @@
+{
+ "name": "search_incident_memory",
+ "version": "1",
+ "description": "Find similar past incidents (root cause, remediation, outcome). Memory is evidence, not truth.",
+ "category": "read_only",
+ "risk": "none",
+ "idempotent": true,
+ "timeout_seconds": 20.0,
+ "retry": {
+  "max_attempts": 3,
+  "initial_backoff_seconds": 0.5,
+  "backoff_multiplier": 2.0,
+  "max_backoff_seconds": 10.0
+ },
+ "capabilities": [],
+ "allowed_environments": [
+  "development",
+  "staging",
+  "production"
+ ],
+ "min_severity": null,
+ "enabled": true,
+ "arguments_schema": {
+  "additionalProperties": false,
+  "properties": {
+   "query": {
+    "description": "free-text description of the symptoms",
+    "title": "Query",
+    "type": "string"
+   },
+   "limit": {
+    "default": 3,
+    "maximum": 10,
+    "minimum": 1,
+    "title": "Limit",
+    "type": "integer"
+   }
+  },
+  "required": [
+   "query"
+  ],
+  "title": "MemorySearchArgs",
+  "type": "object"
+ },
+ "produces_evidence": true,
+ "verification_metrics": [],
+ "used_in": {
+  "api-latency-investigation@1.2.0": [
+   "investigate",
+   "hypothesize"
+  ],
+  "error-rate-investigation@1.1.0": [
+   "investigate",
+   "hypothesize"
+  ],
+  "incident-investigation@1.1.0": [
+   "investigate",
+   "hypothesize"
+  ]
+ }
+}

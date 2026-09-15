@@ -143,6 +143,17 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run build
+        env:
+          NEXT_PUBLIC_AEGIS_DEMO: "1"
+      - uses: astral-sh/setup-uv@v7
+        with:
+          version: ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+      # The demo console replays recorded responses; this fails if an endpoint the console calls
+      # is missing from the recording, which is how fixtures rot unnoticed.
+      - name: demo fixtures answer every call the console makes
+        working-directory: .
+        run: uv run --no-project --with httpx python scripts/check_demo_fixtures.py
 
   manifests:
     name: kubernetes manifests + helm chart

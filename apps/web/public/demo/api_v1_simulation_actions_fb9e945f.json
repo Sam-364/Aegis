@@ -1,0 +1,14 @@
+[
+ {
+  "at": 1789472747.126624,
+  "kind": "inject",
+  "scenario": "bad-deployment",
+  "fault_id": "fault-10",
+  "params": {
+   "service": "payment-service",
+   "version": "2.4.0",
+   "error_rate": 0.35,
+   "added_latency_ms": 350.0
+  }
+ }
+]

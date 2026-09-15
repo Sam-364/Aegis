@@ -215,6 +215,16 @@ docker compose --profile observability up --build     # + Prometheus, Grafana, T
 | Temporal UI | http://localhost:8233 |
 | Grafana (observability profile) | http://localhost:3000 · `admin` / `aegis` |
 
+### Hosting the console
+
+The console is a pure client of the API, so hosting it alone gives you an empty shell — the
+browser has to reach a control plane. For a public link that always works, build it with
+`NEXT_PUBLIC_AEGIS_DEMO=1`: it then replays real incidents recorded from a running stack
+(`apps/web/public/demo/`), states plainly that it is a recording, and refuses every write rather
+than pretending to remediate anything. On Vercel that is: import the repository, set **Root
+Directory** to `apps/web`, add that one environment variable. See
+[`apps/web/README.md`](apps/web/README.md#demo-mode) to refresh the recording.
+
 Break something and watch the whole loop run:
 
 ```bash

@@ -1,0 +1,18 @@
+{
+ "component": "api-gateway",
+ "time": "2026-09-15T11:50:43.126624+00:00",
+ "metrics": {
+  "request_rate": 122.38453219241114,
+  "error_rate": 0.14044810703300475,
+  "latency_p50_ms": 226.8227147721009,
+  "latency_p95_ms": 734.7091246502508,
+  "cpu_percent": 25.152532843353473,
+  "memory_percent": 37.23136852559531,
+  "db_pool_in_use": 0.0,
+  "db_pool_wait_ms": 0.0,
+  "redis_pool_in_use": 0.0,
+  "redis_pool_wait_ms": 0.0,
+  "replicas_ready": 3.0,
+  "up": 1.0
+ }
+}

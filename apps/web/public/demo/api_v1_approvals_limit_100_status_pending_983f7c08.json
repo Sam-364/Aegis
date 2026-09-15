@@ -1,0 +1,98 @@
+[
+ {
+  "created_at": "2026-09-15T11:45:54.572538Z",
+  "updated_at": "2026-09-15T11:45:54.572540Z",
+  "id": "0729b3d8-d279-4287-9c45-bb357d8a37ce",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "action_plan_id": "38459026-892c-44c7-8457-49439cad8248",
+  "status": "pending",
+  "title": "rollback_deployment on payment-service",
+  "summary": "addresses deployment_regression on payment-service",
+  "risk": "medium",
+  "expected_impact": "symptomatic metrics return to baseline",
+  "rollback_summary": "original version unknown until execution",
+  "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+  "hypothesis_statement": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+  "hypothesis_confidence": 0.9728,
+  "evidence_ids": [
+   "135bdc19-f123-4e13-8239-bc25481960eb",
+   "364639b2-26ac-4042-be95-bdc67cddc13c",
+   "4bdf95b6-b6f2-4b3f-baf4-e48ad79d8575",
+   "d4967013-2a30-477d-8b69-8d5686c743fc"
+  ],
+  "requested_by": "workflow:incident-fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "requested_at": "2026-09-15T11:45:54.561387Z",
+  "expires_at": "2026-09-15T12:00:54.561387Z",
+  "decided_at": null,
+  "decided_by": null,
+  "decision_reason": "",
+  "context": {
+   "policy": {
+    "effect": "require_approval",
+    "reason": "Rollbacks change what is running and always require approval.",
+    "invariant": null,
+    "matched_rule": "approve-rollback",
+    "evaluated_rules": [
+     "deny-dangerous",
+     "allow-read-only",
+     "allow-diagnostics",
+     "approve-diagnostics-medium-risk",
+     "deny-high-risk-mutation-production",
+     "approve-rollback"
+    ]
+   },
+   "rollback": null,
+   "arguments": {
+    "service": "payment-service"
+   },
+   "tool_name": "rollback_deployment",
+   "verification": {
+    "conditions": [
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "api-gateway",
+      "comparator": "lte",
+      "description": "api-gateway error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "order-service",
+      "comparator": "lte",
+      "description": "order-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "payment-service",
+      "comparator": "lte",
+      "description": "payment-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "latency_p95_ms",
+      "target": null,
+      "service": "payment-service",
+      "comparator": "lte",
+      "description": "payment-service latency_p95_ms within 1.5x of baseline",
+      "max_ratio_to_baseline": 1.5
+     },
+     {
+      "metric": "up",
+      "target": 1.0,
+      "service": "payment-service",
+      "comparator": "gte",
+      "description": "payment-service up gte 1",
+      "max_ratio_to_baseline": null
+     }
+    ],
+    "require_all": true,
+    "timeout_seconds": 240,
+    "stabilization_seconds": 30
+   }
+  }
+ }
+]

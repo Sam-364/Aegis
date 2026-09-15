@@ -1,0 +1,18 @@
+{
+ "component": "user-service",
+ "time": "2026-09-15T11:50:43.126624+00:00",
+ "metrics": {
+  "request_rate": 73.43071931544668,
+  "error_rate": 0.0010715350638665698,
+  "latency_p50_ms": 22.199468344635818,
+  "latency_p95_ms": 37.57113663785818,
+  "cpu_percent": 30.106435232397633,
+  "memory_percent": 38.887014001943925,
+  "db_pool_in_use": 2.0,
+  "db_pool_wait_ms": 0.0,
+  "redis_pool_in_use": 2.0,
+  "redis_pool_wait_ms": 0.0,
+  "replicas_ready": 2.0,
+  "up": 1.0
+ }
+}

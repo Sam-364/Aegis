@@ -1,0 +1,529 @@
+[
+ {
+  "id": "8a497b4f-515a-4b88-8880-716bc9ec4a71",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 1,
+  "type": "incident.detected",
+  "at": "2026-09-15T10:37:36.541783Z",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Anomaly detected: Traffic surge on api-gateway",
+  "payload": {
+   "signals": [
+    {
+     "id": "aaaac013-0f6e-44bd-830c-bc0cc007c02a",
+     "kind": "traffic",
+     "metric": "request_rate",
+     "service": "api-gateway",
+     "detector": "request_rate:traffic",
+     "description": "api-gateway request_rate 115 -> 351 (+205%): traffic surge",
+     "detected_at": "2026-09-15T10:37:37.126624Z",
+     "baseline_value": 115.11190650423953,
+     "observed_value": 350.94320646967464,
+     "window_seconds": 2,
+     "deviation_sigma": 40.974267063633334
+    }
+   ],
+   "severity": "sev4",
+   "affected_services": [
+    "api-gateway"
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "47bf2d82-c3c5-4764-8d06-8a5b3fc015d8",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 2,
+  "type": "incident.created",
+  "at": "2026-09-15T10:37:36.543806Z",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "INC-1121 created (SEV4)",
+  "payload": {
+   "incident": {
+    "id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+    "flow": "incident-investigation",
+    "title": "Traffic surge on api-gateway",
+    "number": 1121,
+    "status": "detected",
+    "severity": "sev4",
+    "affected_services": [
+     "api-gateway"
+    ]
+   }
+  },
+  "trace_id": null
+ },
+ {
+  "id": "01b87883-e0dd-4103-93a4-2c95c82e60fc",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 3,
+  "type": "flow.selected",
+  "at": "2026-09-15T10:37:36.545530Z",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Flow selected: incident-investigation@1.1.0",
+  "payload": {
+   "flow": "incident-investigation",
+   "phases": [
+    "triage",
+    "investigate",
+    "hypothesize",
+    "validate",
+    "remediate",
+    "verify",
+    "escalate"
+   ],
+   "version": "1.1.0"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "06cfc817-1332-4de4-81f0-da616b6fcd43",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 4,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:37:36.611888Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Triage started",
+  "payload": {
+   "to": "triaging",
+   "from": "detected"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "fd1eaddc-4776-44b2-8648-d841bf2ad7e1",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 5,
+  "type": "flow.phase_entered",
+  "at": "2026-09-15T10:37:36.617048Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Entering phase 'triage' of incident-investigation@1.1.0",
+  "payload": {
+   "flow": "incident-investigation@1.1.0",
+   "phase": "triage",
+   "budget": {
+    "max_llm_calls": 22,
+    "max_iterations": 26,
+    "max_llm_tokens": 187500,
+    "max_tool_calls": 30,
+    "max_runtime_seconds": 675,
+    "max_remediation_attempts": 2
+   }
+  },
+  "trace_id": null
+ },
+ {
+  "id": "ab0ae891-037b-4233-a44f-21222d3fc65f",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 6,
+  "type": "agent.run_started",
+  "at": "2026-09-15T10:37:36.687525Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:eda4f659-4cf4-4808-bf01-d613f67f8885",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent started phase 'triage'",
+  "payload": {
+   "flow": "incident-investigation@1.1.0",
+   "phase": "triage",
+   "budget": {
+    "max_llm_calls": 22,
+    "max_iterations": 26,
+    "max_llm_tokens": 187500,
+    "max_tool_calls": 30,
+    "max_runtime_seconds": 675,
+    "max_remediation_attempts": 2
+   },
+   "agent_run_id": "eda4f659-4cf4-4808-bf01-d613f67f8885"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "ab10d78c-f5c6-4a1a-acb5-d184fdd28ff3",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 7,
+  "type": "agent.step",
+  "at": "2026-09-15T10:37:36.712869Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:eda4f659-4cf4-4808-bf01-d613f67f8885",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "[triage] call_tool: Collecting evidence along the dependency chain.",
+  "payload": {
+   "kind": "fallback",
+   "model": "deterministic-planner",
+   "action": "call_tool",
+   "tokens": 0,
+   "step_id": "fda41655-8178-49a1-920d-981aa6be170a",
+   "rationale": "deterministic planner",
+   "observation": "Collecting evidence along the dependency chain."
+  },
+  "trace_id": null
+ },
+ {
+  "id": "2b73b424-fbbe-4e9a-a777-d95225e14df3",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 8,
+  "type": "tool.executed",
+  "at": "2026-09-15T10:37:36.737111Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:eda4f659-4cf4-4808-bf01-d613f67f8885",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "get_health: api-gateway is healthy; all checks passing",
+  "payload": {
+   "tool": "get_health",
+   "status": "succeeded",
+   "summary": "api-gateway is healthy; all checks passing",
+   "arguments": {
+    "service": "api-gateway"
+   },
+   "duration_ms": 4.167,
+   "evidence_ids": [
+    "496a2ad9-27f5-49c9-8a15-45671efe803e"
+   ],
+   "tool_execution_id": "5e243c6f-ca2f-4b1a-964b-23d8059116b7"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "ee86be09-205d-42c3-84d5-978e0ef7cc9b",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 9,
+  "type": "evidence.collected",
+  "at": "2026-09-15T10:37:36.739462Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:eda4f659-4cf4-4808-bf01-d613f67f8885",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "1 evidence item(s) from get_health",
+  "payload": {
+   "evidence": [
+    {
+     "id": "496a2ad9-27f5-49c9-8a15-45671efe803e",
+     "kind": "health",
+     "title": "api-gateway health",
+     "service": "api-gateway",
+     "strength": 0.3
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "70559bfe-44c4-444f-95a6-e43732c26f60",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 10,
+  "type": "agent.step",
+  "at": "2026-09-15T10:37:36.755509Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:eda4f659-4cf4-4808-bf01-d613f67f8885",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Runtime: all detection signals returned within baseline without remediation",
+  "payload": {
+   "action": "conclude_no_action",
+   "metrics": [
+    "api-gateway.request_rate=162 vs 1.8x baseline(115)=208 \u2192 ok"
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "32807e57-60a2-4e9f-9cd4-b0e0fe035a48",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 11,
+  "type": "agent.run_finished",
+  "at": "2026-09-15T10:37:36.780593Z",
+  "actor": {
+   "kind": "agent",
+   "id": "agent:eda4f659-4cf4-4808-bf01-d613f67f8885",
+   "display_name": "Aegis agent",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Agent finished phase 'triage': no_action_required",
+  "payload": {
+   "phase": "triage",
+   "steps": 4,
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 1,
+    "llm_tokens": 0,
+    "tool_calls": 1,
+    "runtime_seconds": 0.052768999999999996,
+    "remediation_attempts": 0
+   },
+   "summary": "detection signals returned within baseline without remediation",
+   "decision": "no_action",
+   "next_phase": null,
+   "termination": "no_action_required",
+   "agent_run_id": "eda4f659-4cf4-4808-bf01-d613f67f8885"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "b58c8d8f-036d-475d-b302-c9d5f60f55b7",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 12,
+  "type": "incident.status_changed",
+  "at": "2026-09-15T10:37:36.848791Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "triaging \u2192 verifying: verifying recovery without action",
+  "payload": {
+   "to": "verifying",
+   "from": "triaging",
+   "reason": "verifying recovery without action"
+  },
+  "trace_id": null
+ },
+ {
+  "id": "70ae557a-15e8-4ea2-a269-20d389bfd71b",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 13,
+  "type": "incident.signal_attached",
+  "at": "2026-09-15T10:37:41.618297Z",
+  "actor": {
+   "kind": "detector",
+   "id": "detector",
+   "display_name": "Detection engine",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "5 new signal(s): api-gateway latency_p95_ms, auth-service latency_p95_ms, order-service latency_p95_ms, payment-service latency_p95_ms",
+  "payload": {
+   "signals": [
+    {
+     "id": "6f5cabf3-12a1-465a-b22c-13f94f98a0a3",
+     "kind": "latency",
+     "metric": "latency_p95_ms",
+     "service": "api-gateway",
+     "detector": "latency_p95_ms:latency",
+     "description": "api-gateway latency_p95_ms 197 -> 325 (+65%): p95 latency regression",
+     "detected_at": "2026-09-15T10:37:42.126624Z",
+     "baseline_value": 196.85670968385702,
+     "observed_value": 325.14178318489644,
+     "window_seconds": 3,
+     "deviation_sigma": 13.033345290293578
+    },
+    {
+     "id": "7d87939f-74a4-400c-866a-97c1d66e7ff7",
+     "kind": "latency",
+     "metric": "latency_p95_ms",
+     "service": "auth-service",
+     "detector": "latency_p95_ms:latency",
+     "description": "auth-service latency_p95_ms 25 -> 44.2 (+77%): p95 latency regression",
+     "detected_at": "2026-09-15T10:37:42.126624Z",
+     "baseline_value": 24.989789073873304,
+     "observed_value": 44.19246300144682,
+     "window_seconds": 3,
+     "deviation_sigma": 15.368416172547697
+    },
+    {
+     "id": "5d943628-2c6c-49d5-9677-bb05e9c7e1c2",
+     "kind": "latency",
+     "metric": "latency_p95_ms",
+     "service": "order-service",
+     "detector": "latency_p95_ms:latency",
+     "description": "order-service latency_p95_ms 112 -> 193 (+73%): p95 latency regression",
+     "detected_at": "2026-09-15T10:37:42.126624Z",
+     "baseline_value": 111.72714303844874,
+     "observed_value": 192.9329240405751,
+     "window_seconds": 3,
+     "deviation_sigma": 10.393766012111247
+    },
+    {
+     "id": "74bf6ff3-e486-4ce4-be29-1752940b5384",
+     "kind": "latency",
+     "metric": "latency_p95_ms",
+     "service": "payment-service",
+     "detector": "latency_p95_ms:latency",
+     "description": "payment-service latency_p95_ms 67.3 -> 134 (+99%): p95 latency regression",
+     "detected_at": "2026-09-15T10:37:42.126624Z",
+     "baseline_value": 67.32329544875576,
+     "observed_value": 133.7565424997493,
+     "window_seconds": 3,
+     "deviation_sigma": 19.735589771169266
+    },
+    {
+     "id": "8a63940d-8432-4a9d-8aeb-046e55005c5d",
+     "kind": "latency",
+     "metric": "latency_p95_ms",
+     "service": "inventory-service",
+     "detector": "latency_p95_ms:latency",
+     "description": "inventory-service latency_p95_ms 29.4 -> 64.7 (+120%): p95 latency regression",
+     "detected_at": "2026-09-15T10:37:42.126624Z",
+     "baseline_value": 29.352846700073083,
+     "observed_value": 64.67660875213372,
+     "window_seconds": 3,
+     "deviation_sigma": 4.545773580351407
+    }
+   ],
+   "affected_services": [
+    "api-gateway",
+    "auth-service",
+    "order-service",
+    "payment-service",
+    "inventory-service"
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "ff16640b-78ec-4a99-93be-9be472dacefb",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 14,
+  "type": "verification.passed",
+  "at": "2026-09-15T10:38:42.054457Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Recovery verified without action: all 1 conditions held for 3 consecutive polls",
+  "payload": {
+   "after": {
+    "api-gateway.request_rate": 116.47893100033416
+   },
+   "before": {
+    "api-gateway.request_rate": 184.34094725429358
+   },
+   "status": "passed",
+   "summary": "all 1 conditions held for 3 consecutive polls",
+   "conditions": [
+    {
+     "ok": true,
+     "value": 116.47893100033416,
+     "detail": "api-gateway.request_rate=116 vs 1.8x baseline(115)=208",
+     "metric": "request_rate",
+     "service": "api-gateway",
+     "baseline": 115.39520324678162,
+     "description": "api-gateway request_rate within 1.8x of baseline",
+     "accumulation_share": null
+    }
+   ]
+  },
+  "trace_id": null
+ },
+ {
+  "id": "3b155d50-b1c0-4d57-bc30-9c725f7567a2",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 15,
+  "type": "incident.resolved",
+  "at": "2026-09-15T10:38:42.130356Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Incident resolved: no remediation required; metrics within baseline",
+  "payload": {
+   "to": "resolved",
+   "from": "verifying",
+   "usage": {
+    "llm_calls": 0,
+    "iterations": 1,
+    "llm_tokens": 0,
+    "tool_calls": 1,
+    "runtime_seconds": 0.052768999999999996,
+    "remediation_attempts": 0
+   },
+   "summary": "no remediation required; metrics within baseline",
+   "duration_seconds": 64.997466
+  },
+  "trace_id": null
+ },
+ {
+  "id": "9294ddb5-2ee2-4f59-a2bf-e6c2b7f8a4c8",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "seq": 16,
+  "type": "memory.stored",
+  "at": "2026-09-15T10:38:42.142604Z",
+  "actor": {
+   "kind": "workflow",
+   "id": "workflow:incident-22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "display_name": "Incident workflow",
+   "roles": [
+    "operator"
+   ]
+  },
+  "title": "Incident memory stored: undetermined",
+  "payload": {
+   "lessons": [],
+   "outcome": "false_positive",
+   "memory_id": "2bd1bcf5-8caf-4691-8a31-c2e05f0a9821",
+   "root_cause_service": null
+  },
+  "trace_id": null
+ }
+]

@@ -1,0 +1,14 @@
+{
+ "by_status": {
+  "awaiting_approval": 1,
+  "closed": 15,
+  "resolved": 67,
+  "escalated": 1
+ },
+ "total": 84,
+ "active": 2,
+ "resolved": 67,
+ "mttr_seconds": 91.23174192537313,
+ "pending_approvals": 1,
+ "memories": 82
+}

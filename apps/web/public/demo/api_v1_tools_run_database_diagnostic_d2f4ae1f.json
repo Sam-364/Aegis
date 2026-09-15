@@ -1,0 +1,54 @@
+{
+ "name": "run_database_diagnostic",
+ "version": "1",
+ "description": "Active database check: connection slots by client, idle-in-transaction sessions, lock waits.",
+ "category": "diagnostic",
+ "risk": "low",
+ "idempotent": true,
+ "timeout_seconds": 10.0,
+ "retry": {
+  "max_attempts": 3,
+  "initial_backoff_seconds": 0.5,
+  "backoff_multiplier": 2.0,
+  "max_backoff_seconds": 10.0
+ },
+ "capabilities": [],
+ "allowed_environments": [
+  "development",
+  "staging",
+  "production"
+ ],
+ "min_severity": null,
+ "enabled": true,
+ "arguments_schema": {
+  "additionalProperties": false,
+  "properties": {
+   "component": {
+    "default": "postgres",
+    "title": "Component",
+    "type": "string"
+   },
+   "expectation": {
+    "default": "",
+    "description": "what the hypothesis predicts this shows",
+    "title": "Expectation",
+    "type": "string"
+   }
+  },
+  "title": "ComponentArgs",
+  "type": "object"
+ },
+ "produces_evidence": true,
+ "verification_metrics": [],
+ "used_in": {
+  "api-latency-investigation@1.2.0": [
+   "validate"
+  ],
+  "error-rate-investigation@1.1.0": [
+   "validate"
+  ],
+  "incident-investigation@1.1.0": [
+   "validate"
+  ]
+ }
+}

@@ -1,0 +1,277 @@
+{
+ "nodes": [
+  {
+   "name": "api-gateway",
+   "kind": "gateway",
+   "tier": 0,
+   "owner": "edge",
+   "replicas": 3,
+   "version": "3.2.1",
+   "state": {
+    "version": "3.2.1",
+    "replicas": 3,
+    "up": true,
+    "error_rate": 0.1404,
+    "latency_p95_ms": 734.7,
+    "health": "degraded"
+   }
+  },
+  {
+   "name": "auth-service",
+   "kind": "service",
+   "tier": 1,
+   "owner": "identity",
+   "replicas": 2,
+   "version": "2.8.0",
+   "state": {
+    "version": "2.8.0",
+    "replicas": 2,
+    "up": true,
+    "error_rate": 0.0036,
+    "latency_p95_ms": 25.4,
+    "health": "healthy"
+   }
+  },
+  {
+   "name": "user-service",
+   "kind": "service",
+   "tier": 1,
+   "owner": "accounts",
+   "replicas": 2,
+   "version": "1.14.2",
+   "state": {
+    "version": "1.14.2",
+    "replicas": 2,
+    "up": true,
+    "error_rate": 0.0011,
+    "latency_p95_ms": 37.6,
+    "health": "healthy"
+   }
+  },
+  {
+   "name": "order-service",
+   "kind": "service",
+   "tier": 1,
+   "owner": "commerce",
+   "replicas": 3,
+   "version": "4.1.0",
+   "state": {
+    "version": "4.1.0",
+    "replicas": 3,
+    "up": true,
+    "error_rate": 0.1417,
+    "latency_p95_ms": 518.0,
+    "health": "degraded"
+   }
+  },
+  {
+   "name": "payment-service",
+   "kind": "service",
+   "tier": 2,
+   "owner": "payments",
+   "replicas": 2,
+   "version": "2.4.0",
+   "state": {
+    "version": "2.4.0",
+    "replicas": 2,
+    "up": true,
+    "error_rate": 0.3501,
+    "latency_p95_ms": 650.8,
+    "health": "degraded"
+   }
+  },
+  {
+   "name": "inventory-service",
+   "kind": "service",
+   "tier": 2,
+   "owner": "commerce",
+   "replicas": 2,
+   "version": "1.9.3",
+   "state": {
+    "version": "1.9.3",
+    "replicas": 2,
+    "up": true,
+    "error_rate": 0.0016,
+    "latency_p95_ms": 32.5,
+    "health": "healthy"
+   }
+  },
+  {
+   "name": "notification-service",
+   "kind": "service",
+   "tier": 2,
+   "owner": "growth",
+   "replicas": 1,
+   "version": "0.9.1",
+   "state": {
+    "version": "0.9.1",
+    "replicas": 1,
+    "up": true,
+    "error_rate": 0.0,
+    "latency_p95_ms": 18.2,
+    "health": "healthy"
+   }
+  },
+  {
+   "name": "postgres",
+   "kind": "database",
+   "tier": 3,
+   "owner": "platform",
+   "replicas": 1,
+   "version": "16.4",
+   "state": {
+    "connections": 11,
+    "saturation": 0.11,
+    "up": true
+   }
+  },
+  {
+   "name": "redis",
+   "kind": "cache",
+   "tier": 3,
+   "owner": "platform",
+   "replicas": 1,
+   "version": "7.2",
+   "state": {
+    "connections": 12,
+    "saturation": 0.048,
+    "up": true
+   }
+  }
+ ],
+ "edges": [
+  {
+   "source": "api-gateway",
+   "target": "auth-service",
+   "protocol": "http",
+   "critical": true
+  },
+  {
+   "source": "api-gateway",
+   "target": "user-service",
+   "protocol": "http",
+   "critical": true
+  },
+  {
+   "source": "api-gateway",
+   "target": "order-service",
+   "protocol": "http",
+   "critical": true
+  },
+  {
+   "source": "api-gateway",
+   "target": "payment-service",
+   "protocol": "http",
+   "critical": true
+  },
+  {
+   "source": "api-gateway",
+   "target": "inventory-service",
+   "protocol": "http",
+   "critical": true
+  },
+  {
+   "source": "api-gateway",
+   "target": "notification-service",
+   "protocol": "http",
+   "critical": false
+  },
+  {
+   "source": "auth-service",
+   "target": "redis",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "auth-service",
+   "target": "postgres",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "user-service",
+   "target": "postgres",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "user-service",
+   "target": "redis",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "order-service",
+   "target": "postgres",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "order-service",
+   "target": "redis",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "order-service",
+   "target": "inventory-service",
+   "protocol": "http",
+   "critical": true
+  },
+  {
+   "source": "order-service",
+   "target": "payment-service",
+   "protocol": "http",
+   "critical": true
+  },
+  {
+   "source": "payment-service",
+   "target": "postgres",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "payment-service",
+   "target": "redis",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "inventory-service",
+   "target": "postgres",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "inventory-service",
+   "target": "redis",
+   "protocol": "tcp",
+   "critical": true
+  },
+  {
+   "source": "notification-service",
+   "target": "redis",
+   "protocol": "tcp",
+   "critical": true
+  }
+ ],
+ "time": "2026-09-15T11:50:43.126624+00:00",
+ "active_faults": [
+  {
+   "id": "fault-10",
+   "scenario_id": "bad-deployment",
+   "fault_type": "bad_deployment",
+   "params": {
+    "service": "payment-service",
+    "version": "2.4.0",
+    "error_rate": 0.35,
+    "added_latency_ms": 350.0
+   },
+   "started_at": 1789472747.126624,
+   "duration_seconds": null,
+   "cleared_at": null,
+   "cleared_by": null,
+   "active": true
+  }
+ ]
+}

@@ -1,0 +1,583 @@
+[
+ {
+  "id": "52938a50-5681-4c21-b371-d05d7a9e734d",
+  "kind": "approval_requested",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "title": "INC-1125: approve rollback_deployment on payment-service?",
+  "body": "addresses deployment_regression on payment-service",
+  "at": "2026-09-15T11:45:54.575483Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "0729b3d8-d279-4287-9c45-bb357d8a37ce"
+  }
+ },
+ {
+  "id": "56645c2f-1f68-434c-9ead-fa11b18166ca",
+  "kind": "incident_detected",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "title": "INC-1125 SEV2: Elevated API error rate",
+  "body": "payment-service error_rate 0.000938 -> 0.351 (+37281%): elevated error rate; order-service error_rate 0.00264 -> 0.145 (+5388%): elevated error rate; api-gateway error_rate 0.00528 -> 0.142 (+2581%): elevated error rate",
+  "at": "2026-09-15T11:45:53.009533Z",
+  "read": false,
+  "data": {
+   "severity": "sev2"
+  }
+ },
+ {
+  "id": "8b891da4-4174-4337-a617-491043a9386f",
+  "kind": "incident_escalated",
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "title": "INC-1124 escalated: API latency regression",
+  "body": "execution budget exhausted: iterations 32 >= 32",
+  "at": "2026-09-15T10:44:57.563201Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "f5f55456-3a08-4d13-9245-1fe3a36d1ae8",
+  "kind": "incident_detected",
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "title": "INC-1124 SEV3: API latency regression",
+  "body": "api-gateway latency_p95_ms 237 -> 542 (+129%): p95 latency regression",
+  "at": "2026-09-15T10:43:23.793034Z",
+  "read": false,
+  "data": {
+   "severity": "sev3"
+  }
+ },
+ {
+  "id": "f6eea9ae-b3fd-43d9-9ebd-a1651a23c562",
+  "kind": "incident_escalated",
+  "incident_id": "185d522d-a679-4af6-8f6b-93b0e08f9809",
+  "title": "INC-1123 escalated: Latency regression on notification-service",
+  "body": "execution budget exhausted: iterations 32 >= 32",
+  "at": "2026-09-15T10:43:06.960566Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "5f6666a9-00d7-4c05-bc6a-88c46f533191",
+  "kind": "incident_detected",
+  "incident_id": "185d522d-a679-4af6-8f6b-93b0e08f9809",
+  "title": "INC-1123 SEV3: Latency regression on notification-service",
+  "body": "notification-service latency_p95_ms 18.6 -> 111 (+499%): p95 latency regression; notification-service cpu_percent 29.1 -> 100 (+243%): CPU saturation",
+  "at": "2026-09-15T10:41:33.102283Z",
+  "read": false,
+  "data": {
+   "severity": "sev3"
+  }
+ },
+ {
+  "id": "9edc669b-88f4-4003-a5af-05e1929aa03e",
+  "kind": "incident_escalated",
+  "incident_id": "e734bda1-2ba6-4d66-bb9d-99fa91770cc3",
+  "title": "INC-1122 escalated: payment-service MEMORY pressure",
+  "body": "execution budget exhausted: iterations 26 >= 26",
+  "at": "2026-09-15T10:41:15.525721Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "78d5697f-632c-4cfb-a5ee-d70f41d78bcf",
+  "kind": "incident_detected",
+  "incident_id": "e734bda1-2ba6-4d66-bb9d-99fa91770cc3",
+  "title": "INC-1122 SEV4: payment-service MEMORY pressure",
+  "body": "payment-service memory_percent 73 -> 90.3 (+24%): memory pressure",
+  "at": "2026-09-15T10:40:27.680837Z",
+  "read": false,
+  "data": {
+   "severity": "sev4"
+  }
+ },
+ {
+  "id": "8283bfe8-7235-4e32-8382-9f67fd2ec29a",
+  "kind": "incident_resolved",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "title": "INC-1121 resolved: Traffic surge on api-gateway",
+  "body": "no remediation required; metrics within baseline",
+  "at": "2026-09-15T10:38:42.134122Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "ab908735-4e47-4793-9fbc-577b1a94c601",
+  "kind": "incident_detected",
+  "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+  "title": "INC-1121 SEV4: Traffic surge on api-gateway",
+  "body": "api-gateway request_rate 115 -> 351 (+205%): traffic surge",
+  "at": "2026-09-15T10:37:36.548000Z",
+  "read": false,
+  "data": {
+   "severity": "sev4"
+  }
+ },
+ {
+  "id": "0fe89e96-d60f-4873-80ad-67aa7cf0f9c7",
+  "kind": "incident_resolved",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "title": "INC-1120 resolved: Elevated API error rate",
+  "body": "remediation verified: all 5 conditions held for 3 consecutive polls",
+  "at": "2026-09-15T10:37:20.509186Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "022d6258-0a9d-42b0-8795-0c1f41fa1c9e",
+  "kind": "approval_requested",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "title": "INC-1120: approve restart_service on inventory-service?",
+  "body": "addresses dependency_failure on inventory-service",
+  "at": "2026-09-15T10:36:27.663652Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "00c9ce27-4587-4589-99b8-1b6a94964033"
+  }
+ },
+ {
+  "id": "d524358c-738b-45b6-959e-04bf83dfdfbf",
+  "kind": "incident_detected",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "title": "INC-1120 SEV1: Elevated API error rate",
+  "body": "inventory-service error_rate 0.00139 -> 1 (+72061%): elevated error rate; order-service error_rate 0.0032 -> 1 (+31173%): elevated error rate; api-gateway error_rate 0.00512 -> 0.651 (+12614%): elevated error rate; inventory-service up 1 -> 0 (-100%): component unavailable",
+  "at": "2026-09-15T10:36:26.085256Z",
+  "read": false,
+  "data": {
+   "severity": "sev1"
+  }
+ },
+ {
+  "id": "c142f113-9356-4272-abce-da2b29a3ff60",
+  "kind": "incident_resolved",
+  "incident_id": "9f1057d1-85e9-4aaf-960d-dc26688dcee8",
+  "title": "INC-1119 resolved: postgres idle in transaction saturation",
+  "body": "remediation verified: all 4 conditions held for 3 consecutive polls",
+  "at": "2026-09-15T10:36:11.475526Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "3a6c7478-ed75-4b07-ac22-8ab044b754ce",
+  "kind": "approval_requested",
+  "incident_id": "9f1057d1-85e9-4aaf-960d-dc26688dcee8",
+  "title": "INC-1119: approve restart_service on user-service?",
+  "body": "addresses resource_exhaustion on user-service",
+  "at": "2026-09-15T10:35:18.220543Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "c7f95a5b-b5f6-4034-8ba1-f50f31a8fb61"
+  }
+ },
+ {
+  "id": "4c32d57f-0190-4f4d-8781-bb87c7fd2d5a",
+  "kind": "incident_detected",
+  "incident_id": "9f1057d1-85e9-4aaf-960d-dc26688dcee8",
+  "title": "INC-1119 SEV3: postgres idle in transaction saturation",
+  "body": "postgres idle_in_transaction 0.96 -> 24 (+2400%): idle-in-transaction sessions",
+  "at": "2026-09-15T10:34:30.332690Z",
+  "read": false,
+  "data": {
+   "severity": "sev3"
+  }
+ },
+ {
+  "id": "5bfcf6a4-ae9c-486d-9890-a2813f32e0b0",
+  "kind": "incident_resolved",
+  "incident_id": "9d1c6791-7129-4250-8bff-9bfd371e2308",
+  "title": "INC-1118 resolved: Elevated API error rate",
+  "body": "remediation verified: all 5 conditions held for 3 consecutive polls",
+  "at": "2026-09-15T10:34:03.600148Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "c6561cb4-1973-4b9c-891e-5f5f3262c27a",
+  "kind": "approval_requested",
+  "incident_id": "9d1c6791-7129-4250-8bff-9bfd371e2308",
+  "title": "INC-1118: approve rollback_deployment on payment-service?",
+  "body": "addresses deployment_regression on payment-service",
+  "at": "2026-09-15T10:33:21.452525Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "1a0a535d-efa7-46e4-b4b2-90c302339239"
+  }
+ },
+ {
+  "id": "b64c2ba6-b6fe-453c-b146-e52c9afe5f6c",
+  "kind": "incident_detected",
+  "incident_id": "9d1c6791-7129-4250-8bff-9bfd371e2308",
+  "title": "INC-1118 SEV2: Elevated API error rate",
+  "body": "payment-service error_rate 0.00123 -> 0.352 (+28395%): elevated error rate; api-gateway error_rate 0.00513 -> 0.141 (+2650%): elevated error rate; order-service error_rate 0.00272 -> 0.143 (+5143%): elevated error rate",
+  "at": "2026-09-15T10:33:19.829448Z",
+  "read": false,
+  "data": {
+   "severity": "sev2"
+  }
+ },
+ {
+  "id": "01cb9196-9b11-4411-8030-95fd83c8d8e7",
+  "kind": "incident_resolved",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "title": "INC-1117 resolved: redis connections saturation",
+  "body": "remediation verified: all 4 conditions held for 3 consecutive polls",
+  "at": "2026-09-15T10:33:07.377217Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "d93c9ff3-1562-4376-bc1d-91c472f46ca0",
+  "kind": "approval_requested",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "title": "INC-1117: approve restart_service on order-service?",
+  "body": "addresses resource_exhaustion on order-service",
+  "at": "2026-09-15T10:32:16.448864Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "c97fd22b-7d2b-41a1-87a7-1b6f1597239a"
+  }
+ },
+ {
+  "id": "12fa1d84-4b22-4de7-9eca-9a9e8f8656d0",
+  "kind": "incident_detected",
+  "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+  "title": "INC-1117 SEV3: redis connections saturation",
+  "body": "redis connections 14 -> 59.5 (+325%): connection count growth",
+  "at": "2026-09-15T10:31:29.027429Z",
+  "read": false,
+  "data": {
+   "severity": "sev3"
+  }
+ },
+ {
+  "id": "19028ed0-d057-49e6-affa-b8e8120aea31",
+  "kind": "incident_escalated",
+  "incident_id": "fb170fbe-2f3a-4188-96c8-e70654bccb7f",
+  "title": "INC-1116 escalated: Latency regression on notification-service",
+  "body": "approval request timed out",
+  "at": "2026-09-15T10:29:50.761737Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "29bf627d-aa5c-4f89-9413-06345f8a07fe",
+  "kind": "incident_escalated",
+  "incident_id": "f2321171-4ee3-4c69-a004-44fde8157528",
+  "title": "INC-1115 escalated: payment-service MEMORY pressure",
+  "body": "verification failed after 2 attempt(s): 2 of 4 conditions still failing after 240s: payment-service.memory_percent=90.2 lte 85; payment-service.latency_p95_ms=136 vs 1.5x baseline(68.2)=102",
+  "at": "2026-09-15T10:22:47.847818Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "2a750b56-4106-425c-8b6a-ada7dc603f83",
+  "kind": "approval_requested",
+  "incident_id": "f2321171-4ee3-4c69-a004-44fde8157528",
+  "title": "INC-1115: approve rollback_deployment on payment-service?",
+  "body": "addresses deployment_regression on payment-service",
+  "at": "2026-09-15T10:18:44.510336Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "37c4fd8b-d2c1-4954-aa2a-0c1bb3111195"
+  }
+ },
+ {
+  "id": "4733ab71-9e48-404e-98a7-5065816fb530",
+  "kind": "approval_requested",
+  "incident_id": "fb170fbe-2f3a-4188-96c8-e70654bccb7f",
+  "title": "INC-1116: approve rollback_deployment on payment-service?",
+  "body": "addresses deployment_regression on payment-service",
+  "at": "2026-09-15T10:14:50.467249Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "d328cb7e-72b3-43f9-ab8c-1a57a386b7e3"
+  }
+ },
+ {
+  "id": "7ab9b803-0137-4fff-a5ce-65af701634b5",
+  "kind": "incident_detected",
+  "incident_id": "fb170fbe-2f3a-4188-96c8-e70654bccb7f",
+  "title": "INC-1116 SEV3: Latency regression on notification-service",
+  "body": "notification-service latency_p95_ms 18.7 -> 105 (+461%): p95 latency regression; notification-service cpu_percent 29 -> 100 (+245%): CPU saturation",
+  "at": "2026-09-15T10:14:48.762968Z",
+  "read": false,
+  "data": {
+   "severity": "sev3"
+  }
+ },
+ {
+  "id": "8ae4438d-e2d2-41d7-928e-e8b7798a506a",
+  "kind": "approval_requested",
+  "incident_id": "f2321171-4ee3-4c69-a004-44fde8157528",
+  "title": "INC-1115: approve rollback_deployment on payment-service?",
+  "body": "addresses deployment_regression on payment-service",
+  "at": "2026-09-15T10:14:40.285941Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "060bc6ab-3002-47e3-b8b2-08d9821d66e6"
+  }
+ },
+ {
+  "id": "71f031d1-1b3d-417c-bd41-d82dcad999f9",
+  "kind": "incident_detected",
+  "incident_id": "f2321171-4ee3-4c69-a004-44fde8157528",
+  "title": "INC-1115 SEV4: payment-service MEMORY pressure",
+  "body": "payment-service memory_percent 74.6 -> 89.5 (+20%): memory pressure",
+  "at": "2026-09-15T10:14:38.650008Z",
+  "read": false,
+  "data": {
+   "severity": "sev4"
+  }
+ },
+ {
+  "id": "25b58259-a7b7-42df-8278-be0527b2002c",
+  "kind": "incident_escalated",
+  "incident_id": "a21e154c-d177-4418-baca-17e1aadf986c",
+  "title": "INC-1114 escalated: payment-service MEMORY pressure",
+  "body": "verification failed after 2 attempt(s): 1 of 6 conditions still failing after 240s: payment-service.memory_percent=78.5 lte 85, but still accumulating (+14% of the threshold across the window)",
+  "at": "2026-09-15T10:14:29.587541Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "75da6277-19a4-4b58-a19b-d106e7e20a32",
+  "kind": "approval_requested",
+  "incident_id": "a21e154c-d177-4418-baca-17e1aadf986c",
+  "title": "INC-1114: approve rollback_deployment on payment-service?",
+  "body": "addresses deployment_regression on payment-service",
+  "at": "2026-09-15T10:10:25.994253Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "9239cd11-e44c-4099-8b04-63804d4c1d43"
+  }
+ },
+ {
+  "id": "637a25bf-c16f-422d-8de3-1da65a1d8216",
+  "kind": "approval_requested",
+  "incident_id": "a21e154c-d177-4418-baca-17e1aadf986c",
+  "title": "INC-1114: approve rollback_deployment on payment-service?",
+  "body": "addresses deployment_regression on payment-service",
+  "at": "2026-09-15T10:06:21.681814Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "4917fcb5-c082-4cb4-9869-aea27b7506fc"
+  }
+ },
+ {
+  "id": "fdf24bbb-4a90-4a84-8183-ff4070b7e85d",
+  "kind": "incident_detected",
+  "incident_id": "a21e154c-d177-4418-baca-17e1aadf986c",
+  "title": "INC-1114 SEV4: payment-service MEMORY pressure",
+  "body": "payment-service memory_percent 73.5 -> 91.5 (+24%): memory pressure",
+  "at": "2026-09-15T10:06:19.978536Z",
+  "read": false,
+  "data": {
+   "severity": "sev4"
+  }
+ },
+ {
+  "id": "846bd217-c59c-40a9-a6a8-7bd68fe70b34",
+  "kind": "incident_resolved",
+  "incident_id": "51fa2058-106b-49c6-b292-47058a53d2f4",
+  "title": "INC-1113 resolved: Elevated API error rate",
+  "body": "remediation verified: all 5 conditions held for 3 consecutive polls",
+  "at": "2026-09-15T10:04:31.256064Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "6199c56a-dabc-4e12-9569-d52a3d65210a",
+  "kind": "approval_requested",
+  "incident_id": "51fa2058-106b-49c6-b292-47058a53d2f4",
+  "title": "INC-1113: approve rollback_deployment on payment-service?",
+  "body": "addresses deployment_regression on payment-service",
+  "at": "2026-09-15T10:03:50.631661Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "15c2d9fd-4d7e-4190-9243-1969c4b20f02"
+  }
+ },
+ {
+  "id": "56aaac23-2bf3-4f38-9813-6931e37156e9",
+  "kind": "incident_detected",
+  "incident_id": "51fa2058-106b-49c6-b292-47058a53d2f4",
+  "title": "INC-1113 SEV2: Elevated API error rate",
+  "body": "payment-service error_rate 0.00125 -> 0.35 (+27822%): elevated error rate; order-service error_rate 0.00234 -> 0.143 (+6029%): elevated error rate; api-gateway error_rate 0.00392 -> 0.139 (+3445%): elevated error rate",
+  "at": "2026-09-15T10:03:48.852136Z",
+  "read": false,
+  "data": {
+   "severity": "sev2"
+  }
+ },
+ {
+  "id": "e9ea696f-4701-403f-a0b0-a7971f8dabc9",
+  "kind": "incident_resolved",
+  "incident_id": "5ba30933-e45f-4b1c-b60f-e1eb80c98a9c",
+  "title": "INC-1112 resolved: Traffic surge on api-gateway",
+  "body": "no remediation required; metrics within baseline",
+  "at": "2026-09-15T09:04:15.932779Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "d227434b-7066-48de-889b-e186f79d2ebc",
+  "kind": "incident_detected",
+  "incident_id": "5ba30933-e45f-4b1c-b60f-e1eb80c98a9c",
+  "title": "INC-1112 SEV4: Traffic surge on api-gateway",
+  "body": "api-gateway request_rate 124 -> 373 (+201%): traffic surge",
+  "at": "2026-09-15T09:03:10.400127Z",
+  "read": false,
+  "data": {
+   "severity": "sev4"
+  }
+ },
+ {
+  "id": "0917b336-0395-4c9e-b6a9-deb9efc49c07",
+  "kind": "incident_resolved",
+  "incident_id": "57151b35-7c5f-4c74-a896-608772377395",
+  "title": "INC-1111 resolved: Elevated API error rate",
+  "body": "remediation verified: all 5 conditions held for 3 consecutive polls",
+  "at": "2026-09-15T09:02:55.163909Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "aae8d258-b6bb-4889-b251-758101ed94e2",
+  "kind": "approval_requested",
+  "incident_id": "57151b35-7c5f-4c74-a896-608772377395",
+  "title": "INC-1111: approve restart_service on inventory-service?",
+  "body": "addresses dependency_failure on inventory-service",
+  "at": "2026-09-15T09:02:01.440611Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "aa070147-edaa-4ac2-9ed3-3ec0d44a8a89"
+  }
+ },
+ {
+  "id": "a0fdf090-36a9-46d0-b4d6-4cfbcfef4fab",
+  "kind": "incident_detected",
+  "incident_id": "57151b35-7c5f-4c74-a896-608772377395",
+  "title": "INC-1111 SEV1: Elevated API error rate",
+  "body": "inventory-service error_rate 0.00131 -> 1 (+76154%): elevated error rate; order-service error_rate 0.00242 -> 1 (+41215%): elevated error rate; api-gateway error_rate 0.00452 -> 0.653 (+14346%): elevated error rate; inventory-service up 1 -> 0 (-100%): component unavailable",
+  "at": "2026-09-15T09:01:59.901811Z",
+  "read": false,
+  "data": {
+   "severity": "sev1"
+  }
+ },
+ {
+  "id": "5b3b2af9-d191-45f3-8dd4-d9f6ef84c2dd",
+  "kind": "incident_resolved",
+  "incident_id": "91cd529c-6116-4726-be9e-2c567d152732",
+  "title": "INC-1110 resolved: postgres idle in transaction saturation",
+  "body": "remediation verified: all 5 conditions held for 3 consecutive polls",
+  "at": "2026-09-15T09:01:42.883666Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "1e8ce006-ff57-4369-b9d1-4114e3c4d24f",
+  "kind": "approval_requested",
+  "incident_id": "91cd529c-6116-4726-be9e-2c567d152732",
+  "title": "INC-1110: approve restart_service on user-service?",
+  "body": "addresses resource_exhaustion on user-service",
+  "at": "2026-09-15T09:00:51.916861Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "1f2f0dc0-2762-42ef-b5f4-1b3652488914"
+  }
+ },
+ {
+  "id": "0b6bff19-b51a-40f5-b0b8-9facd3de34ed",
+  "kind": "incident_detected",
+  "incident_id": "91cd529c-6116-4726-be9e-2c567d152732",
+  "title": "INC-1110 SEV3: postgres idle in transaction saturation",
+  "body": "postgres idle_in_transaction 2.93 -> 30 (+925%): idle-in-transaction sessions",
+  "at": "2026-09-15T09:00:04.083366Z",
+  "read": false,
+  "data": {
+   "severity": "sev3"
+  }
+ },
+ {
+  "id": "3e57f8c1-e759-4bfd-bfeb-fcdceb0de932",
+  "kind": "incident_resolved",
+  "incident_id": "f8877ba4-f46a-4a22-8706-384baf26bbac",
+  "title": "INC-1109 resolved: Elevated API error rate",
+  "body": "remediation verified: all 5 conditions held for 3 consecutive polls",
+  "at": "2026-09-15T08:59:32.260082Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "1167feef-2548-491e-89a3-7a0e7748273d",
+  "kind": "approval_requested",
+  "incident_id": "f8877ba4-f46a-4a22-8706-384baf26bbac",
+  "title": "INC-1109: approve rollback_deployment on payment-service?",
+  "body": "addresses deployment_regression on payment-service",
+  "at": "2026-09-15T08:58:50.130935Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "7c499472-fa0f-4a60-a2a6-6e4b1411a8ef"
+  }
+ },
+ {
+  "id": "eeb93f23-19f4-44bf-9ee2-03a54bb1cc18",
+  "kind": "incident_detected",
+  "incident_id": "f8877ba4-f46a-4a22-8706-384baf26bbac",
+  "title": "INC-1109 SEV2: Elevated API error rate",
+  "body": "payment-service error_rate 0.00138 -> 0.352 (+25354%): elevated error rate; order-service error_rate 0.00205 -> 0.143 (+6877%): elevated error rate; api-gateway error_rate 0.00514 -> 0.14 (+2618%): elevated error rate",
+  "at": "2026-09-15T08:58:48.510235Z",
+  "read": false,
+  "data": {
+   "severity": "sev2"
+  }
+ },
+ {
+  "id": "0f880f60-833d-4277-b7fe-8a306bfea39c",
+  "kind": "incident_resolved",
+  "incident_id": "c2043368-fd95-4568-b75b-3e4f1ce60074",
+  "title": "INC-1108 resolved: redis connections saturation",
+  "body": "remediation verified: all 4 conditions held for 3 consecutive polls",
+  "at": "2026-09-15T08:58:36.341743Z",
+  "read": false,
+  "data": {}
+ },
+ {
+  "id": "bbb757b5-c660-4d61-8743-9c7ac3eb82b6",
+  "kind": "approval_requested",
+  "incident_id": "c2043368-fd95-4568-b75b-3e4f1ce60074",
+  "title": "INC-1108: approve restart_service on order-service?",
+  "body": "addresses resource_exhaustion on order-service",
+  "at": "2026-09-15T08:57:44.696442Z",
+  "read": false,
+  "data": {
+   "risk": "medium",
+   "approval_id": "257ea7d7-4299-4e00-af18-19ee8236bf24"
+  }
+ },
+ {
+  "id": "a20342f1-2983-449f-bfe2-c3f824383892",
+  "kind": "incident_detected",
+  "incident_id": "c2043368-fd95-4568-b75b-3e4f1ce60074",
+  "title": "INC-1108 SEV3: redis connections saturation",
+  "body": "redis connections 14 -> 59.5 (+325%): connection count growth",
+  "at": "2026-09-15T08:56:57.727074Z",
+  "read": false,
+  "data": {
+   "severity": "sev3"
+  }
+ }
+]

@@ -1,0 +1,96 @@
+{
+ "run": {
+  "created_at": "2026-09-15T10:44:11.755918Z",
+  "updated_at": "2026-09-15T10:44:11.755920Z",
+  "id": "84346d2a-153c-474d-ad4d-f1e74d8cdb31",
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "flow_name": "api-latency-investigation",
+  "flow_version": "1.2.0",
+  "phase": "hypothesize",
+  "status": "completed",
+  "budget": {
+   "max_iterations": 32,
+   "max_tool_calls": 36,
+   "max_llm_calls": 26,
+   "max_llm_tokens": 220000,
+   "max_runtime_seconds": 900,
+   "max_remediation_attempts": 2
+  },
+  "usage": {
+   "iterations": 27,
+   "tool_calls": 15,
+   "llm_calls": 0,
+   "llm_tokens": 0,
+   "runtime_seconds": 1.013922,
+   "remediation_attempts": 0
+  },
+  "model": "deterministic-planner",
+  "started_at": "2026-09-15T10:44:11.755904Z",
+  "finished_at": "2026-09-15T10:44:11.851673Z",
+  "termination_reason": "phase_complete",
+  "summary": "exit_conditions_met \u2192 validate",
+  "error": null,
+  "steps_count": 2,
+  "workflow_id": "incident-26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "attempt": 1
+ },
+ "steps": [
+  {
+   "id": "25c6731c-e378-4401-b176-428fbc234bbe",
+   "agent_run_id": "84346d2a-153c-474d-ad4d-f1e74d8cdb31",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 1,
+   "phase": "hypothesize",
+   "node": "propose",
+   "kind": "fallback",
+   "at": "2026-09-15T10:44:11.779672Z",
+   "title": "phase_complete: no further hypotheses derivable from evidence",
+   "input": {
+    "phase": "hypothesize",
+    "evidence": 15,
+    "iteration": 0,
+    "hypotheses": 1
+   },
+   "output": {
+    "proposal": {
+     "action": "phase_complete",
+     "rationale": "deterministic planner",
+     "tool_call": null,
+     "hypotheses": [],
+     "observation": "no further hypotheses derivable from evidence",
+     "remediation": null,
+     "hypothesis_update": null
+    },
+    "recovered": false
+   },
+   "model": "deterministic-planner",
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  },
+  {
+   "id": "f0aab511-2984-4102-a8af-22f80fc2b07e",
+   "agent_run_id": "84346d2a-153c-474d-ad4d-f1e74d8cdb31",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "seq": 2,
+   "phase": "hypothesize",
+   "node": "conclude",
+   "kind": "decision",
+   "at": "2026-09-15T10:44:11.789072Z",
+   "title": "phase_complete requested",
+   "input": {},
+   "output": {
+    "exit_met": true,
+    "unsatisfied": []
+   },
+   "model": null,
+   "tokens_in": 0,
+   "tokens_out": 0,
+   "latency_ms": 0.0,
+   "tool_execution_id": null,
+   "trace_id": null
+  }
+ ]
+}

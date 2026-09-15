@@ -1,0 +1,98 @@
+[
+ {
+  "id": "f9871805-eddb-4529-9650-394cac2f0228",
+  "agent_run_id": "f77a9515-ca7e-4020-bfcb-796f57a8e785",
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "seq": 1,
+  "phase": "hypothesize",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:43:24.889757Z",
+  "title": "propose_hypotheses: Evidence implicates specific components.",
+  "input": {
+   "phase": "hypothesize",
+   "evidence": 11,
+   "iteration": 0,
+   "hypotheses": 0
+  },
+  "output": {
+   "proposal": {
+    "action": "propose_hypotheses",
+    "rationale": "deterministic planner derived hypotheses from evidence strength",
+    "tool_call": null,
+    "hypotheses": [
+     {
+      "category": "unknown",
+      "mechanism": "derived deterministically from evidence strength and service attribution",
+      "statement": "payment-service is the most implicated component in the collected evidence.",
+      "suggested_tests": [],
+      "supporting_evidence": [
+       "E7",
+       "E8"
+      ],
+      "contradicting_evidence": [],
+      "suspected_root_cause_service": "payment-service"
+     }
+    ],
+    "observation": "Evidence implicates specific components.",
+    "remediation": null,
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "df1e7eaa-2e70-4d41-8c19-a16654cadf2b",
+  "agent_run_id": "f77a9515-ca7e-4020-bfcb-796f57a8e785",
+  "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+  "seq": 2,
+  "phase": "hypothesize",
+  "node": "apply_hypotheses",
+  "kind": "hypothesis_update",
+  "at": "2026-09-15T10:43:24.908232Z",
+  "title": "1 new, 1 total; leading confidence 0.82",
+  "input": {
+   "action": "propose_hypotheses"
+  },
+  "output": {
+   "hypotheses": [
+    {
+     "score": {
+      "total": 0.8203,
+      "explanation": [
+       "2 supporting evidence items (strength 0.93)",
+       "temporal alignment 1.00",
+       "payment-service explains 1/1 symptomatic services"
+      ],
+      "validation_bonus": 0.0,
+      "evidence_strength": 0.934,
+      "temporal_alignment": 1.0,
+      "dependency_alignment": 1.0,
+      "contradiction_penalty": 0.0,
+      "historical_similarity": 0.0
+     },
+     "status": "supported",
+     "category": "unknown",
+     "statement": "payment-service is the most implicated component in the collected evidence.",
+     "confidence": 0.8203,
+     "supporting": 2,
+     "contradicting": 0,
+     "hypothesis_id": "c709b547-5ab1-4b66-a86b-4ba5e2ac8e96",
+     "root_cause_service": "payment-service"
+    }
+   ]
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ }
+]

@@ -1,0 +1,17 @@
+{
+ "component": "redis",
+ "time": "2026-09-15T11:50:43.126624+00:00",
+ "metrics": {
+  "connections": 12.0,
+  "max_connections": 250.0,
+  "saturation": 0.048,
+  "ops_per_sec": 356.13898867991645,
+  "latency_p95_ms": 0.8002654208,
+  "memory_percent": 31.94117095281919,
+  "blocked_clients": 0,
+  "idle_in_transaction": 0.0,
+  "lock_waits": 0.0,
+  "hit_rate": 0.97,
+  "up": 1.0
+ }
+}

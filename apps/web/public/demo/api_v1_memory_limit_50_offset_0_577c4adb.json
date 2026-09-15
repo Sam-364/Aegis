@@ -1,0 +1,2359 @@
+{
+ "items": [
+  {
+   "created_at": "2026-09-15T10:44:57.570151Z",
+   "updated_at": "2026-09-15T10:44:57.570152Z",
+   "id": "139123ac-3ad0-41e3-aca0-2ba72974bdd8",
+   "incident_id": "26c92e97-ca0f-4357-b018-fd9c52c07b0d",
+   "incident_number": 1124,
+   "title": "API latency regression",
+   "severity": "sev3",
+   "symptoms": [
+    "api-gateway latency_p95_ms 237 -> 542 (+129%): p95 latency regression"
+   ],
+   "affected_services": [
+    "api-gateway"
+   ],
+   "root_cause": "payment-service is the most implicated component in the collected evidence.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "unknown",
+   "evidence_summary": [
+    "9 traces sampled, 9 errored, avg 127ms; failure origin (deepest failing span): payment-service x9; slowest span most often in: order-service x7, user-service x1",
+    "payment-service runs 2.3.7 deployed 10 min ago (previous 2.4.0); change: rollback from 2.4.0; rollback available \u2014 this was a ROLLBACK to a version already run, not a new release \u2014 deployment precedes",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; all dependencies healthy; own error rate 0.0%, own l",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; all dependencies healthy; own error rate 0.0%, own l",
+    "api-gateway is healthy; all checks passing",
+    "api-gateway latency_p95_ms: current 288 ms vs baseline 202 ms \u2192 +42% vs baseline"
+   ],
+   "actions": [],
+   "resolution": "escalated to humans without automated remediation",
+   "verification_summary": "",
+   "duration_seconds": 93.443515,
+   "outcome": "escalated",
+   "lessons": [],
+   "embedding_text": "Title: API latency regression\nSeverity: sev3\nSymptoms: api-gateway latency_p95_ms 237 -> 542 (+129%): p95 latency regression\nAffected services: api-gateway\nRoot cause: payment-service is the most implicated component in the collected evidence.\nRoot cause service: payment-service\nCategory: unknown\nResolution: escalated to humans without automated remediation",
+   "embedding_model": null,
+   "resolved_at": null
+  },
+  {
+   "created_at": "2026-09-15T10:43:06.970353Z",
+   "updated_at": "2026-09-15T10:43:06.970353Z",
+   "id": "bd1df507-3651-4d31-ad9a-9f3d6d4057ce",
+   "incident_id": "185d522d-a679-4af6-8f6b-93b0e08f9809",
+   "incident_number": 1123,
+   "title": "Latency regression on notification-service",
+   "severity": "sev3",
+   "symptoms": [
+    "notification-service latency_p95_ms 18.6 -> 111 (+499%): p95 latency regression",
+    "notification-service cpu_percent 29.1 -> 100 (+243%): CPU saturation"
+   ],
+   "affected_services": [
+    "notification-service"
+   ],
+   "root_cause": "payment-service is under memory pressure (leak or undersized limit).",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "payment-service runs 2.3.7 deployed 8 min ago (previous 2.4.0); change: rollback from 2.4.0; rollback available \u2014 this was a ROLLBACK to a version already run, not a new release \u2014 deployment precedes ",
+    "12 traces sampled, 12 errored, avg 112ms; failure origin (deepest failing span): payment-service x9, inventory-service x3; slowest span most often in: order-service x10, user-service x1",
+    "notification-service is degraded; failing checks: latency_ok, cpu_ok",
+    "payment-service: 17 WARN+ log lines in 300s (ERROR 2, WARN 15); top: GC pause Nms (heap N%) (x15) | process exited with code N (OOMKilled: heap limit exceeded) (x1) | GET /inventory/sku N in Nms (x1)",
+    "notification-service latency_p95_ms: current 34.8 ms vs baseline 18.8 ms \u2192 +86% vs baseline",
+    "notification-service cpu_percent: current 43.1 % vs baseline 28.3 % \u2192 +53% vs baseline"
+   ],
+   "actions": [],
+   "resolution": "escalated to humans without automated remediation",
+   "verification_summary": "",
+   "duration_seconds": 93.843714,
+   "outcome": "escalated",
+   "lessons": [],
+   "embedding_text": "Title: Latency regression on notification-service\nSeverity: sev3\nSymptoms: notification-service latency_p95_ms 18.6 -> 111 (+499%): p95 latency regression; notification-service cpu_percent 29.1 -> 100 (+243%): CPU saturation\nAffected services: notification-service\nRoot cause: payment-service is under memory pressure (leak or undersized limit).\nRoot cause service: payment-service\nCategory: resource_exhaustion\nResolution: escalated to humans without automated remediation",
+   "embedding_model": null,
+   "resolved_at": null
+  },
+  {
+   "created_at": "2026-09-15T10:41:15.532912Z",
+   "updated_at": "2026-09-15T10:41:15.532913Z",
+   "id": "cdc96f86-4b4b-4781-9dcf-0fbf153bf58d",
+   "incident_id": "e734bda1-2ba6-4d66-bb9d-99fa91770cc3",
+   "incident_number": 1122,
+   "title": "payment-service MEMORY pressure",
+   "severity": "sev4",
+   "symptoms": [
+    "payment-service memory_percent 73 -> 90.3 (+24%): memory pressure",
+    "payment-service latency_p95_ms 78.6 -> 208 (+165%): p95 latency regression",
+    "api-gateway error_rate 0.00612 -> 0.364 (+5841%): elevated error rate",
+    "order-service error_rate 0.00383 -> 0.403 (+10442%): elevated error rate",
+    "payment-service error_rate 0.00188 -> 1 (+52973%): elevated error rate",
+    "payment-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "payment-service",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "inventory-service is under memory pressure (leak or undersized limit).",
+   "root_cause_service": "inventory-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 81ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x10, payment-service x1",
+    "payment-service runs 2.3.7 deployed 7 min ago (previous 2.4.0); change: rollback from 2.4.0; rollback available \u2014 this was a ROLLBACK to a version already run, not a new release \u2014 deployment precedes ",
+    "payment-service is degraded; failing checks: memory_ok",
+    "inventory-service: 1 WARN+ log lines in 300s (ERROR 1); top: process exited with code N (OOMKilled) (x1)",
+    "payment-service memory_percent: current 75.3 % vs baseline 38.8 % \u2192 +94% vs baseline",
+    "payment-service depends on postgres, redis; depended on by api-gateway, order-service; all dependencies healthy; own error rate 0.0%, own latency 80ms"
+   ],
+   "actions": [],
+   "resolution": "escalated to humans without automated remediation",
+   "verification_summary": "",
+   "duration_seconds": 47.406279,
+   "outcome": "escalated",
+   "lessons": [],
+   "embedding_text": "Title: payment-service MEMORY pressure\nSeverity: sev4\nSymptoms: payment-service memory_percent 73 -> 90.3 (+24%): memory pressure; payment-service latency_p95_ms 78.6 -> 208 (+165%): p95 latency regression; api-gateway error_rate 0.00612 -> 0.364 (+5841%): elevated error rate; order-service error_rate 0.00383 -> 0.403 (+10442%): elevated error rate; payment-service error_rate 0.00188 -> 1 (+52973%): elevated error rate; payment-service up 1 -> 0 (-100%): component unavailable\nAffected services: payment-service, api-gateway, order-service\nRoot cause: inventory-service is under memory pressure (leak or undersized limit).\nRoot cause service: inventory-service\nCategory: resource_exhaustion\nResolution: escalated to humans without automated remediation",
+   "embedding_model": null,
+   "resolved_at": null
+  },
+  {
+   "created_at": "2026-09-15T10:38:42.141409Z",
+   "updated_at": "2026-09-15T10:38:42.141410Z",
+   "id": "2bd1bcf5-8caf-4691-8a31-c2e05f0a9821",
+   "incident_id": "22f1c65f-56d4-4a43-acc8-e5d306b702a1",
+   "incident_number": 1121,
+   "title": "Traffic surge on api-gateway",
+   "severity": "sev4",
+   "symptoms": [
+    "api-gateway request_rate 115 -> 351 (+205%): traffic surge",
+    "api-gateway latency_p95_ms 197 -> 325 (+65%): p95 latency regression",
+    "auth-service latency_p95_ms 25 -> 44.2 (+77%): p95 latency regression",
+    "order-service latency_p95_ms 112 -> 193 (+73%): p95 latency regression",
+    "payment-service latency_p95_ms 67.3 -> 134 (+99%): p95 latency regression",
+    "inventory-service latency_p95_ms 29.4 -> 64.7 (+120%): p95 latency regression"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "auth-service",
+    "order-service",
+    "payment-service",
+    "inventory-service"
+   ],
+   "root_cause": "undetermined",
+   "root_cause_service": null,
+   "root_cause_category": "unknown",
+   "evidence_summary": [
+    "api-gateway is healthy; all checks passing"
+   ],
+   "actions": [],
+   "resolution": "no action required; metrics recovered without intervention",
+   "verification_summary": "",
+   "duration_seconds": 64.997466,
+   "outcome": "false_positive",
+   "lessons": [],
+   "embedding_text": "Title: Traffic surge on api-gateway\nSeverity: sev4\nSymptoms: api-gateway request_rate 115 -> 351 (+205%): traffic surge; api-gateway latency_p95_ms 197 -> 325 (+65%): p95 latency regression; auth-service latency_p95_ms 25 -> 44.2 (+77%): p95 latency regression; order-service latency_p95_ms 112 -> 193 (+73%): p95 latency regression; payment-service latency_p95_ms 67.3 -> 134 (+99%): p95 latency regression; inventory-service latency_p95_ms 29.4 -> 64.7 (+120%): p95 latency regression\nAffected services: api-gateway, auth-service, order-service, payment-service, inventory-service\nRoot cause: undetermined\nRoot cause service: unknown\nCategory: unknown\nResolution: no action required; metrics recovered without intervention",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T10:38:42.124090Z"
+  },
+  {
+   "created_at": "2026-09-15T10:37:20.533200Z",
+   "updated_at": "2026-09-15T10:37:20.533202Z",
+   "id": "2b0b16f4-858a-4c94-b4ce-54ee1c202d94",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "incident_number": 1120,
+   "title": "Elevated API error rate",
+   "severity": "sev1",
+   "symptoms": [
+    "api-gateway error_rate 0.00512 -> 0.651 (+12614%): elevated error rate",
+    "order-service error_rate 0.0032 -> 1 (+31173%): elevated error rate",
+    "inventory-service error_rate 0.00139 -> 1 (+72061%): elevated error rate",
+    "inventory-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "inventory-service",
+    "order-service"
+   ],
+   "root_cause": "inventory-service is unavailable and its dependents fail as a result.",
+   "root_cause_service": "inventory-service",
+   "root_cause_category": "dependency_failure",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 80ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x7, user-service x3",
+    "api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+    "order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+    "inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (50% errors), ",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own error rate 0.0%, own latency 21ms"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "inventory-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=inventory-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 54.358769,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev1\nSymptoms: api-gateway error_rate 0.00512 -> 0.651 (+12614%): elevated error rate; order-service error_rate 0.0032 -> 1 (+31173%): elevated error rate; inventory-service error_rate 0.00139 -> 1 (+72061%): elevated error rate; inventory-service up 1 -> 0 (-100%): component unavailable\nAffected services: api-gateway, inventory-service, order-service\nRoot cause: inventory-service is unavailable and its dependents fail as a result.\nRoot cause service: inventory-service\nCategory: dependency_failure\nResolution: restart_service(service=inventory-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T10:37:20.485393Z"
+  },
+  {
+   "created_at": "2026-09-15T10:36:11.487395Z",
+   "updated_at": "2026-09-15T10:36:11.487396Z",
+   "id": "8926f469-d799-48d0-8abf-bf2338b072ad",
+   "incident_id": "9f1057d1-85e9-4aaf-960d-dc26688dcee8",
+   "incident_number": 1119,
+   "title": "postgres idle in transaction saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "postgres idle_in_transaction 0.96 -> 24 (+2400%): idle-in-transaction sessions",
+    "postgres saturation 0.606 -> 0.954 (+57%): connection saturation"
+   ],
+   "affected_services": [
+    "postgres"
+   ],
+   "root_cause": "user-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "user-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 188ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: payment-service x4, auth-service x4",
+    "postgres: 91/100 connections (91% saturation), p95 14.3ms; by client: user-service 82, order-service 3, auth-service 2, payment-service 2; user-service holds 90% of connections; idle-in-transaction by",
+    "postgres diagnostic: saturation 91%, 91 connections; top client user-service (82, 90%); idle-in-transaction: user-service=80; lock waits 12",
+    "order-service: 15 WARN+ log lines in 300s (ERROR 6, WARN 9); top: redis client count for this process is unusually high (N) (x9) | upstream payment-service failed or timed out (N% of calls) (x6); depe",
+    "restart of user-service restarting (eta 10s, version 1.14.2)",
+    "INC-1055 (71% similar): Incident: Postgres idle in transaction saturation due to user-service behavior (sev3); root cause: User-service is leaking/holding transactions (idle-in-transaction), causing P"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "user-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=user-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 100.336341,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: postgres idle in transaction saturation\nSeverity: sev3\nSymptoms: postgres idle_in_transaction 0.96 -> 24 (+2400%): idle-in-transaction sessions; postgres saturation 0.606 -> 0.954 (+57%): connection saturation\nAffected services: postgres\nRoot cause: user-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: user-service\nCategory: resource_exhaustion\nResolution: restart_service(service=user-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T10:36:11.462965Z"
+  },
+  {
+   "created_at": "2026-09-15T10:34:03.610682Z",
+   "updated_at": "2026-09-15T10:34:03.610683Z",
+   "id": "a9d858da-f799-46b8-89db-ca80067ed294",
+   "incident_id": "9d1c6791-7129-4250-8bff-9bfd371e2308",
+   "incident_number": 1118,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00513 -> 0.141 (+2650%): elevated error rate",
+    "order-service error_rate 0.00272 -> 0.143 (+5143%): elevated error rate",
+    "payment-service error_rate 0.00123 -> 0.352 (+28395%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "11 traces sampled, 11 errored, avg 112ms; failure origin (deepest failing span): order-service x10, payment-service x1; slowest span most often in: auth-service x4, user-service x3",
+    "payment-service error_rate: current 3.6% vs baseline 0.1% \u2192 +2764% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 43.462676,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00513 -> 0.141 (+2650%): elevated error rate; order-service error_rate 0.00272 -> 0.143 (+5143%): elevated error rate; payment-service error_rate 0.00123 -> 0.352 (+28395%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T10:34:03.589300Z"
+  },
+  {
+   "created_at": "2026-09-15T10:33:07.392117Z",
+   "updated_at": "2026-09-15T10:33:07.392118Z",
+   "id": "74296adb-57e0-415d-b45a-33d5cfd113bc",
+   "incident_id": "c248d6ca-daad-415d-a9a6-d52c601f62ec",
+   "incident_number": 1117,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+325%): connection count growth",
+    "api-gateway error_rate 0.00512 -> 0.503 (+9715%): elevated error rate",
+    "order-service error_rate 0.00291 -> 1 (+34303%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 71%, 177 connections; top client order-service (168, 95%); leaked: order-service=165",
+    "redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 98.238159,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+325%): connection count growth; api-gateway error_rate 0.00512 -> 0.503 (+9715%): elevated error rate; order-service error_rate 0.00291 -> 1 (+34303%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T10:33:07.364783Z"
+  },
+  {
+   "created_at": "2026-09-15T10:29:50.777757Z",
+   "updated_at": "2026-09-15T10:29:50.777759Z",
+   "id": "0f1622c7-f0be-4075-8eb2-2ddbebde6539",
+   "incident_id": "fb170fbe-2f3a-4188-96c8-e70654bccb7f",
+   "incident_number": 1116,
+   "title": "Latency regression on notification-service",
+   "severity": "sev3",
+   "symptoms": [
+    "notification-service latency_p95_ms 18.7 -> 105 (+461%): p95 latency regression",
+    "notification-service cpu_percent 29 -> 100 (+245%): CPU saturation"
+   ],
+   "affected_services": [
+    "notification-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 90ms; failure origin (deepest failing span): payment-service x12; slowest span most often in: order-service x7, auth-service x3",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: rollback from 2.3.7; rollback available \u2014 deployment precedes the incident window",
+    "payment-service process: up, version 2.4.0, uptime 111s, replicas 2.0/2, restarts 4, mem 89.7%, cpu 36.7%, open redis conns 2, open db conns 2",
+    "payment-service (service) is degraded; failing: memory_ok; error_rate 0.1%, p95 161ms, cpu 34%, mem 90%; version 2.4.0, uptime 110s, replicas 2.0/2, restarts 4, open redis conns 2, open db conns 2",
+    "notification-service is degraded; failing checks: latency_ok, cpu_ok",
+    "payment-service: 38 WARN+ log lines in 300s (WARN 36, ERROR 2); top: GC pause Nms (heap N%) (x36) | process exited with code N (OOMKilled: heap limit exceeded) (x2)"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "rejected",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "escalated to humans without automated remediation",
+   "verification_summary": "",
+   "duration_seconds": 901.879912,
+   "outcome": "escalated",
+   "lessons": [],
+   "embedding_text": "Title: Latency regression on notification-service\nSeverity: sev3\nSymptoms: notification-service latency_p95_ms 18.7 -> 105 (+461%): p95 latency regression; notification-service cpu_percent 29 -> 100 (+245%): CPU saturation\nAffected services: notification-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: escalated to humans without automated remediation",
+   "embedding_model": null,
+   "resolved_at": null
+  },
+  {
+   "created_at": "2026-09-15T10:22:47.858897Z",
+   "updated_at": "2026-09-15T10:22:47.858899Z",
+   "id": "412a1baa-23ab-4bfb-b5b3-e01be57b26d3",
+   "incident_id": "f2321171-4ee3-4c69-a004-44fde8157528",
+   "incident_number": 1115,
+   "title": "payment-service MEMORY pressure",
+   "severity": "sev4",
+   "symptoms": [
+    "payment-service memory_percent 74.6 -> 89.5 (+20%): memory pressure",
+    "payment-service latency_p95_ms 71.8 -> 135 (+88%): p95 latency regression"
+   ],
+   "affected_services": [
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 90ms; failure origin (deepest failing span): payment-service x12; slowest span most often in: order-service x7, auth-service x3",
+    "payment-service runs 2.3.7 deployed 4 min ago (previous 2.4.0); change: rollback from 2.4.0; rollback available \u2014 deployment precedes the incident window",
+    "payment-service process: up, version 2.3.7, uptime 100s, replicas 2.0/2, restarts 4, mem 89.8%, cpu 33.0%, open redis conns 2, open db conns 2",
+    "payment-service: 32 WARN+ log lines in 300s (WARN 30, ERROR 2); top: GC pause Nms (heap N%) (x30) | process exited with code N (OOMKilled: heap limit exceeded) (x2)",
+    "INC-1114 (81% similar): payment-service MEMORY pressure; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: rollback_deployment(service=payme",
+    "payment-service memory_percent: current 75.3 % vs baseline 39.1 % \u2192 +93% vs baseline"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verification_failed",
+     "arguments": {
+      "service": "payment-service"
+     }
+    },
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verification_failed",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 failed; rollback_deployment(service=payment-service) \u2192 failed",
+   "verification_summary": "2 of 4 conditions still failing after 240s: payment-service.memory_percent=90.2 lte 85; payment-service.latency_p95_ms=136 vs 1.5x baseline(68.2)=102",
+   "duration_seconds": 488.961075,
+   "outcome": "escalated",
+   "lessons": [],
+   "embedding_text": "Title: payment-service MEMORY pressure\nSeverity: sev4\nSymptoms: payment-service memory_percent 74.6 -> 89.5 (+20%): memory pressure; payment-service latency_p95_ms 71.8 -> 135 (+88%): p95 latency regression\nAffected services: payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 failed; rollback_deployment(service=payment-service) \u2192 failed",
+   "embedding_model": null,
+   "resolved_at": null
+  },
+  {
+   "created_at": "2026-09-15T10:14:29.605190Z",
+   "updated_at": "2026-09-15T10:14:29.605191Z",
+   "id": "b1693cee-4218-48b7-a77e-8eb1a5a1ff50",
+   "incident_id": "a21e154c-d177-4418-baca-17e1aadf986c",
+   "incident_number": 1114,
+   "title": "payment-service MEMORY pressure",
+   "severity": "sev4",
+   "symptoms": [
+    "payment-service memory_percent 73.5 -> 91.5 (+24%): memory pressure",
+    "payment-service latency_p95_ms 77.8 -> 288 (+271%): p95 latency regression",
+    "api-gateway error_rate 0.00422 -> 0.362 (+8477%): elevated error rate",
+    "order-service error_rate 0.00268 -> 0.401 (+14826%): elevated error rate",
+    "payment-service error_rate 0.000957 -> 1 (+104370%): elevated error rate",
+    "payment-service up 1 -> 0 (-100%): component unavailable",
+    "payment-service memory_percent 75 -> 91.5 (+22%): memory pressure",
+    "payment-service latency_p95_ms 71.5 -> 186 (+161%): p95 latency regression"
+   ],
+   "affected_services": [
+    "payment-service",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "payment-service runs 2.3.7 deployed 2 min ago (previous 2.4.0); change: rollback from 2.4.0; rollback available \u2014 deployment precedes the incident window",
+    "payment-service process: up, version 2.3.7, uptime 5699s, replicas 2.0/2, restarts 0, mem 92.2%, cpu 32.9%, open redis conns 2, open db conns 2",
+    "payment-service (service) is degraded; failing: memory_ok; error_rate 0.2%, p95 141ms, cpu 35%, mem 92%; version 2.3.7, uptime 5698s, replicas 2.0/2, restarts 0, open redis conns 2, open db conns 2",
+    "payment-service is degraded; failing checks: memory_ok",
+    "payment-service: 15 WARN+ log lines in 300s (WARN 7, ERROR 8); top: NullPointerException in CheckoutHandler.process (version N.N) (x8) | GC pause Nms (heap N%) (x7)",
+    "payment-service memory_percent: current 76 % vs baseline 39.1 % \u2192 +94% vs baseline"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verification_failed",
+     "arguments": {
+      "service": "payment-service"
+     }
+    },
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verification_failed",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 failed; rollback_deployment(service=payment-service) \u2192 failed",
+   "verification_summary": "1 of 6 conditions still failing after 240s: payment-service.memory_percent=78.5 lte 85, but still accumulating (+14% of the threshold across the window)",
+   "duration_seconds": 489.707388,
+   "outcome": "escalated",
+   "lessons": [],
+   "embedding_text": "Title: payment-service MEMORY pressure\nSeverity: sev4\nSymptoms: payment-service memory_percent 73.5 -> 91.5 (+24%): memory pressure; payment-service latency_p95_ms 77.8 -> 288 (+271%): p95 latency regression; api-gateway error_rate 0.00422 -> 0.362 (+8477%): elevated error rate; order-service error_rate 0.00268 -> 0.401 (+14826%): elevated error rate; payment-service error_rate 0.000957 -> 1 (+104370%): elevated error rate; payment-service up 1 -> 0 (-100%): component unavailable; payment-service memory_percent 75 -> 91.5 (+22%): memory pressure; payment-service latency_p95_ms 71.5 -> 186 (+161%): p95 latency regression\nAffected services: payment-service, api-gateway, order-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 failed; rollback_deployment(service=payment-service) \u2192 failed",
+   "embedding_model": null,
+   "resolved_at": null
+  },
+  {
+   "created_at": "2026-09-15T10:04:31.276343Z",
+   "updated_at": "2026-09-15T10:04:31.276345Z",
+   "id": "5da949b0-1628-465e-91b0-468d8ca4815d",
+   "incident_id": "51fa2058-106b-49c6-b292-47058a53d2f4",
+   "incident_number": 1113,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00392 -> 0.139 (+3445%): elevated error rate",
+    "order-service error_rate 0.00234 -> 0.143 (+6029%): elevated error rate",
+    "payment-service error_rate 0.00125 -> 0.35 (+27822%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "payment-service error_rate: current 4.8% vs baseline 0.1% \u2192 +4084% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok",
+    "order-service is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.345734,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00392 -> 0.139 (+3445%): elevated error rate; order-service error_rate 0.00234 -> 0.143 (+6029%): elevated error rate; payment-service error_rate 0.00125 -> 0.35 (+27822%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T10:04:31.243524Z"
+  },
+  {
+   "created_at": "2026-09-15T09:04:15.941612Z",
+   "updated_at": "2026-09-15T09:04:15.941612Z",
+   "id": "77c73513-b820-4b3e-bdd7-9a43a12a9d63",
+   "incident_id": "5ba30933-e45f-4b1c-b60f-e1eb80c98a9c",
+   "incident_number": 1112,
+   "title": "Traffic surge on api-gateway",
+   "severity": "sev4",
+   "symptoms": [
+    "api-gateway request_rate 124 -> 373 (+201%): traffic surge",
+    "api-gateway latency_p95_ms 204 -> 375 (+84%): p95 latency regression",
+    "auth-service latency_p95_ms 24.9 -> 50.8 (+104%): p95 latency regression",
+    "user-service latency_p95_ms 37.2 -> 68 (+83%): p95 latency regression",
+    "order-service latency_p95_ms 115 -> 209 (+82%): p95 latency regression",
+    "payment-service latency_p95_ms 68.8 -> 151 (+119%): p95 latency regression",
+    "inventory-service latency_p95_ms 30.5 -> 68.6 (+125%): p95 latency regression"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "auth-service",
+    "user-service",
+    "order-service",
+    "payment-service",
+    "inventory-service"
+   ],
+   "root_cause": "undetermined",
+   "root_cause_service": null,
+   "root_cause_category": "unknown",
+   "evidence_summary": [
+    "api-gateway is healthy; all checks passing"
+   ],
+   "actions": [],
+   "resolution": "no action required; metrics recovered without intervention",
+   "verification_summary": "",
+   "duration_seconds": 65.00631,
+   "outcome": "false_positive",
+   "lessons": [],
+   "embedding_text": "Title: Traffic surge on api-gateway\nSeverity: sev4\nSymptoms: api-gateway request_rate 124 -> 373 (+201%): traffic surge; api-gateway latency_p95_ms 204 -> 375 (+84%): p95 latency regression; auth-service latency_p95_ms 24.9 -> 50.8 (+104%): p95 latency regression; user-service latency_p95_ms 37.2 -> 68 (+83%): p95 latency regression; order-service latency_p95_ms 115 -> 209 (+82%): p95 latency regression; payment-service latency_p95_ms 68.8 -> 151 (+119%): p95 latency regression; inventory-service latency_p95_ms 30.5 -> 68.6 (+125%): p95 latency regression\nAffected services: api-gateway, auth-service, user-service, order-service, payment-service, inventory-service\nRoot cause: undetermined\nRoot cause service: unknown\nCategory: unknown\nResolution: no action required; metrics recovered without intervention",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T09:04:15.904100Z"
+  },
+  {
+   "created_at": "2026-09-15T09:02:55.178071Z",
+   "updated_at": "2026-09-15T09:02:55.178072Z",
+   "id": "1b8240b3-36a2-4aca-977f-a34b9e290042",
+   "incident_id": "57151b35-7c5f-4c74-a896-608772377395",
+   "incident_number": 1111,
+   "title": "Elevated API error rate",
+   "severity": "sev1",
+   "symptoms": [
+    "api-gateway error_rate 0.00452 -> 0.653 (+14346%): elevated error rate",
+    "order-service error_rate 0.00242 -> 1 (+41215%): elevated error rate",
+    "inventory-service error_rate 0.00131 -> 1 (+76154%): elevated error rate",
+    "inventory-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "inventory-service",
+    "order-service"
+   ],
+   "root_cause": "inventory-service is unavailable and its dependents fail as a result.",
+   "root_cause_service": "inventory-service",
+   "root_cause_category": "dependency_failure",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 90ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x10, payment-service x1",
+    "api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+    "order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+    "inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (50% errors), ",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own error rate 0.0%, own latency 21ms"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "inventory-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=inventory-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 55.25582,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev1\nSymptoms: api-gateway error_rate 0.00452 -> 0.653 (+14346%): elevated error rate; order-service error_rate 0.00242 -> 1 (+41215%): elevated error rate; inventory-service error_rate 0.00131 -> 1 (+76154%): elevated error rate; inventory-service up 1 -> 0 (-100%): component unavailable\nAffected services: api-gateway, inventory-service, order-service\nRoot cause: inventory-service is unavailable and its dependents fail as a result.\nRoot cause service: inventory-service\nCategory: dependency_failure\nResolution: restart_service(service=inventory-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T09:02:55.153610Z"
+  },
+  {
+   "created_at": "2026-09-15T09:01:42.891480Z",
+   "updated_at": "2026-09-15T09:01:42.891480Z",
+   "id": "7a2628c8-07e7-4f99-9c05-f9691656b127",
+   "incident_id": "91cd529c-6116-4726-be9e-2c567d152732",
+   "incident_number": 1110,
+   "title": "postgres idle in transaction saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "postgres idle_in_transaction 2.93 -> 30 (+925%): idle-in-transaction sessions",
+    "postgres saturation 0.606 -> 0.955 (+58%): connection saturation",
+    "api-gateway error_rate 0.00486 -> 0.601 (+12264%): elevated error rate",
+    "user-service error_rate 0.00154 -> 1 (+64801%): elevated error rate",
+    "user-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "postgres",
+    "api-gateway",
+    "user-service"
+   ],
+   "root_cause": "user-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "user-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "postgres: 99/100 connections (99% saturation), p95 22.6ms; by client: user-service 89, inventory-service 3, order-service 3, auth-service 2; user-service holds 90% of connections; idle-in-transaction ",
+    "postgres diagnostic: saturation 99%, 99 connections; top client user-service (89, 90%); idle-in-transaction: user-service=86; lock waits 13",
+    "9 traces sampled, 9 errored, avg 148ms; failure origin (deepest failing span): order-service x7, payment-service x2; slowest span most often in: user-service x4, payment-service x2",
+    "order-service: 13 WARN+ log lines in 300s (ERROR 5, WARN 8); top: redis client count for this process is unusually high (N) (x8) | upstream payment-service failed or timed out (N% of calls) (x4) | GET",
+    "restart of user-service restarting (eta 10s, version 1.14.2)",
+    "INC-1055 (71% similar): Incident: Postgres idle in transaction saturation due to user-service behavior (sev3); root cause: User-service is leaking/holding transactions (idle-in-transaction), causing P"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "user-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=user-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 97.980003,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: postgres idle in transaction saturation\nSeverity: sev3\nSymptoms: postgres idle_in_transaction 2.93 -> 30 (+925%): idle-in-transaction sessions; postgres saturation 0.606 -> 0.955 (+58%): connection saturation; api-gateway error_rate 0.00486 -> 0.601 (+12264%): elevated error rate; user-service error_rate 0.00154 -> 1 (+64801%): elevated error rate; user-service up 1 -> 0 (-100%): component unavailable\nAffected services: postgres, api-gateway, user-service\nRoot cause: user-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: user-service\nCategory: resource_exhaustion\nResolution: restart_service(service=user-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T09:01:42.877793Z"
+  },
+  {
+   "created_at": "2026-09-15T08:59:32.267234Z",
+   "updated_at": "2026-09-15T08:59:32.267234Z",
+   "id": "0e4f74a4-0772-4ff8-950b-cba9013d01b2",
+   "incident_id": "f8877ba4-f46a-4a22-8706-384baf26bbac",
+   "incident_number": 1109,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00514 -> 0.14 (+2618%): elevated error rate",
+    "order-service error_rate 0.00205 -> 0.143 (+6877%): elevated error rate",
+    "payment-service error_rate 0.00138 -> 0.352 (+25354%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "payment-service error_rate: current 3.6% vs baseline 0.1% \u2192 +2991% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "9 traces sampled, 9 errored, avg 148ms; failure origin (deepest failing span): order-service x7, payment-service x2; slowest span most often in: user-service x4, payment-service x2",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 43.355718,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00514 -> 0.14 (+2618%): elevated error rate; order-service error_rate 0.00205 -> 0.143 (+6877%): elevated error rate; payment-service error_rate 0.00138 -> 0.352 (+25354%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T08:59:32.253508Z"
+  },
+  {
+   "created_at": "2026-09-15T08:58:36.351636Z",
+   "updated_at": "2026-09-15T08:58:36.351637Z",
+   "id": "2b89028d-5802-4cdb-ade4-c72694aa49d2",
+   "incident_id": "c2043368-fd95-4568-b75b-3e4f1ce60074",
+   "incident_number": 1108,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+325%): connection count growth",
+    "api-gateway error_rate 0.006 -> 0.503 (+8287%): elevated error rate",
+    "order-service error_rate 0.00266 -> 1 (+37500%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 71%, 177 connections; top client order-service (168, 95%); leaked: order-service=165",
+    "order-service: 9 WARN+ log lines in 300s (WARN 8, ERROR 1); top: redis client count for this process is unusually high (N) (x8) | GET /users/me N in Nms (x1); dependencies mentioned: redis x8",
+    "redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 98.431273,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+325%): connection count growth; api-gateway error_rate 0.006 -> 0.503 (+8287%): elevated error rate; order-service error_rate 0.00266 -> 1 (+37500%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T08:58:36.329063Z"
+  },
+  {
+   "created_at": "2026-09-15T08:34:20.454530Z",
+   "updated_at": "2026-09-15T08:34:20.454531Z",
+   "id": "7561ea19-58c2-4022-ac62-233f05b2a5c3",
+   "incident_id": "87b04e61-565f-46b1-8f86-3c28643baa5c",
+   "incident_number": 1107,
+   "title": "Elevated API error rate",
+   "severity": "sev1",
+   "symptoms": [
+    "api-gateway error_rate 0.00569 -> 0.651 (+11338%): elevated error rate",
+    "order-service error_rate 0.0029 -> 1 (+34366%): elevated error rate",
+    "inventory-service error_rate 0.000772 -> 1 (+129463%): elevated error rate",
+    "inventory-service up 1 -> 0 (-100%): component unavailable",
+    "inventory-service latency_p95_ms 0.191 -> 31.5 (+16424%): p95 latency regression",
+    "inventory-service memory_percent 0.233 -> 38.4 (+16383%): memory pressure"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "inventory-service",
+    "order-service"
+   ],
+   "root_cause": "inventory-service is unavailable and its dependents fail as a result.",
+   "root_cause_service": "inventory-service",
+   "root_cause_category": "dependency_failure",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 90ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x10, payment-service x1",
+    "api-gateway is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+    "order-service is unhealthy; failing checks: error_rate_ok, dependencies_ok",
+    "inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (50% errors), ",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own error rate 0.0%, own latency 21ms"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "inventory-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=inventory-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 147.53521,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev1\nSymptoms: api-gateway error_rate 0.00569 -> 0.651 (+11338%): elevated error rate; order-service error_rate 0.0029 -> 1 (+34366%): elevated error rate; inventory-service error_rate 0.000772 -> 1 (+129463%): elevated error rate; inventory-service up 1 -> 0 (-100%): component unavailable; inventory-service latency_p95_ms 0.191 -> 31.5 (+16424%): p95 latency regression; inventory-service memory_percent 0.233 -> 38.4 (+16383%): memory pressure\nAffected services: api-gateway, inventory-service, order-service\nRoot cause: inventory-service is unavailable and its dependents fail as a result.\nRoot cause service: inventory-service\nCategory: dependency_failure\nResolution: restart_service(service=inventory-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T08:34:20.433000Z"
+  },
+  {
+   "created_at": "2026-09-15T07:42:30.001120Z",
+   "updated_at": "2026-09-15T07:42:30.001121Z",
+   "id": "869b2103-e480-487a-910e-048d97b3f76a",
+   "incident_id": "b8ee3ae6-1036-46f2-90b6-873f3280fcb1",
+   "incident_number": 1106,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00477 -> 0.141 (+2852%): elevated error rate",
+    "order-service error_rate 0.00207 -> 0.142 (+6762%): elevated error rate",
+    "payment-service error_rate 0.000949 -> 0.35 (+36771%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "payment-service error_rate: current 4.8% vs baseline 0.1% \u2192 +4110% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "12 traces sampled, 12 errored, avg 189ms; failure origin (deepest failing span): order-service x9, payment-service x3; slowest span most often in: payment-service x4, auth-service x3",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 43.876376,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00477 -> 0.141 (+2852%): elevated error rate; order-service error_rate 0.00207 -> 0.142 (+6762%): elevated error rate; payment-service error_rate 0.000949 -> 0.35 (+36771%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:42:29.975910Z"
+  },
+  {
+   "created_at": "2026-09-15T07:41:31.153284Z",
+   "updated_at": "2026-09-15T07:41:31.153285Z",
+   "id": "747eaeab-4df9-4f61-ad82-bfa4a214237e",
+   "incident_id": "b42c24c4-9e56-4dd1-99ff-9e21b82f31b4",
+   "incident_number": 1105,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+324%): connection count growth"
+   ],
+   "affected_services": [
+    "redis"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 177/250 connections (71% saturation), p95 1.6ms; by client: order-service 168, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 72%, 180 connections; top client order-service (170, 94%); leaked: order-service=168",
+    "order-service: 32 WARN+ log lines in 300s (WARN 18, ERROR 14); top: redis client count for this process is unusually high (N) (x18) | upstream payment-service failed or timed out (N% of calls) (x14); ",
+    "12 traces sampled, 12 errored, avg 160ms; failure origin (deepest failing span): order-service x9, payment-service x3; slowest span most often in: user-service x6, payment-service x5",
+    "redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 101.030032,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+324%): connection count growth\nAffected services: redis\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:41:31.129566Z"
+  },
+  {
+   "created_at": "2026-09-15T07:39:23.414380Z",
+   "updated_at": "2026-09-15T07:39:23.414381Z",
+   "id": "87a14056-d5ae-463d-957b-cf1a59a26d5c",
+   "incident_id": "697e9e3c-289a-48d5-8414-d7aab08d7927",
+   "incident_number": 1104,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00569 -> 0.141 (+2374%): elevated error rate",
+    "order-service error_rate 0.00334 -> 0.143 (+4189%): elevated error rate",
+    "payment-service error_rate 0.00113 -> 0.351 (+30858%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 131ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: user-service x6, payment-service x5",
+    "payment-service error_rate: current 5.4% vs baseline 0.1% \u2192 +4533% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 43.301721,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00569 -> 0.141 (+2374%): elevated error rate; order-service error_rate 0.00334 -> 0.143 (+4189%): elevated error rate; payment-service error_rate 0.00113 -> 0.351 (+30858%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:39:23.401255Z"
+  },
+  {
+   "created_at": "2026-09-15T07:38:24.596500Z",
+   "updated_at": "2026-09-15T07:38:24.596500Z",
+   "id": "bcc599c7-d0d8-4745-8127-d29fe2d52f73",
+   "incident_id": "d8977872-182d-4732-9266-87467a3c43df",
+   "incident_number": 1103,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14.5 -> 62 (+327%): connection count growth",
+    "api-gateway error_rate 0.006 -> 0.502 (+8256%): elevated error rate",
+    "order-service error_rate 0.00282 -> 1 (+35416%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 188ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: payment-service x4, auth-service x4",
+    "redis: 180/250 connections (72% saturation), p95 1.7ms; by client: order-service 170, auth-service 2, user-service 2, payment-service 2; order-service holds 94% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 73%, 182 connections; top client order-service (173, 95%); leaked: order-service=170",
+    "order-service: 18 WARN+ log lines in 300s (WARN 12, ERROR 6); top: redis client count for this process is unusually high (N) (x12) | upstream payment-service failed or timed out (N% of calls) (x6); de",
+    "redis connections: current 20.8 count vs baseline 12 count \u2192 +73% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 100.483835,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14.5 -> 62 (+327%): connection count growth; api-gateway error_rate 0.006 -> 0.502 (+8256%): elevated error rate; order-service error_rate 0.00282 -> 1 (+35416%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:38:24.583369Z"
+  },
+  {
+   "created_at": "2026-09-15T07:36:16.727846Z",
+   "updated_at": "2026-09-15T07:36:16.727847Z",
+   "id": "7f3c10cc-34af-4ee9-98ac-c43b25e99bea",
+   "incident_id": "299a4328-f1ca-4785-a5fe-ae926bc50c05",
+   "incident_number": 1102,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00507 -> 0.141 (+2683%): elevated error rate",
+    "order-service error_rate 0.00288 -> 0.143 (+4866%): elevated error rate",
+    "payment-service error_rate 0.00133 -> 0.352 (+26364%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "11 traces sampled, 11 errored, avg 112ms; failure origin (deepest failing span): order-service x10, payment-service x1; slowest span most often in: auth-service x4, user-service x3",
+    "payment-service error_rate: current 4.2% vs baseline 0.1% \u2192 +3090% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.611695,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00507 -> 0.141 (+2683%): elevated error rate; order-service error_rate 0.00288 -> 0.143 (+4866%): elevated error rate; payment-service error_rate 0.00133 -> 0.352 (+26364%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:36:16.711229Z"
+  },
+  {
+   "created_at": "2026-09-15T07:35:20.864506Z",
+   "updated_at": "2026-09-15T07:35:20.864506Z",
+   "id": "d5c833bb-afd6-4f95-af3f-cdc6dfd8ffd7",
+   "incident_id": "fd0b7075-4708-407f-b1da-56294363480f",
+   "incident_number": 1101,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+325%): connection count growth",
+    "api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate",
+    "order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 71%, 177 connections; top client order-service (168, 95%); leaked: order-service=165",
+    "redis connections: current 19.1 count vs baseline 12 count \u2192 +59% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 97.743265,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+325%): connection count growth; api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate; order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:35:20.842799Z"
+  },
+  {
+   "created_at": "2026-09-15T07:19:04.874883Z",
+   "updated_at": "2026-09-15T07:19:04.874883Z",
+   "id": "651bdc03-f42f-4f19-8553-6903f408a36f",
+   "incident_id": "8e019b4b-12f4-4eb0-8ee3-5702d4a7f8a4",
+   "incident_number": 1100,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00585 -> 0.141 (+2318%): elevated error rate",
+    "order-service error_rate 0.00321 -> 0.144 (+4402%): elevated error rate",
+    "payment-service error_rate 0.000818 -> 0.351 (+42828%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 110ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: user-service x6, payment-service x3",
+    "payment-service error_rate: current 3.6% vs baseline 0.1% \u2192 +3245% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.79145,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00585 -> 0.141 (+2318%): elevated error rate; order-service error_rate 0.00321 -> 0.144 (+4402%): elevated error rate; payment-service error_rate 0.000818 -> 0.351 (+42828%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:19:04.863928Z"
+  },
+  {
+   "created_at": "2026-09-15T07:18:08.879906Z",
+   "updated_at": "2026-09-15T07:18:08.879908Z",
+   "id": "79e373e1-535d-4e66-8f66-3ac303166663",
+   "incident_id": "d7281c86-937e-48c6-8b5a-5d82f17ac41a",
+   "incident_number": 1099,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+324%): connection count growth",
+    "api-gateway error_rate 0.00497 -> 0.501 (+9991%): elevated error rate",
+    "order-service error_rate 0.00278 -> 1 (+35868%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 177/250 connections (71% saturation), p95 1.6ms; by client: order-service 168, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 71%, 177 connections; top client order-service (168, 95%); leaked: order-service=165",
+    "order-service: 32 WARN+ log lines in 300s (WARN 18, ERROR 14); top: redis client count for this process is unusually high (N) (x18) | upstream payment-service failed or timed out (N% of calls) (x14); ",
+    "12 traces sampled, 12 errored, avg 161ms; failure origin (deepest failing span): order-service x9, payment-service x3; slowest span most often in: user-service x6, payment-service x5",
+    "redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 97.794404,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+324%): connection count growth; api-gateway error_rate 0.00497 -> 0.501 (+9991%): elevated error rate; order-service error_rate 0.00278 -> 1 (+35868%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:18:08.866882Z"
+  },
+  {
+   "created_at": "2026-09-15T07:16:04.320170Z",
+   "updated_at": "2026-09-15T07:16:04.320171Z",
+   "id": "c7ad652f-1613-463c-9b03-6309d7341b88",
+   "incident_id": "b9a3c8ac-d221-456e-92ff-d33fa23fb9e1",
+   "incident_number": 1098,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00569 -> 0.141 (+2377%): elevated error rate",
+    "order-service error_rate 0.00336 -> 0.143 (+4162%): elevated error rate",
+    "payment-service error_rate 0.00113 -> 0.351 (+31095%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 131ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: user-service x6, payment-service x5",
+    "payment-service error_rate: current 5.4% vs baseline 0.1% \u2192 +4533% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 43.23158,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00569 -> 0.141 (+2377%): elevated error rate; order-service error_rate 0.00336 -> 0.143 (+4162%): elevated error rate; payment-service error_rate 0.00113 -> 0.351 (+31095%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:16:04.304058Z"
+  },
+  {
+   "created_at": "2026-09-15T07:15:05.424236Z",
+   "updated_at": "2026-09-15T07:15:05.424236Z",
+   "id": "257fb9cd-40cf-4fe8-b08f-1791aedf7e3a",
+   "incident_id": "10431aef-4092-496d-99bd-404dd4587d78",
+   "incident_number": 1097,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14.5 -> 62 (+327%): connection count growth",
+    "api-gateway error_rate 0.00599 -> 0.502 (+8280%): elevated error rate",
+    "order-service error_rate 0.00288 -> 1 (+34633%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 188ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: payment-service x4, auth-service x4",
+    "redis: 180/250 connections (72% saturation), p95 1.7ms; by client: order-service 170, auth-service 2, user-service 2, payment-service 2; order-service holds 94% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 72%, 180 connections; top client order-service (170, 94%); leaked: order-service=168",
+    "order-service: 18 WARN+ log lines in 300s (WARN 12, ERROR 6); top: redis client count for this process is unusually high (N) (x12) | upstream payment-service failed or timed out (N% of calls) (x6); de",
+    "redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 100.339968,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14.5 -> 62 (+327%): connection count growth; api-gateway error_rate 0.00599 -> 0.502 (+8280%): elevated error rate; order-service error_rate 0.00288 -> 1 (+34633%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:15:05.412446Z"
+  },
+  {
+   "created_at": "2026-09-15T07:12:57.666581Z",
+   "updated_at": "2026-09-15T07:12:57.666582Z",
+   "id": "c8a13578-e09e-4a46-8e27-fe2801dc8de1",
+   "incident_id": "5ef8a075-4dbe-4dfc-bc0d-040970b17bd5",
+   "incident_number": 1096,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00507 -> 0.141 (+2683%): elevated error rate",
+    "order-service error_rate 0.00288 -> 0.143 (+4866%): elevated error rate",
+    "payment-service error_rate 0.00134 -> 0.352 (+26231%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "11 traces sampled, 11 errored, avg 112ms; failure origin (deepest failing span): order-service x10, payment-service x1; slowest span most often in: auth-service x4, user-service x3",
+    "payment-service error_rate: current 4.2% vs baseline 0.1% \u2192 +3090% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.580291,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00507 -> 0.141 (+2683%): elevated error rate; order-service error_rate 0.00288 -> 0.143 (+4866%): elevated error rate; payment-service error_rate 0.00134 -> 0.352 (+26231%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:12:57.652769Z"
+  },
+  {
+   "created_at": "2026-09-15T07:12:01.846688Z",
+   "updated_at": "2026-09-15T07:12:01.846689Z",
+   "id": "4ab54146-9a9c-4b4e-b27c-ac93009427b5",
+   "incident_id": "6c2fa250-91d6-4965-a209-e51e9ab2752d",
+   "incident_number": 1095,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+325%): connection count growth",
+    "api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate",
+    "order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 71%, 177 connections; top client order-service (168, 95%); leaked: order-service=165",
+    "redis connections: current 19.1 count vs baseline 12 count \u2192 +59% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 97.758664,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+325%): connection count growth; api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate; order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:12:01.831142Z"
+  },
+  {
+   "created_at": "2026-09-15T07:06:11.969129Z",
+   "updated_at": "2026-09-15T07:06:11.969130Z",
+   "id": "1fecda54-6905-49b0-af2c-673ede3af6ac",
+   "incident_id": "023ab42c-9bc3-4eb7-a6ea-a2a5725b3d21",
+   "incident_number": 1094,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00536 -> 0.138 (+2468%): elevated error rate",
+    "order-service error_rate 0.00313 -> 0.142 (+4432%): elevated error rate",
+    "payment-service error_rate 0.0013 -> 0.351 (+26961%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "payment-service error_rate: current 3.6% vs baseline 0.1% \u2192 +3173% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "12 traces sampled, 12 errored, avg 169ms; failure origin (deepest failing span): order-service x9, payment-service x3; slowest span most often in: user-service x6, payment-service x4",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.961111,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00536 -> 0.138 (+2468%): elevated error rate; order-service error_rate 0.00313 -> 0.142 (+4432%): elevated error rate; payment-service error_rate 0.0013 -> 0.351 (+26961%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:06:11.955608Z"
+  },
+  {
+   "created_at": "2026-09-15T07:05:15.976999Z",
+   "updated_at": "2026-09-15T07:05:15.977000Z",
+   "id": "6d4e9e80-267b-40fe-8036-2b2f1ca11e47",
+   "incident_id": "2189edfd-2d54-4c51-934a-7eec5bd505f0",
+   "incident_number": 1093,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+324%): connection count growth",
+    "api-gateway error_rate 0.00497 -> 0.502 (+10005%): elevated error rate",
+    "order-service error_rate 0.00339 -> 1 (+29373%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is the most implicated component in the collected evidence.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "unknown",
+   "evidence_summary": [
+    "redis: 177/250 connections (71% saturation), p95 1.6ms; by client: order-service 168, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "order-service process: up, version 4.1.0, uptime 173s, replicas 3.0/3, restarts 2, mem 37.6%, cpu 25.8%, open redis conns 168, open db conns 3",
+    "order-service: 25 WARN+ log lines in 300s (WARN 11, ERROR 14); top: upstream payment-service failed or timed out (N% of calls) (x13) | redis client count for this process is unusually high (N) (x11) |",
+    "12 traces sampled, 12 errored, avg 161ms; failure origin (deepest failing span): order-service x9, payment-service x3; slowest span most often in: payment-service x7, user-service x3",
+    "redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 97.969551,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+324%): connection count growth; api-gateway error_rate 0.00497 -> 0.502 (+10005%): elevated error rate; order-service error_rate 0.00339 -> 1 (+29373%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is the most implicated component in the collected evidence.\nRoot cause service: order-service\nCategory: unknown\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:05:15.964048Z"
+  },
+  {
+   "created_at": "2026-09-15T07:03:11.289771Z",
+   "updated_at": "2026-09-15T07:03:11.289772Z",
+   "id": "927d1edc-2b94-4011-8241-dcb2000ed1ab",
+   "incident_id": "639d405b-ef99-4da3-8d9d-d294865363cb",
+   "incident_number": 1092,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00511 -> 0.138 (+2607%): elevated error rate",
+    "order-service error_rate 0.00364 -> 0.141 (+3778%): elevated error rate",
+    "payment-service error_rate 0.00131 -> 0.351 (+26716%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 122ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: payment-service x7, user-service x3",
+    "payment-service error_rate: current 5.4% vs baseline 0.1% \u2192 +4748% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 43.275005,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00511 -> 0.138 (+2607%): elevated error rate; order-service error_rate 0.00364 -> 0.141 (+3778%): elevated error rate; payment-service error_rate 0.00131 -> 0.351 (+26716%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:03:11.269502Z"
+  },
+  {
+   "created_at": "2026-09-15T07:02:12.360264Z",
+   "updated_at": "2026-09-15T07:02:12.360264Z",
+   "id": "ac80bc2b-b2a2-4f40-a4dd-3e051bc07145",
+   "incident_id": "11fb3f6b-778c-4412-baa2-ac8be454bc23",
+   "incident_number": 1091,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+324%): connection count growth",
+    "api-gateway error_rate 0.0048 -> 0.504 (+10407%): elevated error rate",
+    "order-service error_rate 0.00413 -> 1 (+24101%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is the most implicated component in the collected evidence.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "unknown",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 188ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: payment-service x4, auth-service x4",
+    "redis: 177/250 connections (71% saturation), p95 1.6ms; by client: order-service 168, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "order-service process: up, version 4.1.0, uptime 170s, replicas 3.0/3, restarts 1, mem 37.6%, cpu 23.3%, open redis conns 168, open db conns 3",
+    "order-service: 15 WARN+ log lines in 300s (ERROR 6, WARN 9); top: redis client count for this process is unusually high (N) (x9) | upstream payment-service failed or timed out (N% of calls) (x6); depe",
+    "redis connections: current 19.9 count vs baseline 12 count \u2192 +66% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 100.345072,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+324%): connection count growth; api-gateway error_rate 0.0048 -> 0.504 (+10407%): elevated error rate; order-service error_rate 0.00413 -> 1 (+24101%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is the most implicated component in the collected evidence.\nRoot cause service: order-service\nCategory: unknown\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:02:12.339569Z"
+  },
+  {
+   "created_at": "2026-09-15T07:00:04.583812Z",
+   "updated_at": "2026-09-15T07:00:04.583813Z",
+   "id": "2f3a0b72-7818-439d-ab4f-11111d2b7004",
+   "incident_id": "182a2943-3cb5-41cd-bacf-fdfd99bccf30",
+   "incident_number": 1090,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00507 -> 0.141 (+2683%): elevated error rate",
+    "order-service error_rate 0.00288 -> 0.143 (+4866%): elevated error rate",
+    "payment-service error_rate 0.00129 -> 0.352 (+27148%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "11 traces sampled, 11 errored, avg 112ms; failure origin (deepest failing span): order-service x10, payment-service x1; slowest span most often in: auth-service x4, user-service x3",
+    "payment-service error_rate: current 4.2% vs baseline 0.1% \u2192 +3090% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.572296,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00507 -> 0.141 (+2683%): elevated error rate; order-service error_rate 0.00288 -> 0.143 (+4866%): elevated error rate; payment-service error_rate 0.00129 -> 0.352 (+27148%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T07:00:04.566793Z"
+  },
+  {
+   "created_at": "2026-09-15T06:59:08.702436Z",
+   "updated_at": "2026-09-15T06:59:08.702437Z",
+   "id": "1f05a927-c031-4e4d-a8dd-b1687a09b94e",
+   "incident_id": "51991839-c52e-40f9-a9de-ce2952451a90",
+   "incident_number": 1089,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+325%): connection count growth",
+    "api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate",
+    "order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 71%, 177 connections; top client order-service (168, 95%); leaked: order-service=165",
+    "redis connections: current 19.1 count vs baseline 12 count \u2192 +59% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 97.687395,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+325%): connection count growth; api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate; order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:59:08.681892Z"
+  },
+  {
+   "created_at": "2026-09-15T06:38:38.616697Z",
+   "updated_at": "2026-09-15T06:38:38.616698Z",
+   "id": "5464eb63-f146-4a36-a649-b275abbe144c",
+   "incident_id": "8c8a9f13-bc93-4a43-b3e2-f7765d655529",
+   "incident_number": 1088,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00579 -> 0.139 (+2294%): elevated error rate",
+    "order-service error_rate 0.00225 -> 0.143 (+6238%): elevated error rate",
+    "payment-service error_rate 0.00126 -> 0.35 (+27666%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 119ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: payment-service x5, user-service x3",
+    "payment-service error_rate: current 6.5% vs baseline 0.1% \u2192 +4938% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.673727,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00579 -> 0.139 (+2294%): elevated error rate; order-service error_rate 0.00225 -> 0.143 (+6238%): elevated error rate; payment-service error_rate 0.00126 -> 0.35 (+27666%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:38:38.601891Z"
+  },
+  {
+   "created_at": "2026-09-15T06:37:39.740661Z",
+   "updated_at": "2026-09-15T06:37:39.740661Z",
+   "id": "965a8877-fff3-446a-bcf9-a6900ce1b446",
+   "incident_id": "f0e043a3-e7dd-42c9-9199-0506fa7aa4ff",
+   "incident_number": 1087,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14.5 -> 64.5 (+345%): connection count growth",
+    "api-gateway error_rate 0.0054 -> 0.502 (+9204%): elevated error rate",
+    "order-service error_rate 0.00329 -> 1 (+30311%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is the most implicated component in the collected evidence.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "unknown",
+   "evidence_summary": [
+    "redis: 182/250 connections (73% saturation), p95 1.7ms; by client: order-service 173, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "order-service process: up, version 4.1.0, uptime 203s, replicas 3.0/3, restarts 2, mem 36.8%, cpu 27.2%, open redis conns 173, open db conns 3",
+    "order-service: 23 WARN+ log lines in 300s (WARN 9, ERROR 14); top: upstream payment-service failed or timed out (N% of calls) (x13) | redis client count for this process is unusually high (N) (x9) | G",
+    "12 traces sampled, 12 errored, avg 198ms; failure origin (deepest failing span): order-service x8, payment-service x4; slowest span most often in: payment-service x6, user-service x4",
+    "redis connections: current 20.8 count vs baseline 12 count \u2192 +73% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 98.796733,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14.5 -> 64.5 (+345%): connection count growth; api-gateway error_rate 0.0054 -> 0.502 (+9204%): elevated error rate; order-service error_rate 0.00329 -> 1 (+30311%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is the most implicated component in the collected evidence.\nRoot cause service: order-service\nCategory: unknown\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:37:39.724897Z"
+  },
+  {
+   "created_at": "2026-09-15T06:35:03.539900Z",
+   "updated_at": "2026-09-15T06:35:03.539900Z",
+   "id": "739e4eee-387e-4e95-b244-0a01c46a0b66",
+   "incident_id": "eafa577f-d63b-426a-abd8-590071e30c9e",
+   "incident_number": 1086,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00459 -> 0.139 (+2936%): elevated error rate",
+    "order-service error_rate 0.00304 -> 0.143 (+4617%): elevated error rate",
+    "payment-service error_rate 0.000887 -> 0.35 (+39420%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 124ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: payment-service x4, user-service x4",
+    "payment-service error_rate: current 5.4% vs baseline 0.1% \u2192 +4145% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 43.582858,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00459 -> 0.139 (+2936%): elevated error rate; order-service error_rate 0.00304 -> 0.143 (+4617%): elevated error rate; payment-service error_rate 0.000887 -> 0.35 (+39420%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:35:03.511022Z"
+  },
+  {
+   "created_at": "2026-09-15T06:34:04.468229Z",
+   "updated_at": "2026-09-15T06:34:04.468230Z",
+   "id": "915e9ac6-fb71-486c-b5c9-1d1d453f8e1b",
+   "incident_id": "7412a41c-2968-44cc-9701-2f4e4d3b9522",
+   "incident_number": 1085,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+324%): connection count growth"
+   ],
+   "affected_services": [
+    "redis"
+   ],
+   "root_cause": "order-service is the most implicated component in the collected evidence.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "unknown",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 188ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: payment-service x4, auth-service x4",
+    "redis: 177/250 connections (71% saturation), p95 1.6ms; by client: order-service 168, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "order-service process: up, version 4.1.0, uptime 170s, replicas 3.0/3, restarts 1, mem 37.6%, cpu 23.3%, open redis conns 168, open db conns 3",
+    "order-service: 15 WARN+ log lines in 300s (ERROR 6, WARN 9); top: redis client count for this process is unusually high (N) (x9) | upstream payment-service failed or timed out (N% of calls) (x6); depe",
+    "redis connections: current 19.1 count vs baseline 12 count \u2192 +59% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 100.519153,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+324%): connection count growth\nAffected services: redis\nRoot cause: order-service is the most implicated component in the collected evidence.\nRoot cause service: order-service\nCategory: unknown\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:34:04.447317Z"
+  },
+  {
+   "created_at": "2026-09-15T06:31:56.469267Z",
+   "updated_at": "2026-09-15T06:31:56.469268Z",
+   "id": "023633c9-0a09-4580-a67b-f663106e49e7",
+   "incident_id": "31b148e2-b2d9-4e26-8a43-cba294b99edc",
+   "incident_number": 1084,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00491 -> 0.141 (+2773%): elevated error rate",
+    "order-service error_rate 0.00285 -> 0.143 (+4904%): elevated error rate",
+    "payment-service error_rate 0.00133 -> 0.352 (+26385%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "11 traces sampled, 11 errored, avg 112ms; failure origin (deepest failing span): order-service x10, payment-service x1; slowest span most often in: auth-service x4, user-service x3",
+    "payment-service error_rate: current 4.8% vs baseline 0.1% \u2192 +3534% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.530177,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00491 -> 0.141 (+2773%): elevated error rate; order-service error_rate 0.00285 -> 0.143 (+4904%): elevated error rate; payment-service error_rate 0.00133 -> 0.352 (+26385%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:31:56.458341Z"
+  },
+  {
+   "created_at": "2026-09-15T06:31:00.575031Z",
+   "updated_at": "2026-09-15T06:31:00.575032Z",
+   "id": "3c971d76-d91c-431f-945e-0bb37d5ecccf",
+   "incident_id": "e4b9eac5-d3bb-450a-a558-c03dd172b812",
+   "incident_number": 1083,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+325%): connection count growth",
+    "api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate",
+    "order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 70%, 174 connections; top client order-service (166, 95%); leaked: order-service=162",
+    "redis connections: current 19.1 count vs baseline 12 count \u2192 +59% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 97.629367,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+325%): connection count growth; api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate; order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:31:00.557531Z"
+  },
+  {
+   "created_at": "2026-09-15T06:24:28.707902Z",
+   "updated_at": "2026-09-15T06:24:28.707903Z",
+   "id": "619776ea-6a74-43d9-821a-821673fa7ca8",
+   "incident_id": "b42a020a-848a-4a04-9186-c85ada9f4c7a",
+   "incident_number": 1082,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00542 -> 0.137 (+2421%): elevated error rate",
+    "order-service error_rate 0.00259 -> 0.141 (+5347%): elevated error rate",
+    "payment-service error_rate 0.00104 -> 0.351 (+33560%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "redis: 200/250 connections (80% saturation), p95 2.0ms; by client: order-service 190, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "payment-service error_rate: current 3.6% vs baseline 0.1% \u2192 +2949% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "12 traces sampled, 12 errored, avg 314ms; failure origin (deepest failing span): order-service x7, payment-service x5; slowest span most often in: payment-service x4, order-service x3"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 43.667646,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00542 -> 0.137 (+2421%): elevated error rate; order-service error_rate 0.00259 -> 0.141 (+5347%): elevated error rate; payment-service error_rate 0.00104 -> 0.351 (+33560%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:24:28.692937Z"
+  },
+  {
+   "created_at": "2026-09-15T06:23:31.611611Z",
+   "updated_at": "2026-09-15T06:23:31.611612Z",
+   "id": "402445cf-a026-4eb3-aa1c-c4d805d9b6c2",
+   "incident_id": "96871d7f-b58c-4ccc-b90e-d7e056b04881",
+   "incident_number": 1081,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14.5 -> 62 (+327%): connection count growth"
+   ],
+   "affected_services": [
+    "redis"
+   ],
+   "root_cause": "order-service is the most implicated component in the collected evidence.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "unknown",
+   "evidence_summary": [
+    "12 traces sampled, 12 errored, avg 188ms; failure origin (deepest failing span): order-service x10, payment-service x2; slowest span most often in: payment-service x4, auth-service x4",
+    "order-service process: up, version 4.1.0, uptime 171s, replicas 3.0/3, restarts 1, mem 37.6%, cpu 23.3%, open redis conns 173, open db conns 3",
+    "order-service: 18 WARN+ log lines in 300s (WARN 12, ERROR 6); top: redis client count for this process is unusually high (N) (x12) | upstream payment-service failed or timed out (N% of calls) (x6); de",
+    "redis connections: current 20.8 count vs baseline 12 count \u2192 +73% vs baseline",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate",
+    "INC-1065 (65% similar): redis connections saturation; root cause: order-service is exhausting a shared resource (connections), degrading callers.; resolution: restart_service(service=order-service) \u2192 "
+   ],
+   "actions": [],
+   "resolution": "escalated to humans without automated remediation",
+   "verification_summary": "",
+   "duration_seconds": 47.58631,
+   "outcome": "escalated",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14.5 -> 62 (+327%): connection count growth\nAffected services: redis\nRoot cause: order-service is the most implicated component in the collected evidence.\nRoot cause service: order-service\nCategory: unknown\nResolution: escalated to humans without automated remediation",
+   "embedding_model": null,
+   "resolved_at": null
+  },
+  {
+   "created_at": "2026-09-15T06:22:16.582847Z",
+   "updated_at": "2026-09-15T06:22:16.582848Z",
+   "id": "d29ebef7-6502-4ce1-8fbd-ed834bfd7d41",
+   "incident_id": "765761dc-1297-4207-94bc-fe61c7d70da7",
+   "incident_number": 1080,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00507 -> 0.141 (+2683%): elevated error rate",
+    "order-service error_rate 0.00288 -> 0.143 (+4866%): elevated error rate",
+    "payment-service error_rate 0.00133 -> 0.352 (+26364%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "11 traces sampled, 11 errored, avg 112ms; failure origin (deepest failing span): order-service x10, payment-service x1; slowest span most often in: auth-service x4, user-service x3",
+    "payment-service error_rate: current 4.2% vs baseline 0.1% \u2192 +3090% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.532778,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00507 -> 0.141 (+2683%): elevated error rate; order-service error_rate 0.00288 -> 0.143 (+4866%): elevated error rate; payment-service error_rate 0.00133 -> 0.352 (+26364%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:22:16.558069Z"
+  },
+  {
+   "created_at": "2026-09-15T06:21:20.698534Z",
+   "updated_at": "2026-09-15T06:21:20.698534Z",
+   "id": "89c8df58-a531-45a8-98b0-86f27d586adf",
+   "incident_id": "38286855-b46c-4caf-8b3e-e48ff9fca3fd",
+   "incident_number": 1079,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14 -> 59.5 (+325%): connection count growth",
+    "api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate",
+    "order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 174/250 connections (70% saturation), p95 1.6ms; by client: order-service 166, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 71%, 177 connections; top client order-service (168, 95%); leaked: order-service=165",
+    "redis connections: current 19.1 count vs baseline 12 count \u2192 +59% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 97.661407,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14 -> 59.5 (+325%): connection count growth; api-gateway error_rate 0.00497 -> 0.502 (+10006%): elevated error rate; order-service error_rate 0.00328 -> 1 (+30410%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:21:20.686698Z"
+  },
+  {
+   "created_at": "2026-09-15T06:05:45.003899Z",
+   "updated_at": "2026-09-15T06:05:45.003900Z",
+   "id": "aa952485-05da-4c50-8240-9ce01c1b87b7",
+   "incident_id": "a9f7ddf2-55cd-468d-ab51-d6d1db7cafb0",
+   "incident_number": 1078,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00511 -> 0.138 (+2594%): elevated error rate",
+    "order-service error_rate 0.00317 -> 0.142 (+4363%): elevated error rate",
+    "payment-service error_rate 0.00135 -> 0.351 (+25970%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "redis: 200/250 connections (80% saturation), p95 2.0ms; by client: order-service 190, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "payment-service error_rate: current 3.6% vs baseline 0.1% \u2192 +2905% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "11 traces sampled, 11 errored, avg 195ms; failure origin (deepest failing span): order-service x8, payment-service x3; slowest span most often in: payment-service x6, user-service x3"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 43.384269,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00511 -> 0.138 (+2594%): elevated error rate; order-service error_rate 0.00317 -> 0.142 (+4363%): elevated error rate; payment-service error_rate 0.00135 -> 0.351 (+25970%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:05:44.984482Z"
+  },
+  {
+   "created_at": "2026-09-15T06:04:47.708666Z",
+   "updated_at": "2026-09-15T06:04:47.708667Z",
+   "id": "f73c9aea-18a3-4a96-8978-abfa13e0579a",
+   "incident_id": "2e46fc76-15f9-4f63-aa29-cb0a294d20c2",
+   "incident_number": 1077,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14.5 -> 64.5 (+344%): connection count growth"
+   ],
+   "affected_services": [
+    "redis"
+   ],
+   "root_cause": "order-service is the most implicated component in the collected evidence.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "unknown",
+   "evidence_summary": [
+    "10 traces sampled, 10 errored, avg 165ms; failure origin (deepest failing span): order-service x8, payment-service x2; slowest span most often in: payment-service x6, user-service x3",
+    "order-service process: up, version 4.1.0, uptime 173s, replicas 3.0/3, restarts 1, mem 37.5%, cpu 23.7%, open redis conns 170, open db conns 3",
+    "order-service: 23 WARN+ log lines in 300s (WARN 15, ERROR 8); top: redis client count for this process is unusually high (N) (x15) | upstream payment-service failed or timed out (N% of calls) (x7) | G",
+    "redis connections: current 20.8 count vs baseline 12 count \u2192 +73% vs baseline",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate",
+    "INC-1061 (65% similar): redis connections saturation; root cause: order-service is exhausting a shared resource (connections), degrading callers.; resolution: restart_service(service=order-service) \u2192 "
+   ],
+   "actions": [],
+   "resolution": "escalated to humans without automated remediation",
+   "verification_summary": "",
+   "duration_seconds": 46.108445,
+   "outcome": "escalated",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14.5 -> 64.5 (+344%): connection count growth\nAffected services: redis\nRoot cause: order-service is the most implicated component in the collected evidence.\nRoot cause service: order-service\nCategory: unknown\nResolution: escalated to humans without automated remediation",
+   "embedding_model": null,
+   "resolved_at": null
+  },
+  {
+   "created_at": "2026-09-15T06:03:32.884313Z",
+   "updated_at": "2026-09-15T06:03:32.884314Z",
+   "id": "2758055a-317d-4f15-9bee-530c64e3ef64",
+   "incident_id": "22d254bb-e344-42f6-80d3-4aba7758bd3b",
+   "incident_number": 1076,
+   "title": "Elevated API error rate",
+   "severity": "sev2",
+   "symptoms": [
+    "api-gateway error_rate 0.00464 -> 0.14 (+2906%): elevated error rate",
+    "order-service error_rate 0.00313 -> 0.141 (+4417%): elevated error rate",
+    "payment-service error_rate 0.00124 -> 0.351 (+28218%): elevated error rate"
+   ],
+   "affected_services": [
+    "api-gateway",
+    "order-service",
+    "payment-service"
+   ],
+   "root_cause": "A recent deployment of payment-service introduced a regression causing the symptoms.",
+   "root_cause_service": "payment-service",
+   "root_cause_category": "deployment_regression",
+   "evidence_summary": [
+    "10 traces sampled, 10 errored, avg 165ms; failure origin (deepest failing span): order-service x8, payment-service x2; slowest span most often in: payment-service x6, user-service x3",
+    "payment-service error_rate: current 6.0% vs baseline 0.1% \u2192 +4966% vs baseline",
+    "payment-service runs 2.4.0 deployed 0 min ago (previous 2.3.7); change: checkout handler refactor; new retry path; rollback available \u2014 deployment precedes the incident window",
+    "api-gateway depends on auth-service, user-service, order-service, payment-service, inventory-service, notification-service; depended on by nothing; unhealthy dependencies: order-service (7% errors), p",
+    "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: payment-service (14% errors); own error rate 0.0%, own latency 21ms",
+    "api-gateway is degraded; failing checks: error_rate_ok, latency_ok, dependencies_ok"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "rollback_deployment",
+     "status": "verified",
+     "arguments": {
+      "service": "payment-service"
+     }
+    }
+   ],
+   "resolution": "rollback_deployment(service=payment-service) \u2192 passed",
+   "verification_summary": "all 5 conditions held for 3 consecutive polls",
+   "duration_seconds": 42.265426,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: Elevated API error rate\nSeverity: sev2\nSymptoms: api-gateway error_rate 0.00464 -> 0.14 (+2906%): elevated error rate; order-service error_rate 0.00313 -> 0.141 (+4417%): elevated error rate; payment-service error_rate 0.00124 -> 0.351 (+28218%): elevated error rate\nAffected services: api-gateway, order-service, payment-service\nRoot cause: A recent deployment of payment-service introduced a regression causing the symptoms.\nRoot cause service: payment-service\nCategory: deployment_regression\nResolution: rollback_deployment(service=payment-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:03:32.865639Z"
+  },
+  {
+   "created_at": "2026-09-15T06:02:34.030268Z",
+   "updated_at": "2026-09-15T06:02:34.030269Z",
+   "id": "d70941d9-4401-41dd-9a75-ef9e257473c4",
+   "incident_id": "99323bf5-c06c-443f-8822-ee6d93ae12a5",
+   "incident_number": 1075,
+   "title": "redis connections saturation",
+   "severity": "sev3",
+   "symptoms": [
+    "redis connections 14.5 -> 62 (+328%): connection count growth",
+    "api-gateway error_rate 0.00526 -> 0.502 (+9448%): elevated error rate",
+    "order-service error_rate 0.00318 -> 1 (+31338%): elevated error rate",
+    "order-service up 1 -> 0 (-100%): component unavailable"
+   ],
+   "affected_services": [
+    "redis",
+    "api-gateway",
+    "order-service"
+   ],
+   "root_cause": "order-service is exhausting a shared resource (connections), degrading callers.",
+   "root_cause_service": "order-service",
+   "root_cause_category": "resource_exhaustion",
+   "evidence_summary": [
+    "redis: 177/250 connections (71% saturation), p95 1.6ms; by client: order-service 168, auth-service 2, user-service 2, payment-service 2; order-service holds 95% of connections; leaked by service: orde",
+    "redis diagnostic: saturation 72%, 180 connections; top client order-service (170, 94%); leaked: order-service=168",
+    "redis connections: current 20.8 count vs baseline 12 count \u2192 +73% vs baseline",
+    "restart of order-service restarting (eta 10s, version 4.1.0)",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate",
+    "INC-1067 (66% similar): redis connections saturation; root cause: A recent deployment of payment-service introduced a regression causing the symptoms.; resolution: escalated to humans without automate"
+   ],
+   "actions": [
+    {
+     "risk": "medium",
+     "tool": "restart_service",
+     "status": "verified",
+     "arguments": {
+      "service": "order-service"
+     }
+    }
+   ],
+   "resolution": "restart_service(service=order-service) \u2192 passed",
+   "verification_summary": "all 4 conditions held for 3 consecutive polls",
+   "duration_seconds": 99.41632,
+   "outcome": "resolved",
+   "lessons": [],
+   "embedding_text": "Title: redis connections saturation\nSeverity: sev3\nSymptoms: redis connections 14.5 -> 62 (+328%): connection count growth; api-gateway error_rate 0.00526 -> 0.502 (+9448%): elevated error rate; order-service error_rate 0.00318 -> 1 (+31338%): elevated error rate; order-service up 1 -> 0 (-100%): component unavailable\nAffected services: redis, api-gateway, order-service\nRoot cause: order-service is exhausting a shared resource (connections), degrading callers.\nRoot cause service: order-service\nCategory: resource_exhaustion\nResolution: restart_service(service=order-service) \u2192 passed",
+   "embedding_model": null,
+   "resolved_at": "2026-09-15T06:02:34.016533Z"
+  }
+ ],
+ "total": 82,
+ "limit": 50,
+ "offset": 0
+}

@@ -1,0 +1,653 @@
+{
+ "approval": {
+  "created_at": "2026-09-15T10:36:27.656798Z",
+  "updated_at": "2026-09-15T10:36:29.880577Z",
+  "id": "00c9ce27-4587-4589-99b8-1b6a94964033",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "action_plan_id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+  "status": "approved",
+  "title": "restart_service on inventory-service",
+  "summary": "addresses dependency_failure on inventory-service",
+  "risk": "medium",
+  "expected_impact": "symptomatic metrics return to baseline",
+  "rollback_summary": "restart_service is not reversible; a failed verification escalates",
+  "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+  "hypothesis_statement": "inventory-service is unavailable and its dependents fail as a result.",
+  "hypothesis_confidence": 0.9728,
+  "evidence_ids": [
+   "3056ad35-c147-43ca-8766-2fe15eb99938",
+   "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+   "b128d51d-28ad-4435-895f-ce09a67cbdc4"
+  ],
+  "requested_by": "workflow:incident-3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "requested_at": "2026-09-15T10:36:27.644965Z",
+  "expires_at": "2026-09-15T10:51:27.644965Z",
+  "decided_at": "2026-09-15T10:36:29.880577Z",
+  "decided_by": "user:local-operator",
+  "decision_reason": "e2e harness",
+  "context": {
+   "policy": {
+    "effect": "require_approval",
+    "reason": "SEV1 incidents have humans in the loop for every change.",
+    "invariant": null,
+    "matched_rule": "approve-sev1-mutations",
+    "evaluated_rules": [
+     "deny-dangerous",
+     "allow-read-only",
+     "allow-diagnostics",
+     "approve-diagnostics-medium-risk",
+     "deny-high-risk-mutation-production",
+     "approve-rollback",
+     "approve-production-mutations",
+     "approve-sev1-mutations"
+    ]
+   },
+   "rollback": null,
+   "arguments": {
+    "service": "inventory-service"
+   },
+   "tool_name": "restart_service",
+   "verification": {
+    "conditions": [
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "api-gateway",
+      "comparator": "lte",
+      "description": "api-gateway error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "order-service",
+      "comparator": "lte",
+      "description": "order-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "error_rate",
+      "target": 0.03,
+      "service": "inventory-service",
+      "comparator": "lte",
+      "description": "inventory-service error_rate lte 0.03",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "up",
+      "target": 1.0,
+      "service": "inventory-service",
+      "comparator": "gte",
+      "description": "inventory-service up gte 1",
+      "max_ratio_to_baseline": null
+     },
+     {
+      "metric": "latency_p95_ms",
+      "target": null,
+      "service": "inventory-service",
+      "comparator": "lte",
+      "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+      "max_ratio_to_baseline": 1.5
+     }
+    ],
+    "require_all": true,
+    "timeout_seconds": 240,
+    "stabilization_seconds": 30
+   }
+  }
+ },
+ "action_plan": {
+  "created_at": "2026-09-15T10:36:27.511994Z",
+  "updated_at": "2026-09-15T10:37:20.373123Z",
+  "id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+  "tool_name": "restart_service",
+  "tool_version": "1",
+  "arguments": {
+   "service": "inventory-service"
+  },
+  "reason": "addresses dependency_failure on inventory-service",
+  "expected_effect": "symptomatic metrics return to baseline",
+  "risk": "medium",
+  "rollback": {
+   "available": false,
+   "tool_name": null,
+   "arguments": {},
+   "reason": "restart_service is not reversible; a failed verification escalates"
+  },
+  "verification": {
+   "conditions": [
+    {
+     "metric": "error_rate",
+     "service": "api-gateway",
+     "comparator": "lte",
+     "target": 0.03,
+     "max_ratio_to_baseline": null,
+     "description": "api-gateway error_rate lte 0.03"
+    },
+    {
+     "metric": "error_rate",
+     "service": "order-service",
+     "comparator": "lte",
+     "target": 0.03,
+     "max_ratio_to_baseline": null,
+     "description": "order-service error_rate lte 0.03"
+    },
+    {
+     "metric": "error_rate",
+     "service": "inventory-service",
+     "comparator": "lte",
+     "target": 0.03,
+     "max_ratio_to_baseline": null,
+     "description": "inventory-service error_rate lte 0.03"
+    },
+    {
+     "metric": "up",
+     "service": "inventory-service",
+     "comparator": "gte",
+     "target": 1.0,
+     "max_ratio_to_baseline": null,
+     "description": "inventory-service up gte 1"
+    },
+    {
+     "metric": "latency_p95_ms",
+     "service": "inventory-service",
+     "comparator": "lte",
+     "target": null,
+     "max_ratio_to_baseline": 1.5,
+     "description": "inventory-service latency_p95_ms within 1.5x of baseline"
+    }
+   ],
+   "stabilization_seconds": 30,
+   "timeout_seconds": 240,
+   "require_all": true
+  },
+  "timeout_seconds": 90,
+  "status": "verified",
+  "idempotency_key": "7123afc80dd8812817bc5f479d6789d2",
+  "proposed_by": "deterministic",
+  "agent_run_id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+  "approval_id": "00c9ce27-4587-4589-99b8-1b6a94964033",
+  "policy_decision": {
+   "effect": "require_approval",
+   "reason": "SEV1 incidents have humans in the loop for every change.",
+   "invariant": null,
+   "matched_rule": "approve-sev1-mutations",
+   "evaluated_rules": [
+    "deny-dangerous",
+    "allow-read-only",
+    "allow-diagnostics",
+    "approve-diagnostics-medium-risk",
+    "deny-high-risk-mutation-production",
+    "approve-rollback",
+    "approve-production-mutations",
+    "approve-sev1-mutations"
+   ]
+  },
+  "attempt": 1,
+  "verification_result": {
+   "status": "passed",
+   "checked_at": "2026-09-15T10:37:20.364546Z",
+   "condition_results": [
+    {
+     "ok": true,
+     "value": 0.005182081243413203,
+     "detail": "api-gateway.error_rate=0.00518 lte 0.03",
+     "metric": "error_rate",
+     "service": "api-gateway",
+     "baseline": 0.004976302247429489,
+     "description": "api-gateway error_rate lte 0.03",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 0.0027011177162443523,
+     "detail": "order-service.error_rate=0.0027 lte 0.03",
+     "metric": "error_rate",
+     "service": "order-service",
+     "baseline": 0.002832653973527574,
+     "description": "order-service error_rate lte 0.03",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 0.0010655906153039765,
+     "detail": "inventory-service.error_rate=0.00107 lte 0.03",
+     "metric": "error_rate",
+     "service": "inventory-service",
+     "baseline": 0.001175278293863384,
+     "description": "inventory-service error_rate lte 0.03",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 1.0,
+     "detail": "inventory-service.up=1 gte 1",
+     "metric": "up",
+     "service": "inventory-service",
+     "baseline": 1.0,
+     "description": "inventory-service up gte 1",
+     "accumulation_share": null
+    },
+    {
+     "ok": true,
+     "value": 32.27757021941398,
+     "detail": "inventory-service.latency_p95_ms=32.3 vs 1.5x baseline(32.1)=48.2",
+     "metric": "latency_p95_ms",
+     "service": "inventory-service",
+     "baseline": 32.12318060175157,
+     "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+     "accumulation_share": null
+    }
+   ],
+   "summary": "all 5 conditions held for 3 consecutive polls",
+   "before": {
+    "inventory-service.up": 0.6333333333333333,
+    "api-gateway.error_rate": 0.24244503849872606,
+    "order-service.error_rate": 0.3685391069010774,
+    "inventory-service.error_rate": 0.36744440574320447,
+    "inventory-service.latency_p95_ms": 20.35102803899891
+   },
+   "after": {
+    "inventory-service.up": 1.0,
+    "api-gateway.error_rate": 0.005182081243413203,
+    "order-service.error_rate": 0.0027011177162443523,
+    "inventory-service.error_rate": 0.0010655906153039765,
+    "inventory-service.latency_p95_ms": 32.27757021941398
+   }
+  }
+ },
+ "incident": {
+  "id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "display_id": "INC-1120",
+  "title": "Elevated API error rate",
+  "severity": "sev1",
+  "status": "resolved"
+ },
+ "hypothesis": {
+  "created_at": "2026-09-15T10:36:27.145882Z",
+  "updated_at": "2026-09-15T10:36:27.374435Z",
+  "id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "statement": "inventory-service is unavailable and its dependents fail as a result.",
+  "category": "dependency_failure",
+  "suspected_root_cause_service": "inventory-service",
+  "mechanism": "derived deterministically from evidence strength and service attribution",
+  "affected_services": [
+   "api-gateway",
+   "inventory-service",
+   "order-service"
+  ],
+  "status": "confirmed",
+  "confidence": 0.9728,
+  "score": {
+   "evidence_strength": 0.9397,
+   "temporal_alignment": 1.0,
+   "dependency_alignment": 1.0,
+   "historical_similarity": 0.0,
+   "contradiction_penalty": 0.0,
+   "validation_bonus": 0.15,
+   "total": 0.9728,
+   "explanation": [
+    "api-gateway fails because of inventory-service (90% contribution)",
+    "3 supporting evidence items (strength 0.94)",
+    "temporal alignment 1.00",
+    "inventory-service explains 3/3 symptomatic services",
+    "tests: 1 confirmed, 0 refuted"
+   ]
+  },
+  "supporting_evidence_ids": [
+   "3056ad35-c147-43ca-8766-2fe15eb99938",
+   "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+   "b128d51d-28ad-4435-895f-ce09a67cbdc4"
+  ],
+  "contradicting_evidence_ids": [],
+  "suggested_tests": [],
+  "tests": [
+   {
+    "id": "37a29d76-ac3c-4797-9949-22b69715f6f6",
+    "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "tool_execution_id": null,
+    "tool_name": "run_process_diagnostic",
+    "expectation": "result implicates inventory-service",
+    "outcome": "confirmed",
+    "detail": "deterministic judgement: diagnostic strongly implicates the suspected service",
+    "at": "2026-09-15T10:36:27.373417Z"
+   }
+  ],
+  "proposed_by": "deterministic",
+  "agent_run_id": "da590dd1-b973-4624-b8ed-64eea7c0cbe6",
+  "version": 3
+ },
+ "evidence": [
+  {
+   "created_at": "2026-09-15T10:36:26.355072Z",
+   "updated_at": "2026-09-15T10:36:26.355073Z",
+   "id": "3056ad35-c147-43ca-8766-2fe15eb99938",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "kind": "health",
+   "source": "get_health",
+   "service": "inventory-service",
+   "title": "inventory-service health",
+   "summary": "inventory-service is unhealthy; failing checks: process_up, error_rate_ok",
+   "data": {
+    "state": "unhealthy",
+    "checks": {
+     "cpu_ok": true,
+     "pools_ok": true,
+     "memory_ok": true,
+     "latency_ok": true,
+     "process_up": false,
+     "error_rate_ok": false,
+     "dependencies_ok": true
+    },
+    "message": "failing: process_up, error_rate_ok",
+    "service": "inventory-service"
+   },
+   "strength": 0.85,
+   "observed_at": "2026-09-15T10:36:26.355037Z",
+   "tool_execution_id": "851357c0-d9a0-4543-a784-82050e079f3a",
+   "agent_run_id": "4295ce09-f584-4b23-a348-d9393f3ee09e",
+   "phase": "triage",
+   "tags": [
+    "unhealthy",
+    "process_up",
+    "error_rate_ok"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.730449Z",
+   "updated_at": "2026-09-15T10:36:26.730451Z",
+   "id": "4ed513c7-9b2b-49fd-9f4c-90c43cf414ef",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "kind": "topology",
+   "source": "inspect_dependencies",
+   "service": "inventory-service",
+   "title": "order-service dependencies",
+   "summary": "order-service depends on postgres, redis, inventory-service, payment-service; depended on by api-gateway; unhealthy dependencies: inventory-service (down); own error rate 0.0%, own latency 21ms",
+   "data": {
+    "service": "order-service",
+    "dependents": [
+     "api-gateway"
+    ],
+    "dependencies": [
+     "postgres",
+     "redis",
+     "inventory-service",
+     "payment-service"
+    ],
+    "contributions": [
+     {
+      "target": "inventory-service",
+      "critical": true,
+      "available": false,
+      "timeout_ms": 2000.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 1.0
+     },
+     {
+      "target": "payment-service",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 2500.0,
+      "calls_per_request": 0.4,
+      "error_contribution": 0.001
+     },
+     {
+      "target": "postgres",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 1500.0,
+      "calls_per_request": 1.0,
+      "error_contribution": 0.0
+     },
+     {
+      "target": "redis",
+      "critical": true,
+      "available": true,
+      "timeout_ms": 500.0,
+      "calls_per_request": 1.5,
+      "error_contribution": 0.0
+     }
+    ],
+    "own_error_rate": 0.0,
+    "own_latency_ms": 20.6,
+    "downstream_closure": [
+     "postgres",
+     "redis",
+     "inventory-service",
+     "payment-service"
+    ]
+   },
+   "strength": 0.8,
+   "observed_at": "2026-09-15T10:36:26.730400Z",
+   "tool_execution_id": "314dbee4-ca51-4e90-bc6f-2c905779bedb",
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "phase": "investigate",
+   "tags": [
+    "inventory-service"
+   ]
+  },
+  {
+   "created_at": "2026-09-15T10:36:26.777420Z",
+   "updated_at": "2026-09-15T10:36:26.777420Z",
+   "id": "b128d51d-28ad-4435-895f-ce09a67cbdc4",
+   "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+   "kind": "trace",
+   "source": "query_traces",
+   "service": "inventory-service",
+   "title": "trace analysis",
+   "summary": "12 traces sampled, 12 errored, avg 80ms; failure origin (deepest failing span): inventory-service x12; slowest span most often in: order-service x7, user-service x3",
+   "data": {
+    "count": 12,
+    "errored": 12,
+    "examples": [
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 132,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 37,
+        "error": false,
+        "service": "payment-service"
+       },
+       {
+        "ms": 74,
+        "error": true,
+        "service": "order-service"
+       },
+       {
+        "ms": 49,
+        "error": false,
+        "service": "payment-service"
+       },
+       {
+        "ms": 12,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "inventory-service"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 3,
+        "error": false,
+        "service": "postgres"
+       }
+      ],
+      "trace_id": "972eb67faf614cab8d4652e5c1dd2854",
+      "duration_ms": 132
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 87,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 38,
+        "error": true,
+        "service": "order-service"
+       },
+       {
+        "ms": 20,
+        "error": false,
+        "service": "user-service"
+       },
+       {
+        "ms": 13,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "inventory-service"
+       }
+      ],
+      "trace_id": "1d4992a42e4bf70a18aaf00131d8be21",
+      "duration_ms": 87
+     },
+     {
+      "error": true,
+      "spans": [
+       {
+        "ms": 96,
+        "error": true,
+        "service": "api-gateway"
+       },
+       {
+        "ms": 32,
+        "error": true,
+        "service": "order-service"
+       },
+       {
+        "ms": 39,
+        "error": false,
+        "service": "user-service"
+       },
+       {
+        "ms": 13,
+        "error": false,
+        "service": "auth-service"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 4,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 1,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 2,
+        "error": false,
+        "service": "postgres"
+       },
+       {
+        "ms": 0,
+        "error": false,
+        "service": "redis"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "inventory-service"
+       },
+       {
+        "ms": 5,
+        "error": true,
+        "service": "inventory-service"
+       }
+      ],
+      "trace_id": "6dfd0e735150ca4fa487bd794a2ba8fd",
+      "duration_ms": 96
+     }
+    ],
+    "slowest_span": {
+     "user-service": 3,
+     "order-service": 7,
+     "payment-service": 2
+    },
+    "failure_origin": {
+     "inventory-service": 12
+    },
+    "avg_duration_ms": 79.72583333333334
+   },
+   "strength": 0.9,
+   "observed_at": "2026-09-15T10:36:26.777390Z",
+   "tool_execution_id": "bbd8cae0-5e01-4ee4-9a18-b0649ff7d958",
+   "agent_run_id": "252740f3-0d85-4309-9441-4a69bfb41119",
+   "phase": "investigate",
+   "tags": [
+    "inventory-service"
+   ]
+  }
+ ]
+}

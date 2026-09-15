@@ -1,0 +1,152 @@
+[
+ {
+  "id": "5fff8c56-c8a5-478e-ad30-94ac90a43406",
+  "agent_run_id": "eec7135e-fee5-4033-b454-9f2a71677687",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "seq": 1,
+  "phase": "remediate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T11:45:54.384188Z",
+  "title": "plan_remediation: Planning remediation for H1.",
+  "input": {
+   "phase": "remediate",
+   "evidence": 12,
+   "iteration": 0,
+   "hypotheses": 3
+  },
+  "output": {
+   "proposal": {
+    "action": "plan_remediation",
+    "rationale": "deterministic planner category playbook",
+    "tool_call": null,
+    "hypotheses": [],
+    "observation": "Planning remediation for H1.",
+    "remediation": {
+     "reason": "addresses deployment_regression on payment-service",
+     "tool_name": "rollback_deployment",
+     "arguments_json": "{\"service\": \"payment-service\"}",
+     "expected_effect": "symptomatic metrics return to baseline",
+     "target_hypothesis": "H1",
+     "rollback_tool_name": null,
+     "rollback_arguments_json": "{}"
+    },
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "b474ed43-5224-4d47-a355-ecdd1e5d647a",
+  "agent_run_id": "eec7135e-fee5-4033-b454-9f2a71677687",
+  "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+  "seq": 2,
+  "phase": "remediate",
+  "node": "plan_remediation",
+  "kind": "remediation_plan",
+  "at": "2026-09-15T11:45:54.403945Z",
+  "title": "Proposed rollback_deployment({\"service\": \"payment-service\"}) for H1",
+  "input": {
+   "remediation": {
+    "reason": "addresses deployment_regression on payment-service",
+    "tool_name": "rollback_deployment",
+    "arguments_json": "{\"service\": \"payment-service\"}",
+    "expected_effect": "symptomatic metrics return to baseline",
+    "target_hypothesis": "H1",
+    "rollback_tool_name": null,
+    "rollback_arguments_json": "{}"
+   }
+  },
+  "output": {
+   "action_plan": {
+    "id": "38459026-892c-44c7-8457-49439cad8248",
+    "risk": "medium",
+    "reason": "addresses deployment_regression on payment-service",
+    "status": "proposed",
+    "attempt": 1,
+    "rollback": {
+     "reason": "original version unknown until execution",
+     "arguments": {},
+     "available": false,
+     "tool_name": null
+    },
+    "arguments": {
+     "service": "payment-service"
+    },
+    "tool_name": "rollback_deployment",
+    "created_at": "2026-09-15T11:45:54.399573Z",
+    "updated_at": "2026-09-15T11:45:54.399575Z",
+    "approval_id": null,
+    "incident_id": "fa4ea09f-7181-4b08-a0a8-ca2109dd909d",
+    "proposed_by": "deterministic",
+    "agent_run_id": "eec7135e-fee5-4033-b454-9f2a71677687",
+    "tool_version": "1",
+    "verification": {
+     "conditions": [
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "api-gateway",
+       "comparator": "lte",
+       "description": "api-gateway error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "order-service",
+       "comparator": "lte",
+       "description": "order-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "payment-service",
+       "comparator": "lte",
+       "description": "payment-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "latency_p95_ms",
+       "target": null,
+       "service": "payment-service",
+       "comparator": "lte",
+       "description": "payment-service latency_p95_ms within 1.5x of baseline",
+       "max_ratio_to_baseline": 1.5
+      },
+      {
+       "metric": "up",
+       "target": 1.0,
+       "service": "payment-service",
+       "comparator": "gte",
+       "description": "payment-service up gte 1",
+       "max_ratio_to_baseline": null
+      }
+     ],
+     "require_all": true,
+     "timeout_seconds": 240,
+     "stabilization_seconds": 30
+    },
+    "hypothesis_id": "1c849775-d672-47ff-8040-57abababf4d9",
+    "expected_effect": "symptomatic metrics return to baseline",
+    "idempotency_key": "4fdaa407d428271b07f56031fb3f4211",
+    "policy_decision": null,
+    "timeout_seconds": 90,
+    "verification_result": null
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ }
+]

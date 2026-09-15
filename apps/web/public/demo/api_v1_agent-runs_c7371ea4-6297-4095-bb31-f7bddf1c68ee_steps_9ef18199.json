@@ -1,0 +1,152 @@
+[
+ {
+  "id": "8ca19040-140c-43a3-be82-643634a9a6e7",
+  "agent_run_id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 1,
+  "phase": "remediate",
+  "node": "propose",
+  "kind": "fallback",
+  "at": "2026-09-15T10:36:27.492897Z",
+  "title": "plan_remediation: Planning remediation for H1.",
+  "input": {
+   "phase": "remediate",
+   "evidence": 12,
+   "iteration": 0,
+   "hypotheses": 3
+  },
+  "output": {
+   "proposal": {
+    "action": "plan_remediation",
+    "rationale": "deterministic planner category playbook",
+    "tool_call": null,
+    "hypotheses": [],
+    "observation": "Planning remediation for H1.",
+    "remediation": {
+     "reason": "addresses dependency_failure on inventory-service",
+     "tool_name": "restart_service",
+     "arguments_json": "{\"service\": \"inventory-service\"}",
+     "expected_effect": "symptomatic metrics return to baseline",
+     "target_hypothesis": "H1",
+     "rollback_tool_name": null,
+     "rollback_arguments_json": "{}"
+    },
+    "hypothesis_update": null
+   },
+   "recovered": false
+  },
+  "model": "deterministic-planner",
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ },
+ {
+  "id": "e92e659e-5c49-4a4b-ad1b-a71b8e8b4bc1",
+  "agent_run_id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+  "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+  "seq": 2,
+  "phase": "remediate",
+  "node": "plan_remediation",
+  "kind": "remediation_plan",
+  "at": "2026-09-15T10:36:27.516846Z",
+  "title": "Proposed restart_service({\"service\": \"inventory-service\"}) for H1",
+  "input": {
+   "remediation": {
+    "reason": "addresses dependency_failure on inventory-service",
+    "tool_name": "restart_service",
+    "arguments_json": "{\"service\": \"inventory-service\"}",
+    "expected_effect": "symptomatic metrics return to baseline",
+    "target_hypothesis": "H1",
+    "rollback_tool_name": null,
+    "rollback_arguments_json": "{}"
+   }
+  },
+  "output": {
+   "action_plan": {
+    "id": "4cc06fdc-c806-4699-8ace-589fee10e8e4",
+    "risk": "medium",
+    "reason": "addresses dependency_failure on inventory-service",
+    "status": "proposed",
+    "attempt": 1,
+    "rollback": {
+     "reason": "restart_service is not reversible; a failed verification escalates",
+     "arguments": {},
+     "available": false,
+     "tool_name": null
+    },
+    "arguments": {
+     "service": "inventory-service"
+    },
+    "tool_name": "restart_service",
+    "created_at": "2026-09-15T10:36:27.511994Z",
+    "updated_at": "2026-09-15T10:36:27.511998Z",
+    "approval_id": null,
+    "incident_id": "3360826f-f1d8-4bc1-b15a-a3e52220e46d",
+    "proposed_by": "deterministic",
+    "agent_run_id": "c7371ea4-6297-4095-bb31-f7bddf1c68ee",
+    "tool_version": "1",
+    "verification": {
+     "conditions": [
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "api-gateway",
+       "comparator": "lte",
+       "description": "api-gateway error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "order-service",
+       "comparator": "lte",
+       "description": "order-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "error_rate",
+       "target": 0.03,
+       "service": "inventory-service",
+       "comparator": "lte",
+       "description": "inventory-service error_rate lte 0.03",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "up",
+       "target": 1.0,
+       "service": "inventory-service",
+       "comparator": "gte",
+       "description": "inventory-service up gte 1",
+       "max_ratio_to_baseline": null
+      },
+      {
+       "metric": "latency_p95_ms",
+       "target": null,
+       "service": "inventory-service",
+       "comparator": "lte",
+       "description": "inventory-service latency_p95_ms within 1.5x of baseline",
+       "max_ratio_to_baseline": 1.5
+      }
+     ],
+     "require_all": true,
+     "timeout_seconds": 240,
+     "stabilization_seconds": 30
+    },
+    "hypothesis_id": "078af765-c7a0-4404-8c69-1ae27bedba49",
+    "expected_effect": "symptomatic metrics return to baseline",
+    "idempotency_key": "7123afc80dd8812817bc5f479d6789d2",
+    "policy_decision": null,
+    "timeout_seconds": 90,
+    "verification_result": null
+   }
+  },
+  "model": null,
+  "tokens_in": 0,
+  "tokens_out": 0,
+  "latency_ms": 0.0,
+  "tool_execution_id": null,
+  "trace_id": null
+ }
+]
