@@ -213,7 +213,10 @@ class IncidentWorkflow:
                 break
             usage = result.usage
             feedback = []
-            refresh = False
+            # A phase that was told to re-observe but transitioned without restating the diagnosis
+            # passes the instruction on, so the wait is not swallowed by exit conditions that were
+            # already satisfied before it.
+            refresh = result.refresh_pending
             if result.decision == "transition" and result.next_phase:
                 if result.next_phase == "escalate":
                     outcome, summary = "escalated", result.summary or "flow escalated"

@@ -18,7 +18,11 @@ from aegis.domain.flow import FlowPhase
 from aegis.domain.hypothesis import Hypothesis
 from aegis.domain.incident import Incident
 from aegis.domain.telemetry import Topology
-from aegis.hypotheses.engine import attributions, deterministic_hypotheses
+from aegis.hypotheses.engine import (
+    HypothesisProposal,
+    attributions,
+    deterministic_hypotheses,
+)
 from aegis.remediation.planning import category_default_action
 
 
@@ -71,9 +75,11 @@ class DeterministicPlanner:
                     return call
                 return self._hypothesize(incident, evidence, topology, hypotheses)
             case "hypothesize":
-                if not hypotheses:
-                    return self._hypothesize(incident, evidence, topology, hypotheses)
-                return self._done("hypotheses proposed deterministically")
+                # Always re-derive. "There is already a hypothesis" was the wrong reason to stop:
+                # the first one is formed on the earliest, weakest evidence, and after a wait for
+                # the symptom to develop this is where a better one comes from. `_hypothesize`
+                # returns `phase_complete` when it genuinely has nothing to add.
+                return self._hypothesize(incident, evidence, topology, hypotheses)
             case "validate":
                 return self._validate(hypotheses, hypothesis_handles, phase, topology)
             case "remediate":
@@ -175,8 +181,22 @@ class DeterministicPlanner:
         hypotheses: Sequence[Hypothesis],
     ) -> AgentProposal:
         proposals = deterministic_hypotheses(incident, list(evidence), topology)
-        existing = {h.suspected_root_cause_service for h in hypotheses}
-        proposals = [p for p in proposals if p.suspected_root_cause_service not in existing]
+        prior: dict[str | None, list[Hypothesis]] = {}
+        for h in hypotheses:
+            prior.setdefault(h.suspected_root_cause_service, []).append(h)
+
+        def worth_proposing(candidate: HypothesisProposal) -> bool:
+            """A service that already has a *specific* hypothesis needs no second one. A service
+            whose only hypothesis is `unknown` — "X is the most implicated component", all the
+            early evidence could support — is worth naming properly once the evidence allows it."""
+            held = prior.get(candidate.suspected_root_cause_service)
+            if not held:
+                return True
+            if candidate.category is HypothesisCategory.UNKNOWN:
+                return False
+            return any(h.category is HypothesisCategory.UNKNOWN for h in held)
+
+        proposals = [p for p in proposals if worth_proposing(p)]
         if not proposals:
             return self._done("no further hypotheses derivable from evidence")
         return AgentProposal(

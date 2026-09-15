@@ -58,6 +58,7 @@ from aegis.domain.enums import (
     AgentStepKind,
     Environment,
     ExecutionStatus,
+    HypothesisCategory,
     HypothesisStatus,
     TerminationReason,
     ToolCategory,
@@ -151,6 +152,10 @@ class PhaseOutcome(BaseModel):
     llm_used: bool = True
     steps: int = 0
     summary: str = ""
+    refresh_pending: bool = False
+    """The phase was told to re-observe but transitioned without restating the diagnosis, so the
+    next phase inherits the instruction — otherwise a phase whose exit conditions were already
+    satisfied by pre-wait evidence would pass the wait straight through."""
 
 
 class AgentRuntime:
@@ -750,6 +755,7 @@ class AgentRuntime:
             hypotheses = self.engine.rank(await uow.hypotheses.list_for_incident(incident.id))
             _text, hyp_handles = hypotheses_digest(hypotheses)
             created: list[Hypothesis] = []
+            sharpened: list[tuple[Hypothesis, str]] = []
             if proposal.action == "propose_hypotheses":
                 if not proposal.hypotheses:
                     feedback.append("propose_hypotheses requires at least one hypothesis")
@@ -771,6 +777,36 @@ class AgentRuntime:
                     except ProposalRejected as exc:
                         feedback.append(f"hypothesis rejected: {exc}")
                         invalid = True
+                        continue
+                    # An early hypothesis often names the right service with no idea why:
+                    # "X is the most implicated component", category `unknown`. Once the evidence
+                    # can say what X is actually doing, sharpen that hypothesis in place rather
+                    # than adding a rival for the same service — two competing entries would split
+                    # the ranking and the vague one might still be the first confirmed.
+                    vague = next(
+                        (
+                            x
+                            for x in hypotheses
+                            if x.suspected_root_cause_service == h.suspected_root_cause_service
+                            and x.category is HypothesisCategory.UNKNOWN
+                            and h.category is not HypothesisCategory.UNKNOWN
+                            and x.status
+                            not in (HypothesisStatus.REFUTED, HypothesisStatus.ABANDONED)
+                        ),
+                        None,
+                    )
+                    if vague is not None:
+                        was = vague.statement
+                        vague.statement = h.statement
+                        vague.category = h.category
+                        for eid in h.supporting_evidence_ids:
+                            if eid not in vague.supporting_evidence_ids:
+                                vague.supporting_evidence_ids.append(eid)
+                        sharpened.append((vague, was))
+                        feedback.append(
+                            f"hypothesis about {h.suspected_root_cause_service} was sharpened "
+                            f"from '{was[:60]}' to the mechanism the evidence now shows"
+                        )
                         continue
                     dup = next(
                         (
@@ -805,11 +841,23 @@ class AgentRuntime:
                 )
                 await uow.hypotheses.save(h)
                 await EvidenceService(uow.evidence).link_hypothesis(h)
+            restated = bool(created or sharpened)
             ranked = self.engine.rank(hypotheses)
             if ranked:
                 incident.leading_hypothesis_id = ranked[0].id
                 incident.root_cause_summary = ranked[0].statement
                 await uow.incidents.save(incident)
+            for h, was in sharpened:
+                await emit(
+                    uow.incidents,
+                    self.deps.publisher,
+                    incident_id=incident.id,
+                    type=EventType.HYPOTHESIS_UPDATED,
+                    actor=Actor.agent(run_id),
+                    title=f"Hypothesis sharpened: {h.statement[:120]} (confidence "
+                    f"{h.confidence:.0%})",
+                    payload={**self._hypothesis_payload(h), "previous_statement": was},
+                )
             for h in created:
                 await emit(
                     uow.incidents,
@@ -844,7 +892,12 @@ class AgentRuntime:
                     payload=self._hypothesis_payload(ranked[0]),
                 )
             await uow.commit()
-        return self._next(state, feedback, usage, invalid=invalid)
+        return self._next(
+            {**state, "hypotheses_applied": state.get("hypotheses_applied", False) or restated},
+            feedback,
+            usage,
+            invalid=invalid,
+        )
 
     async def _plan_remediation(self, state: AgentState) -> AgentState:
         await self._hook("plan_remediation")
@@ -1590,6 +1643,7 @@ class AgentRuntime:
             and final.get("model") != "deterministic-planner",
             steps=run.steps_count,
             summary=run.summary,
+            refresh_pending=bool(final.get("refresh")) and not final.get("hypotheses_applied"),
         )
 
 

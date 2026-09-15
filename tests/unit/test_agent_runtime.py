@@ -27,10 +27,14 @@ from aegis.domain.enums import (
     HypothesisStatus,
     TerminationReason,
 )
+from aegis.domain.evidence import Evidence
 from aegis.domain.flow import BudgetUsage
+from aegis.domain.hypothesis import Hypothesis
 from aegis.domain.incident import Incident
+from aegis.evidence.service import digest
 from aegis.hypotheses.engine import HypothesisProposal
 from aegis.infrastructure.memory.repositories import InMemoryUnitOfWorkFactory
+from aegis.infrastructure.simulator.inprocess import to_topology
 from aegis.llm.provider_scripted import ScriptedProvider
 from aegis.simulator.faults import SCENARIOS
 from tests.helpers import Runtime, SimClock, build_runtime
@@ -647,3 +651,141 @@ def test_a_vague_hypothesis_is_still_remediable_when_the_evidence_names_a_mechan
     assert choice is not None
     tool, args = choice
     assert tool == "restart_service" and args["service"] == "order-service"
+
+
+async def test_a_vague_hypothesis_is_sharpened_in_place_once_the_evidence_allows_it() -> None:
+    """The first hypothesis of an incident often names the right service with no idea why —
+    "X is the most implicated component", category `unknown`, which is all weak early evidence can
+    support. When a later pass can say what X is actually doing, that claim replaces the vague one
+    rather than lining up beside it: two rival hypotheses for one service split the ranking, and
+    the vague one may still be the first to be confirmed."""
+    rt = build_runtime(seed=31, warmup=600)
+    inc = await seed_incident(rt, "redis-connection-leak")
+    collected = await rt.uow.evidence.add_many(
+        [
+            Evidence(
+                incident_id=inc.id,
+                kind=EvidenceKind.DIAGNOSTIC,
+                source="inspect_redis",
+                service="order-service",
+                title="redis saturation",
+                summary="redis: 240/250 connections (96% saturation); order-service holds 228",
+                strength=0.9,
+                data={
+                    "component": "redis",
+                    "saturation": 0.96,
+                    "connections_by_client": {"order-service": 228.0, "auth-service": 12.0},
+                },
+            )
+        ]
+    )
+    evidence = await rt.uow.evidence.list_for_incident(inc.id)
+    first = next(iter(digest(evidence).handles))
+    assert collected
+
+    vague = Hypothesis(
+        incident_id=inc.id,
+        statement="order-service is the most implicated component in the collected evidence.",
+        category=HypothesisCategory.UNKNOWN,
+        suspected_root_cause_service="order-service",
+        supporting_evidence_ids=[evidence[0].id],
+        status=HypothesisStatus.CONFIRMED,
+    )
+    await rt.uow.hypotheses.add(vague)
+
+    sharper = AgentProposal(
+        observation="the diagnostic now shows the mechanism",
+        action="propose_hypotheses",
+        rationale="r",
+        hypotheses=[
+            HypothesisProposal(
+                statement="order-service is exhausting Redis connections, degrading its callers.",
+                category=HypothesisCategory.RESOURCE_EXHAUSTION,
+                suspected_root_cause_service="order-service",
+                supporting_evidence=[first],
+                mechanism="the pool is saturated and order-service holds most of it",
+            )
+        ],
+    )
+
+    def script(schema: type[BaseModel], system: str, user: str, tier: str) -> BaseModel:
+        return sharper
+
+    agent = make_runtime(rt, llm=ScriptedProvider(script=script))
+    await agent.run_phase(
+        incident_id=inc.id,
+        flow_name=inc.flow_name or "",
+        flow_version=inc.flow_version or "",
+        phase="hypothesize",
+    )
+
+    after = await rt.uow.hypotheses.list_for_incident(inc.id)
+    for_service = [h for h in after if h.suspected_root_cause_service == "order-service"]
+    assert len(for_service) == 1, [h.statement for h in for_service]
+    upgraded = for_service[0]
+    assert upgraded.id == vague.id, "the existing hypothesis is sharpened, not replaced"
+    assert upgraded.category is HypothesisCategory.RESOURCE_EXHAUSTION
+    assert "exhausting Redis connections" in upgraded.statement
+    assert evidence[0].id in upgraded.supporting_evidence_ids, "earlier evidence is kept"
+
+    events = await rt.uow.incidents.events(inc.id)
+    sharpen = [e for e in events if "sharpened" in e.title.lower()]
+    assert sharpen, [e.title for e in events[-5:]]
+    assert sharpen[-1].payload["previous_statement"].startswith("order-service is the most")
+
+
+def test_the_planner_re_proposes_a_service_only_while_its_hypothesis_is_vague() -> None:
+    """The deterministic planner used to skip any service that already had a hypothesis, however
+    empty that hypothesis was — so a first impression formed on weak evidence could never be
+    improved on. It now re-proposes a service whose only hypothesis is `unknown`, and still leaves
+    a service alone once something specific has been said about it."""
+    from aegis.agent.planner import DeterministicPlanner, PlannerMemory
+    from aegis.domain.flow import FlowPhase
+
+    rt = build_runtime(seed=33, warmup=600)
+    rt.engine.inject("redis-connection-leak")
+    rt.engine.advance(200)
+    inc = rt.incident(services=["api-gateway", "redis"])
+    topology = to_topology(rt.engine.topology())
+    strong = Evidence(
+        incident_id=inc.id,
+        kind=EvidenceKind.DIAGNOSTIC,
+        source="inspect_redis",
+        service="order-service",
+        title="redis saturation",
+        summary="redis: 240/250 connections (96% saturation), pool exhausted; order-service 228",
+        strength=0.9,
+        data={
+            "component": "redis",
+            "saturation": 0.96,
+            "connections_by_client": {"order-service": 228.0, "auth-service": 12.0},
+        },
+    )
+    phase = FlowPhase(name="hypothesize", objective="o", transitions=(), terminal=True)
+
+    def propose(existing: list[Hypothesis]) -> str:
+        planner = DeterministicPlanner(PlannerMemory())
+        return planner.propose(
+            incident=inc,
+            phase=phase,
+            evidence=[strong],
+            hypotheses=existing,
+            hypothesis_handles={},
+            topology=topology,
+            remediation_tools=frozenset(),
+            metrics_recovered=False,
+        ).action
+
+    def held(category: HypothesisCategory) -> list[Hypothesis]:
+        return [
+            Hypothesis(
+                incident_id=inc.id,
+                statement="order-service is implicated by the collected evidence somehow.",
+                category=category,
+                suspected_root_cause_service="order-service",
+            )
+        ]
+
+    assert propose([]) == "propose_hypotheses", "a service with no hypothesis is proposed"
+    assert propose(held(HypothesisCategory.UNKNOWN)) == "propose_hypotheses", "vague: try again"
+    assert propose(held(HypothesisCategory.RESOURCE_EXHAUSTION)) == "phase_complete", "specific"

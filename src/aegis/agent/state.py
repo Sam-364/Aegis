@@ -32,6 +32,7 @@ class AgentState(TypedDict, total=False):
     metric_lines: list[str]
     ticked_at: str | None  # ISO timestamp of the last observe, for the runtime budget
     refresh: bool  # this run follows a wait: take a measurement before judging exit conditions
+    hypotheses_applied: bool  # a phase that restated the diagnosis has used its refresh up
     evidence_seen: int  # evidence count at the previous iteration, to detect a stalled phase
     stalled_streak: int
 
@@ -73,6 +74,7 @@ def initial_state(
         metric_lines=[],
         ticked_at=ticked_at,
         refresh=refresh,
+        hypotheses_applied=False,
         evidence_seen=-1,
         stalled_streak=0,
     )

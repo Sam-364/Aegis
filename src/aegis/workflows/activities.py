@@ -196,6 +196,7 @@ class IncidentActivities:
             action_plan_id=outcome.action_plan_id,
             usage=outcome.usage,
             summary=outcome.summary,
+            refresh_pending=outcome.refresh_pending,
             iterations=outcome.iterations,
         )
 

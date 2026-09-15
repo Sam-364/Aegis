@@ -51,6 +51,7 @@ class PhaseResult(BaseModel):
     usage: BudgetUsage
     summary: str = ""
     iterations: int = 0
+    refresh_pending: bool = False
 
 
 class PolicyOutcome(BaseModel):
